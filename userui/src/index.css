@@ -12,3 +12,21 @@ html {
   height: 100vh;
   width: 100vw;
 }
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+/* Apply the font globally */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
