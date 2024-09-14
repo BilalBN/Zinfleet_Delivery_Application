@@ -1,108 +1,130 @@
 import styled from "@emotion/styled";
-import { Box, Button, FormLabel, TextField } from "@mui/material";
-import singInImg from "../assets/signIn.png";
+import { Padding } from "@mui/icons-material";
+import { Button, TextField } from '@mui/material';
+import {Link} from 'react-router-dom'
 
-const Container = styled(Box)`
+const SignInWrapper = styled.div`
   display: flex;
   height: 100vh;
   justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
-  overflow: hidden; 
+  background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7L9TFR900S87mp7hRmwcErUsJO0KruQUspw&s') no-repeat center center;
+  background-size: cover;
 `;
 
-const LeftContainer = styled(Box)`
-  flex: 1;
+const SignInBox = styled.div`
+  background: rgba(255, 255, 255, 0.1); /* Slightly transparent */
+  border-radius: 15px;
   padding: 40px;
-  max-width: 50%;
-  overflow-y: auto;
-`;
-
-const FormContainer = styled(Box)`
-  padding: 0 10%;
-`;
-
-const TruckImageContainer = styled(Box)`
-  flex: 1;
-  max-width: 50%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const TruckImage = styled.img`
+  max-width: 400px;
   width: 100%;
-  height: 100%;
-  display: block;
+  backdrop-filter: blur(10px); /* Creates the blur effect */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Adds a shadow for depth */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Optional, creates an inner border */
 `;
 
-const StyledTextField = styled(TextField)`
-  margin: 5px 0 16px 0 !important;
-`;
-const StyledLabel = styled(FormLabel)`
-`
-const Header = styled.div`
+const Header= styled.div`
   display: flex;
   justify-content: space-between;
 `
-const LeftTitle = styled.div`
-  font-size: 21px; 
-  & span{
-    color: blue;
-  }
+
+const LeftSide= styled.div`
+  font-size: 21px;
 `
-const RightSection = styled.div`
-  display:flex;
-  flex-direction: column;
-  font-size: 13px;
-  & a{
-    color: blue;
-  }
+
+const RightSide= styled.div`
+ font-size: 21px;
 `
-const Title = styled.div`
+
+const Title=styled.div`
   font-size: 55px;
   font-weight: 500;
-  margin-bottom: 20px;
 `
-const ActionContainer= styled.div`
-  display: flex;
-  justify-content: flex-end;
+const FormConatiner=styled.div`
+ display: flex;
+ flex-direction: column;
+ gap: 20px;
 `
-export const SignIn: React.FC = () => {
-  return (
-    <Container>
-      <LeftContainer>
-        <FormContainer>
-          <Header>
-            <LeftTitle>
-              Welcome to <span>ZINFLEET</span>
-            </LeftTitle>
-            <RightSection>
-              <div>No Account?</div>
-              <a>Sign up</a>
-            </RightSection>
-          </Header>
-          <Title>Sign in</Title>
-          <div>
-            <StyledLabel>Username or email address</StyledLabel>
-            <StyledTextField fullWidth placeholder="Username or email address" variant="outlined" />
-          </div>
 
+const ActionContainer=styled.div`
+display: flex;
+justify-content: flex-end;
+`
+
+const CustomLabel=styled.label`
+position: relative;
+top: 10px;
+`
+
+export const SignIn=() =>{
+  return (
+    <SignInWrapper>
+      <SignInBox>
+        <Header>
+          <LeftSide >
+            Welcome to <Link to="/" color="primary">ZINFLEET</Link>
+          </LeftSide>
+          <RightSide>
           <div>
-            <StyledLabel>Password</StyledLabel>
-            <StyledTextField fullWidth placeholder="Password" type="password" variant="outlined" />
+            No Account ?
+          </div>
+          <Link to="/signup">
+            Signup
+          </Link>
+          </RightSide>
+        </Header>
+        <Title>
+          SignIn
+        </Title>
+          <FormConatiner>
+          <div>
+          <CustomLabel>Username or email address</CustomLabel>
+          <TextField
+            placeholder="Username or email address"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            InputProps={{
+              style: { backgroundColor: 'white' }, // White background
+            }}
+            InputLabelProps={{
+              shrink: true, // Keeps the label shrunk and hides placeholder on focus
+            }}
+          />
+          </div>
+          <div>
+          <CustomLabel>Password</CustomLabel>
+          <TextField
+            placeholder="Password"
+            type="password"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            InputProps={{
+              style: { backgroundColor: 'white' }, // White background
+            }}
+            InputLabelProps={{
+              shrink: true, // Keeps the label shrunk and hides placeholder on focus
+            }}
+          />
           </div>
           <ActionContainer>
-            <Button variant="contained" color="primary">
-              Sign In
+            <Link to="/forgotpassword">
+              Forgot Password?
+            </Link>
+          </ActionContainer>
+          <ActionContainer>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              style={{ padding: "10px 60px" }}
+            >
+              Sign in
             </Button>
           </ActionContainer>
-        </FormContainer>
-      </LeftContainer>
-      <TruckImageContainer>
-        <TruckImage src={singInImg} />
-      </TruckImageContainer>
-    </Container>
+        </FormConatiner>
+      </SignInBox>
+    </SignInWrapper>
   );
-};
+}

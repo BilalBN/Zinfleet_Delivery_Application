@@ -33,8 +33,7 @@ const TruckImageContainer = styled(Box)`
 
 const TruckImage = styled.img`
   width: 100%;
-  height: auto;
-  object-fit: contain; /* Ensures the image fits inside its container without being cropped */
+  height: 100%;
   display: block;
 `;
 
