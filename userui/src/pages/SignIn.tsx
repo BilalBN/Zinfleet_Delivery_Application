@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Button, TextField, Typography } from "@mui/material";
-import signInImg from "../assets/signin.png";
-import LogoImg from "../assets/logo.png";
+import signInImg from "../assets/images/signin.png";
+import LogoImg from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
@@ -114,7 +114,7 @@ export const SignIn = () => {
             <Button
               variant="contained"
               sx={{ textTransform: "none", display: "flex", justifyContent: "flex-end", marginTop: "15px" }}
-              onClick={() => { navigate("/sidebar") }}
+              onClick={() => { navigate("/dashboard") }}
             >
               Sign in
             </Button>
