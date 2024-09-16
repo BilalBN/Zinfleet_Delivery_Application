@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import singUpImg from "../assets/signup.png";
+import singUpImg from "../assets/images/signup.png";
 
 const Container = styled(Box)`
   display: flex;
