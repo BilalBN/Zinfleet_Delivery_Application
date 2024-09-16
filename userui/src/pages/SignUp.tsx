@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import signUpImg from "../assets/signup.png";
-import LogoImg from "../assets/logo.png";
+import signUpImg from "../assets/images/signup.png";
+import LogoImg from "../assets/images/logo.png";
 import { Button, TextField, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 const Container = styled.div`
@@ -136,7 +136,7 @@ export const SignUp = () => {
                 marginTop: "15px",
               }}
               onClick={() => {
-                navigate("/sidebar");
+                navigate("/");
               }}
             >
               Sign up

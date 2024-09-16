@@ -11,7 +11,10 @@ html {
   margin: 0;
   height: 100vh;
   width: 100vw;
+  overflow-y: hidden;
+  background-color: #EFEFEF;
 }
+
 @font-face {
   font-family: 'Poppins';
   src: url('./assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
