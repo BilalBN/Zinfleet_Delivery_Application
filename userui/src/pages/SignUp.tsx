@@ -29,59 +29,82 @@ const ZinfleetLogo = styled.img`
   right: 35px;
   top: 30px;
 `;
+
 const RightContainer = styled.div`
   display: flex;
-  flex-direction: column;
   flex: 1;
   max-width: 50%;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  margin: 4px;
+  oveflow-y: hidden;
 `;
 
 const FormContainer = styled.div`
-display: flex;
-flex-direction: column;
-justify-content:center;
-top: 20%;
-left: 20%;
-flex: 1;
-padding: 40px;
-overflow-y: auto;
-gap: 10px;
-overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  flex: 1;
+  padding: 0 15%;
+  overflow-y: auto;
+  gap: 10px;
 `;
+
 const SignInContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 10px;
   white-space: nowrap;
 `;
+
 const WelcomeText = styled.div`
   font-weight: 500;
   font-size: 21px;
 `;
+
 const RightText = styled.div`
-  font-weight: 300;
+  font-weight: 500;
   font-size: 16px;
 `;
+
 const InputField = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  gap: 5px;
+  margin-top: 15px;
 `;
+
 const PersonalInformation = styled.div`
   display: flex;
+  gap: 20px;
+  margin-top: 15px;
 `;
+
 const PersonalDetails = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex:1;
 `;
 
-const CustomLink= styled(Link)`
-text-transform: none
+const CustomLink = styled(Link)`
+text-decoration: none;
 `
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+`
+const CustomButton = styled(Button)`
+  width: 200px;
+`
+const CompanyName = styled.span`
+color:#04009A;
+`
+const Title = styled.div`
+font-size: 55px;
+padding: 10px 0;
+`
+
 export const SignUp = () => {
   const navigate = useNavigate();
 
@@ -95,7 +118,7 @@ export const SignUp = () => {
         <FormContainer>
           <SignInContainer>
             <WelcomeText>
-              Welcome to <span style={{ color: "#0066ff" }}>ZeinFleet</span>
+              Welcome to <CompanyName>ZeinFleet</CompanyName>
             </WelcomeText>
             <RightText>
               <div>Have an Account ?</div>
@@ -105,43 +128,35 @@ export const SignUp = () => {
               </CustomLink>
             </RightText>
           </SignInContainer>
-          <Typography variant="h4">Sign up</Typography>
+          <Title>Sign up</Title>
           <InputField>
             <Typography>Enter your username or email address</Typography>
             <TextField variant="outlined" placeholder="Username or email address" fullWidth />
           </InputField>
-          <InputField>
-            <PersonalInformation>
-              <PersonalDetails>
-                <Typography>User name</Typography>
-                <TextField variant="outlined" placeholder="User name" sx={{ marginright: "4px" }} />
-              </PersonalDetails>
-              <PersonalDetails>
-                <Typography>Contact Number</Typography>
-                <TextField variant="outlined" placeholder="Contact Number" sx={{ marginLeft: "4px" }} />
-              </PersonalDetails>
-            </PersonalInformation>
-          </InputField>
+          <PersonalInformation>
+            <PersonalDetails>
+              <Typography>User name</Typography>
+              <TextField variant="outlined" placeholder="User name" fullWidth />
+            </PersonalDetails>
+            <PersonalDetails>
+              <Typography>Contact Number</Typography>
+              <TextField variant="outlined" placeholder="Contact Number" fullWidth />
+            </PersonalDetails>
+          </PersonalInformation>
           <InputField>
             <Typography>Enter your Password</Typography>
             <TextField variant="outlined" placeholder="Password" fullWidth />
           </InputField>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
+          <ButtonContainer>
+            <CustomButton
               variant="contained"
-              sx={{
-                textTransform: "none",
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "15px",
-              }}
               onClick={() => {
                 navigate("/");
               }}
             >
               Sign up
-            </Button>
-          </div>
+            </CustomButton>
+          </ButtonContainer>
         </FormContainer>
       </RightContainer>
     </Container>
