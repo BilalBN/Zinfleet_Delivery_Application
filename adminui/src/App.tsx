@@ -5,6 +5,10 @@ import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 import { Dashboard } from "./pages/Dashboard";
 import RequireAuth from "./pages/RequireAuth";
+import { Orders } from "./pages/Orders";
+import { Shops } from "./pages/Shops";
+import { Fleets } from "./pages/Fleets";
+import { Settings } from "@mui/icons-material";
 
 function App() {
   const theme = createTheme({
@@ -49,6 +53,10 @@ function App() {
           </Route>
           <Route element={<RequireAuth auth={true} />}>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/order" element={<Orders />} />
+            <Route path="/shops" element={<Shops />} />
+            <Route path="/fleets" element={<Fleets />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
 
         </Routes>
