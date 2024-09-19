@@ -6,7 +6,7 @@ import logo from "../assets/images/logo.png";
 import { Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { grey } from '@mui/material/colors';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = styled.div`
   display: flex;
@@ -53,7 +53,6 @@ const InputField = styled.input`
   border-radius: 9px;
   background-color: #f6f6f6;
   border: none;
-  font-family: Poppins,Arial,sans-serif
 `;
 const Title = styled.div`
   display: flex;
@@ -65,32 +64,49 @@ const Divider = styled.div`
     height: 50px;
 `
 export const NavBar = () => {
-  const navigation= useNavigate()
-    return (
-        <Navbar>
-            <NavbarRight>
-                <LogoWrapper>
-                    <Logo src={logo} />
-                </LogoWrapper>
+  const location = useLocation()
 
-                <Title>
-                    <Typography>Dashboard</Typography>
-                </Title>
-            </NavbarRight>
-            <NavbarLeft>
-                <SearchIcon>
-                    <SearchOutlinedIcon sx={{ color: grey[500] }} />
-                </SearchIcon>
-                <InputField type="text" placeholder="Search here" />
-                <Divider></Divider>
-                <IconButton>
-                    <NotificationsOutlinedIcon />
-                </IconButton>
-                <IconButton>
+  const getNavContext = (): string => {
+    switch (location.pathname) {
+      case '/':
+        return 'Dashboard'
+      case '/order':
+        return 'Order Managment'
+      case '/shop':
+        return 'Shops'
+      case '/fleets':
+        return 'Fleets'
+      case '/settings':
+        return 'Settings'
+      default:
+        return ''
+    }
+  }
+  return (
+    <Navbar>
+      <NavbarRight>
+        <LogoWrapper>
+          <Logo src={logo} />
+        </LogoWrapper>
 
-                    <PermIdentityOutlinedIcon />
-                </IconButton>
-            </NavbarLeft>
-        </Navbar>
-    );
+        <Title>
+          <Typography>{getNavContext()}</Typography>
+        </Title>
+      </NavbarRight>
+      <NavbarLeft>
+        <SearchIcon>
+          <SearchOutlinedIcon sx={{ color: grey[500] }} />
+        </SearchIcon>
+        <InputField type="text" placeholder="Search here" />
+        <Divider></Divider>
+        <IconButton>
+          <NotificationsOutlinedIcon />
+        </IconButton>
+        <IconButton>
+
+          <PermIdentityOutlinedIcon />
+        </IconButton>
+      </NavbarLeft>
+    </Navbar>
+  );
 };
