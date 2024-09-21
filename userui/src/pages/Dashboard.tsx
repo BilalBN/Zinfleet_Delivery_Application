@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import CustomCard from "../components/CustomCard";
 import { ServiceCard } from "../components/ServiceCard";
-import Chart from "../components/RevenueCard";
+import { RevenueCard } from "../components/RevenueCard";
+import { OrderCard } from "../components/OrderCard";
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -53,7 +54,11 @@ export const Dashboard = () => {
           />
           <ServiceCard />
         </CardsRow>
-        <Chart />
+        <div style={{display:"flex", gap:"20px"}}>
+        <RevenueCard />
+        <OrderCard/>
+        </div>
+        
       </WidgetContainer>
     </Container>
   );

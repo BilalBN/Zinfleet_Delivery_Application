@@ -5,7 +5,7 @@ import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import logo from "../assets/images/logo.png";
 import { Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import { grey } from '@mui/material/colors';
+import { grey } from "@mui/material/colors";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = styled.div`
@@ -30,7 +30,7 @@ const Logo = styled.img`
 const LogoWrapper = styled.div`
   height: 98px;
   width: 264px;
-  border-right: 5px solid #EFEFEF;
+  border-right: 5px solid #efefef;
   align-items: center;
   display: flex;
 `;
@@ -53,35 +53,34 @@ const InputField = styled.input`
   border-radius: 9px;
   background-color: #f6f6f6;
   border: none;
-  font-family: Poppins,Arial,sans-serif
+  font-family: Poppins, Arial, sans-serif;
 `;
 const Title = styled.div`
   display: flex;
 `;
 
 const Divider = styled.div`
-    width: 3px;
-    background-color: #EFEFEF;
-    height: 50px;
-`
+  width: 3px;
+  background-color: #efefef;
+  height: 50px;
+`;
 export const NavBar = () => {
-  const location = useLocation()
+  const location = useLocation();
 
   const getNavBarContext = () => {
     switch (location.pathname) {
-      case '/':
-        return 'Dashboard'
-      case '/order':
-        return 'Order Managment'
-      case '/settings':
-        return 'Settings'
-      case '/drivermanagement':
-        return 'Driver Managment'
+      case "/":
+        return "Dashboard";
+      case "/order":
+        return "Order Managment";
+      case "/settings":
+        return "Settings";
+      case "/drivermanagement":
+        return "Driver Managment";
       default:
-        return ''
+        return "";
     }
-
-  }
+  };
   return (
     <Navbar>
       <NavbarRight>
@@ -90,9 +89,7 @@ export const NavBar = () => {
         </LogoWrapper>
 
         <Title>
-          <Typography>
-            {getNavBarContext()}
-          </Typography>
+          <Typography>{getNavBarContext()}</Typography>
         </Title>
       </NavbarRight>
       <NavbarLeft>
@@ -105,7 +102,6 @@ export const NavBar = () => {
           <NotificationsOutlinedIcon />
         </IconButton>
         <IconButton>
-
           <PermIdentityOutlinedIcon />
         </IconButton>
       </NavbarLeft>
