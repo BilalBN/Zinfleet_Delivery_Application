@@ -5,8 +5,8 @@ import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import logo from "../assets/images/logo.png";
 import { Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import { grey } from '@mui/material/colors';
-import { useNavigate } from "react-router-dom";
+import { grey } from "@mui/material/colors";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ const Logo = styled.img`
 const LogoWrapper = styled.div`
   height: 98px;
   width: 264px;
-  border-right: 5px solid #EFEFEF;
+  border-right: 5px solid #efefef;
   align-items: center;
   display: flex;
 `;
@@ -53,44 +53,58 @@ const InputField = styled.input`
   border-radius: 9px;
   background-color: #f6f6f6;
   border: none;
-  font-family: Poppins,Arial,sans-serif
+  font-family: Poppins, Arial, sans-serif;
 `;
 const Title = styled.div`
   display: flex;
 `;
 
 const Divider = styled.div`
-    width: 3px;
-    background-color: #EFEFEF;
-    height: 50px;
-`
+  width: 3px;
+  background-color: #efefef;
+  height: 50px;
+`;
 export const NavBar = () => {
-  const navigation= useNavigate()
-    return (
-        <Navbar>
-            <NavbarRight>
-                <LogoWrapper>
-                    <Logo src={logo} />
-                </LogoWrapper>
+  const location = useLocation();
 
-                <Title>
-                    <Typography>Dashboard</Typography>
-                </Title>
-            </NavbarRight>
-            <NavbarLeft>
-                <SearchIcon>
-                    <SearchOutlinedIcon sx={{ color: grey[500] }} />
-                </SearchIcon>
-                <InputField type="text" placeholder="Search here" />
-                <Divider></Divider>
-                <IconButton>
-                    <NotificationsOutlinedIcon />
-                </IconButton>
-                <IconButton>
+  const getNavBarContext = () => {
+    switch (location.pathname) {
+      case "/":
+        return "Dashboard";
+      case "/order":
+        return "Order Managment";
+      case "/settings":
+        return "Settings";
+      case "/drivermanagement":
+        return "Driver Managment";
+      default:
+        return "";
+    }
+  };
+  return (
+    <Navbar>
+      <NavbarRight>
+        <LogoWrapper>
+          <Logo src={logo} />
+        </LogoWrapper>
 
-                    <PermIdentityOutlinedIcon />
-                </IconButton>
-            </NavbarLeft>
-        </Navbar>
-    );
+        <Title>
+          <Typography>{getNavBarContext()}</Typography>
+        </Title>
+      </NavbarRight>
+      <NavbarLeft>
+        <SearchIcon>
+          <SearchOutlinedIcon sx={{ color: grey[500] }} />
+        </SearchIcon>
+        <InputField type="text" placeholder="Search here" />
+        <Divider></Divider>
+        <IconButton>
+          <NotificationsOutlinedIcon />
+        </IconButton>
+        <IconButton>
+          <PermIdentityOutlinedIcon />
+        </IconButton>
+      </NavbarLeft>
+    </Navbar>
+  );
 };

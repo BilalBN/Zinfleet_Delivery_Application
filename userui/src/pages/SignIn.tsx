@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Button, TextField, Typography } from "@mui/material";
 import signInImg from "../assets/images/signin.png";
 import LogoImg from "../assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -33,10 +33,8 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:center;
-  top: 20%;
-  left: 20%;
   flex: 1;
-  padding: 40px;
+  padding: 0 15%;
   overflow-y: auto;
   gap: 10px;
 `;
@@ -47,8 +45,8 @@ const SignInContainer = styled.div`
     white-space: nowrap;
 `;
 const WelcomeText = styled.div`
-  font-weight:500;
-  font-size:21px
+  font-weight: 500;
+  font-size: 21px
 `;
 const RightText = styled.div`
   font-weight:300;
@@ -58,6 +56,7 @@ const InputField = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  margin-top: 10px;
 `;
 const RightContainer = styled.div`
   display: flex;
@@ -69,13 +68,26 @@ const SignInImage = styled.img`
   width: 100%;
 `;
 
-const ButtonContainer = styled.div`
-display: flex;
-justify-content: flex-end
+const BaseContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+const ButtonContainer = styled(BaseContainer)`
+  margin-top: 20px;
 `
 const Title = styled.div`
-font-size: 28px;
+font-size: 55px;
 padding: 20px 0;
+`
+const CompanyName = styled.span`
+color:#04009A;
+`
+const CustomLink = styled(Link)`
+text-decoration: none
+`
+
+const CustomButton = styled(Button)`
+  width: 200px;
 `
 export const SignIn = () => {
   const navigate = useNavigate();
@@ -87,37 +99,36 @@ export const SignIn = () => {
         <FormContainer>
           <SignInContainer>
             <WelcomeText>
-              Welcome to <span style={{ color: "#0066ff" }}>ZeinFleet</span>
+              Welcome to <CompanyName>ZeinFleet</CompanyName>
             </WelcomeText>
             <RightText>
               <div>No Account ?</div>
-              <Button sx={{ textTransform: "none" }} onClick={() => { navigate("/signup") }}>
+              <CustomLink to={"/signup"}>
                 Sign up
-              </Button>
+              </CustomLink>
             </RightText>
           </SignInContainer>
-          <Title>Sign up</Title>
+          <Title>Sign in</Title>
           <InputField>
-            <Typography>Enter your username or email address</Typography>
-            <TextField variant="outlined" placeholder="Username or email address" fullWidth />
+            <Typography>Username or email address </Typography>
+            <TextField variant="outlined" placeholder="Enter your username or email address" fullWidth />
           </InputField>
           <InputField>
-            <Typography>Enter your Password</Typography>
-            <TextField variant="outlined" placeholder="Password" fullWidth sx={{ borderRadius: "8px" }} />
+            <Typography>Password</Typography>
+            <TextField variant="outlined" placeholder="Enter your Password" fullWidth sx={{ borderRadius: "8px" }} />
           </InputField>
-          <ButtonContainer>
-            <Typography sx={{ color: "#0066ff", display: "flex", justifyContent: "flex-end" }}>
+          <BaseContainer>
+            <CustomLink to={'/'}>
               Forget Password?
-            </Typography>
-          </ButtonContainer>
+            </CustomLink>
+          </BaseContainer>
           <ButtonContainer>
-            <Button
+            <CustomButton
               variant="contained"
-              sx={{ textTransform: "none", display: "flex", justifyContent: "flex-end", marginTop: "15px" }}
               onClick={() => { navigate("/dashboard") }}
             >
               Sign in
-            </Button>
+            </CustomButton>
           </ButtonContainer>
         </FormContainer>
       </LeftContainer>
