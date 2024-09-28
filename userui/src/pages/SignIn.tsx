@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Button, TextField, Typography } from "@mui/material";
 import signInImg from "../assets/images/signin.png";
 import LogoImg from "../assets/images/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppDispatch } from "../store/hook";
 import { login } from "../store/authSlice";
 import { useForm } from "react-hook-form";

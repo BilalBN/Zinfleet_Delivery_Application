@@ -1,7 +1,6 @@
 import TimerIcon from '@mui/icons-material/Timer';
 import StopIcon from '@mui/icons-material/Stop';
 import styled from "@emotion/styled";
-type Props = {};
 const Counter = styled.div`
   display: flex;
   gap: 7px;
