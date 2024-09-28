@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { FormControl, InputLabel, Select, SelectChangeEvent } from "@mui/material";
+import { FormControl, InputLabel } from "@mui/material";
 export const DriverDetails = () => {
     const [open, setOpen] = useState(false);
     // const [age, setAge] = useState(0);

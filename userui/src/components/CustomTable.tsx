@@ -55,7 +55,7 @@ const CustomTable = () => {
     const [reassignedUsers, setReassignedUsers] = useState<{ [key: number]: string }>({});
 
     // Handle page change
-    const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
 
