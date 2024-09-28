@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 const Container = styled.div`
     display: flex;
-    background: #fff;
     width: 100%;
     height: 100%;
+    align-items: center;
+    justify-content: center;
 `
 const Settings = () => {
-    return <Container>Settings</Container>;
+    return <Container>Coming soon</Container>;
 };
 
 export default Settings;

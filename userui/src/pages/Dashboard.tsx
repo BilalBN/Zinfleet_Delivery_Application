@@ -23,7 +23,7 @@ const WidgetContainer = styled.div`
 `;
 const CardsRow = styled.div`
   display: flex;
-  gap:20px;
+  gap:15px;
   flex-wrap: wrap;
 `;
 export const Dashboard = () => {

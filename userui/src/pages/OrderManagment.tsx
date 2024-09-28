@@ -7,14 +7,15 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
 `
+
 const OrderManagment = () => {
     return (
         <Container>
-            <SubNavBar/>
-           <NoDataAvailable/> 
+            <SubNavBar />
+            <NoDataAvailable />
         </Container>
     );
-   
+
 };
 
 export default OrderManagment;
