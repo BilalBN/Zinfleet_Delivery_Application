@@ -2,6 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { NavBar } from "../components/Navbar"
 import { SideBar } from "../components/SideBar"
 import styled from "@emotion/styled";
+import { useAppSelector } from '../store/hook';
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -15,10 +16,10 @@ const Body = styled.div`
     width: 100%;
 `
 const RequireAuth = ({ auth }: { auth: boolean }) => {
-    const user = true
-
+    const { isAuthenticated } = useAppSelector((state) => state.auth);
+    
     return auth ? (
-        user ? (
+        isAuthenticated ? (
             <Container>
                 <NavBar />
                 <Body>
@@ -32,7 +33,7 @@ const RequireAuth = ({ auth }: { auth: boolean }) => {
         ) : (
             <Navigate to="/signin" />
         )
-    ) : user ? (
+    ) : isAuthenticated ? (
         <Navigate to="/" />
     ) : (
         <Outlet />

@@ -3,10 +3,15 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import logo from "../assets/images/logo.png";
-import { Typography } from "@mui/material";
+import { Menu, MenuItem, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { grey } from "@mui/material/colors";
 import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hook";
+import { setLoading } from "../store/rootslice";
+import { logout } from "../store/authSlice";
+import NotificationList from "./Notifications";
 
 const Navbar = styled.div`
   display: flex;
@@ -66,7 +71,16 @@ const Divider = styled.div`
 `;
 export const NavBar = () => {
   const location = useLocation();
-
+  const dispatch = useAppDispatch();
+  const {user}  = useAppSelector((state) => state.auth);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const getNavBarContext = () => {
     switch (location.pathname) {
       case "/":
@@ -81,6 +95,15 @@ export const NavBar = () => {
         return "";
     }
   };
+  const logoutUser=()=>{
+    setAnchorEl(null);
+    dispatch(setLoading(true));
+    setTimeout(() => {
+      dispatch(logout())
+      dispatch(setLoading(false));
+    }, 1000);
+   
+  }
   return (
     <Navbar>
       <NavbarRight>
@@ -98,12 +121,22 @@ export const NavBar = () => {
         </SearchIcon>
         <InputField type="text" placeholder="Search here" />
         <Divider></Divider>
-        <IconButton>
-          <NotificationsOutlinedIcon />
-        </IconButton>
-        <IconButton>
+        <NotificationList/>
+        <IconButton onClick={handleClick}>
           <PermIdentityOutlinedIcon />
         </IconButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem>{user?.name}</MenuItem>
+          <MenuItem onClick={logoutUser}>Logout</MenuItem>
+        </Menu>
       </NavbarLeft>
     </Navbar>
   );

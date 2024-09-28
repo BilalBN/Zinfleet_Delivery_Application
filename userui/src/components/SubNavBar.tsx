@@ -1,19 +1,12 @@
 import styled from "@emotion/styled";
-import { Button, MenuItem, Select, SelectChangeEvent, keyframes } from "@mui/material";
+import { Button, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useState } from "react";
+import Timer from "./Timer";
+
 
 type ViewMode = "LiveOrders" | "ProcessingOrders" | "AssignedOrders" | "RejectedOrders" | "AllOrders";
-
-const borderGrow = keyframes`
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
-`;
 
 const Container = styled.div`
   display: flex;
@@ -32,12 +25,12 @@ const SearchFilterContainer = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-const ProcessTimeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+
 const InputField = styled.input`
   border: none;
+  &:focus{
+    outline: none;
+  }
 `;
 const SearchBox = styled.div`
   display: flex;
@@ -71,30 +64,36 @@ const BottomRow = styled.div`
 const ListItem = styled.div<{ isActive: boolean }>`
   position: relative;
   color: ${(props) => (props.isActive ? "#04009A" : "#6e6e6e")};
+  border-bottom: ${(props) => (props.isActive ? " 2px solid #04009A" : null)};
   padding-bottom: 20px;
   cursor: pointer;
 
   /* Add transition for color */
   transition: color 0.3s ease;
-
-  /* Pseudo-element for animated border */
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: ${(props) => (props.isActive ? "100%" : "0%")};
-    background-color: #04009a;
-
-    /* Apply the borderGrow animation if isActive is true */
-    ${(props) =>
-      props.isActive &&
-      `
-      animation: ${borderGrow} 0.5s ease forwards;
-    `}
-  }
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  line-height: 20px;
 `;
+
+
+
+const CustomSearch = styled(SearchOutlinedIcon)`
+  cursor: pointer;
+`
+const Count = styled.div<{ isActive: boolean }>`
+  width: 36px;
+  height: 22px;
+  color: ${(props) => (props.isActive ? "#04009A" : "#B5B5B5")};
+  border: ${(props) => (props.isActive ? " 1px solid #04009A" : '1px solid #B5B5B5')};
+  display: flex;
+  align-items: center;
+  justify-content:center;
+`
+const TimerContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`
 export const SubNavBar = () => {
   const [searchBy, setSearchBy] = useState("orderid");
   const [orderType, setOrderType] = useState<ViewMode>("LiveOrders");
@@ -124,20 +123,19 @@ export const SubNavBar = () => {
 
             <Divider></Divider>
             <InputField placeholder="Search" />
-            <SearchOutlinedIcon />
+            <CustomSearch />
           </SearchBox>
 
           <FilterBox>
             <FilterAltOutlinedIcon />
           </FilterBox>
         </SearchFilterContainer>
-        <ProcessTimeContainer>
-          <Button variant="contained" sx={{ textTransform: "None" }}>
-            Process
-          </Button>
-          <div>Time</div>
-        </ProcessTimeContainer>
+
+        <Button variant="contained" sx={{ textTransform: "None" }}>
+          Process
+        </Button>
       </TopRow>
+      <TimerContainer><Timer /></TimerContainer>
       <BottomRow>
         <ListItem
           isActive={orderType === "LiveOrders"}
@@ -146,7 +144,7 @@ export const SubNavBar = () => {
           }}
         >
           Live Orders
-        </ListItem>
+          <Count isActive={orderType === "LiveOrders"}>50</Count></ListItem>
         <ListItem
           isActive={orderType === "ProcessingOrders"}
           onClick={() => {
@@ -154,7 +152,7 @@ export const SubNavBar = () => {
           }}
         >
           Processing Orders
-        </ListItem>
+          <Count isActive={orderType === "ProcessingOrders"}>50</Count></ListItem>
         <ListItem
           isActive={orderType === "AssignedOrders"}
           onClick={() => {
@@ -162,15 +160,15 @@ export const SubNavBar = () => {
           }}
         >
           Assigned Orders
-        </ListItem>
+          <Count isActive={orderType === "AssignedOrders"}>50</Count></ListItem>
         <ListItem
           isActive={orderType === "RejectedOrders"}
           onClick={() => {
             setOrderType("RejectedOrders");
           }}
         >
-          Rejected Orders{" "}
-        </ListItem>
+          Rejected Orders
+          <Count isActive={orderType === "RejectedOrders"}>50</Count></ListItem>
         <ListItem
           isActive={orderType === "AllOrders"}
           onClick={() => {
@@ -178,7 +176,7 @@ export const SubNavBar = () => {
           }}
         >
           All Orders{" "}
-        </ListItem>
+          <Count isActive={orderType === "AllOrders"}>50</Count></ListItem>
       </BottomRow>
     </Container>
   );

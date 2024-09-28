@@ -27,6 +27,9 @@ const SearchBox = styled.div`
 `;
 const InputField = styled.input`
   border: none;
+  &:focus{
+    outline: none;
+  }
 `;
 const SerachFilterContainer = styled.div`
   display: flex;
