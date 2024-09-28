@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import logo from "../assets/images/logo.png";
 import { Menu, MenuItem, Typography } from "@mui/material";
