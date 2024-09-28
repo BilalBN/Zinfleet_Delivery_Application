@@ -60,9 +60,23 @@ const TimeRangeSelection = styled.div`
 const Body = styled.div`
   height: 300px;
 `;
+const active = "#000000";
+const normal = "#747474";
+const TimeRange = styled.div<{ isActive: boolean }>`
+  color: ${(props) => (props.isActive ? active : normal)};
+  background-color: ${(props) => (props.isActive ? "#ffffff" : "#f6f6f6")};
+  width:39px;
+  height:24px;
+  border-radius: ${(props)=>(props.isActive ? "2px":null)};
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow:  ${(props) => (props.isActive ? '-1px 1px 2px 1px rgba(0, 0, 0, 0.4)' : null)};;
+`;
+
 type ViewMode = "1D" | "1M" | "1W" | "1M" | "6M" | "1Y";
 export const RevenueCard = () => {
-  const [timeline, setTimeline] = useState<ViewMode>("1M");
+  const [timeline, setTimeline] = useState<ViewMode>("1D");
   return (
     <Container>
       <Header>
@@ -77,17 +91,46 @@ export const RevenueCard = () => {
           </RevenueCount>
         </Revenue>
         <TimeRangeSelection>
-          <div
+          <TimeRange
+            isActive={timeline === "1D"}
             onClick={() => {
               setTimeline("1D");
             }}
           >
             1D
-          </div>
-          <div>1W</div>
-          <div>1M</div>
-          <div>6M</div>
-          <div>1Y</div>
+          </TimeRange>
+          <TimeRange
+            isActive={timeline === "1W"}
+            onClick={() => {
+              setTimeline("1W");
+            }}
+          >
+            1W
+          </TimeRange>
+          <TimeRange
+            isActive={timeline === "1M"}
+            onClick={() => {
+              setTimeline("1M");
+            }}
+          >
+            1M
+          </TimeRange>
+          <TimeRange
+            isActive={timeline === "6M"}
+            onClick={() => {
+              setTimeline("6M");
+            }}
+          >
+            6M
+          </TimeRange>
+          <TimeRange
+            isActive={timeline === "1Y"}
+            onClick={() => {
+              setTimeline("1Y");
+            }}
+          >
+            1Y
+          </TimeRange>
         </TimeRangeSelection>
       </Header>
       <Body>

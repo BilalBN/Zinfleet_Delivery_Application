@@ -6,7 +6,7 @@ import logo from "../assets/images/logo.png";
 import { Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { grey } from "@mui/material/colors";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Navbar = styled.div`
   display: flex;

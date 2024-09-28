@@ -17,35 +17,43 @@ function App() {
       },
     },
     typography: {
-      button: {
-        textTransform: "none",
-        fontFamily: "Poppins, Arial, sans-serif",
-      },
-      h1: {
-        fontFamily: "Poppins, Arial, sans-serif",
-        fontWeight: 700,
-      },
-      body1: {
-        fontFamily: "Poppins, Arial, sans-serif",
-      },
+      // Set global font family
+      fontFamily: "Poppins, Arial, sans-serif",
     },
     components: {
+      // Override for all MUI tables
+      MuiTable: {
+        styleOverrides: {
+          root: {
+            fontFamily: "Poppins, Arial, sans-serif", // Ensure table uses this font
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            fontFamily: "Poppins, Arial, sans-serif", // Applies to all table cells
+            fontSize: "14px", // You can specify a size for table text
+          },
+        },
+      },
       MuiButton: {
         styleOverrides: {
           root: {
             padding: "5px 20px",
             fontSize: "14px",
+            fontFamily: "Poppins, Arial, sans-serif", // Ensure button uses the same font
           },
         },
       },
     },
   });
+
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           {/* Define the layout route with nested routes */}
-
           <Route element={<RequireAuth auth={false} />}>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
@@ -56,7 +64,6 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/drivermanagement" element={<DriverManagment />} />
           </Route>
-
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
