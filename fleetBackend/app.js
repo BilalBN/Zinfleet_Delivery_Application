@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors');
 // const db = require('./db/db');
 const userRoutes = require('./routes/userManagement');
+const authRoutes = require('./routes/authentication');
+const driverRoutes = require('./routes/driver');
+const errorMiddleware = require('./middleware/errorMiddleware');
+
+
 const app = express();
 const port = 3000;
 
@@ -21,8 +26,10 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/drivers', driverRoutes);
 
-
+app.use(errorMiddleware);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
