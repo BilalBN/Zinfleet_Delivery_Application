@@ -1,37 +1,47 @@
-import { PieChart, Pie, Cell } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { ManagersActitvity } from '../types/chart';
 
-// Data for the pie chart
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 200 },
-  { name: 'Group C', value: 400 },
-  { name: 'Group D', value: 300 },
-];
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-// Colors for each segment
-const COLORS = ['#962DFF', '#4A3AFF', '#ACBEFF', '#D7B5FE'];
+    return (
+        <text
+            x={x}
+            y={y}
+            fill="white"
+            fontSize={14}
+            textAnchor={x > cx ? 'start' : 'end'}
+            dominantBaseline="central"
+        >
+            {`${(percent * 100).toFixed(0)}%`}
+        </text>
+    );
+};
 
-
-const CustomPieChart = () => {
-  return (
-    <PieChart width={400} height={250}>
-      {/* First Pie */}
-      <Pie
-        data={data}
-        cx={180}
-        cy={110}
-        innerRadius={60}
-        outerRadius={100}
-        fill="#8884d8"
-        paddingAngle={5}
-        dataKey="value"
-      >
-        {data.map((_entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
-  );
+const CustomPieChart = ({ data }: { data: ManagersActitvity[] }) => {
+    return (
+        <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+                <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}  // Inner radius for donut chart
+                    outerRadius={120} // Outer radius
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    dataKey="value"
+                >
+                    {data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                </Pie>
+            </PieChart>
+        </ResponsiveContainer>
+    );
 };
 
 export default CustomPieChart;

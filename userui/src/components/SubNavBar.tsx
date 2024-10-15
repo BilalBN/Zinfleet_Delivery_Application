@@ -4,9 +4,9 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useState } from "react";
 import Timer from "./Timer";
-
-
-type ViewMode = "LiveOrders" | "ProcessingOrders" | "AssignedOrders" | "RejectedOrders" | "AllOrders";
+import { useAppDispatch, useAppSelector } from "../store/hook";
+import { OrderType } from "../types/order";
+import { setSelectedOrder } from "../store/orderslice";
 
 const Container = styled.div`
   display: flex;
@@ -96,10 +96,14 @@ const TimerContainer = styled.div`
 `
 export const SubNavBar = () => {
   const [searchBy, setSearchBy] = useState("orderid");
-  const [orderType, setOrderType] = useState<ViewMode>("LiveOrders");
+  const { selectedOrder, data } = useAppSelector(state => state.order)
+  const dispatch = useAppDispatch()
   const handleChange = (event: SelectChangeEvent) => {
     setSearchBy(event.target.value as string);
   };
+  const onSlectedOrderTypeChange = (orderType: OrderType) => {
+    dispatch(setSelectedOrder(orderType))
+  }
   return (
     <Container>
       <TopRow>
@@ -138,45 +142,45 @@ export const SubNavBar = () => {
       <TimerContainer><Timer /></TimerContainer>
       <BottomRow>
         <ListItem
-          isActive={orderType === "LiveOrders"}
+          isActive={selectedOrder === OrderType.Live}
           onClick={() => {
-            setOrderType("LiveOrders");
+            onSlectedOrderTypeChange(OrderType.Live);
           }}
         >
           Live Orders
-          <Count isActive={orderType === "LiveOrders"}>50</Count></ListItem>
+          <Count isActive={selectedOrder === OrderType.Live}>{data.length}</Count></ListItem>
         <ListItem
-          isActive={orderType === "ProcessingOrders"}
+          isActive={selectedOrder === OrderType.Processing}
           onClick={() => {
-            setOrderType("ProcessingOrders");
+            onSlectedOrderTypeChange(OrderType.Processing);
           }}
         >
           Processing Orders
-          <Count isActive={orderType === "ProcessingOrders"}>50</Count></ListItem>
+          <Count isActive={selectedOrder === OrderType.Processing}>{data.length}</Count></ListItem>
         <ListItem
-          isActive={orderType === "AssignedOrders"}
+          isActive={selectedOrder === OrderType.Assigned}
           onClick={() => {
-            setOrderType("AssignedOrders");
+            onSlectedOrderTypeChange(OrderType.Assigned);
           }}
         >
           Assigned Orders
-          <Count isActive={orderType === "AssignedOrders"}>50</Count></ListItem>
+          <Count isActive={selectedOrder === OrderType.Assigned}>{data.length}</Count></ListItem>
         <ListItem
-          isActive={orderType === "RejectedOrders"}
+          isActive={selectedOrder === OrderType.Rejected}
           onClick={() => {
-            setOrderType("RejectedOrders");
+            onSlectedOrderTypeChange(OrderType.Rejected);
           }}
         >
           Rejected Orders
-          <Count isActive={orderType === "RejectedOrders"}>50</Count></ListItem>
+          <Count isActive={selectedOrder === OrderType.Rejected}>{data.length}</Count></ListItem>
         <ListItem
-          isActive={orderType === "AllOrders"}
+          isActive={selectedOrder === OrderType.All}
           onClick={() => {
-            setOrderType("AllOrders");
+            onSlectedOrderTypeChange(OrderType.All);
           }}
         >
           All Orders{" "}
-          <Count isActive={orderType === "AllOrders"}>50</Count></ListItem>
+          <Count isActive={selectedOrder === OrderType.All}>{data.length}</Count></ListItem>
       </BottomRow>
     </Container>
   );
