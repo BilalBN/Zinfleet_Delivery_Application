@@ -65,16 +65,15 @@ const WelcomeText = styled.div`
   font-size: 21px;
 `;
 
-const RightText = styled.div`
-  font-weight: 300;
-  font-size: 16px;
-`;
+// const RightText = styled.div`
+//   font-weight: 300;
+//   font-size: 16px;
+// `;
 
 const InputField = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-top: 10px;
 `;
 
 const RightContainer = styled.div`
@@ -106,13 +105,21 @@ const CompanyName = styled.span`
   color: #04009a;
 `;
 
-const CustomLink = styled(Link)`
-  text-decoration: none;
-`;
+// const CustomLink = styled(Link)`
+//   text-decoration: none;
+// `;
 
 const CustomButton = styled(Button)`
-  width: 200px;
+  width: 225px;
+  height: 54px;
+  text-transform: none;
 `;
+
+const Form=styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+`
 
 interface SignInFormInputs {
   email: string;
@@ -141,7 +148,7 @@ export const SignIn = () => {
       };
       dispatch(login(user));
       dispatch(setLoading(false));
-      openSnackbar('Successfully logedin', 'success');
+      openSnackbar('Successfully loggedin', 'success');
     }, 1000);
 
   };
@@ -155,14 +162,13 @@ export const SignIn = () => {
             <WelcomeText>
               Welcome to <CompanyName>ZeinFleet</CompanyName>
             </WelcomeText>
-            <RightText>
+            {/* <RightText>
               <div>No Account?</div>
               <CustomLink to={"/signup"}>Sign up</CustomLink>
-            </RightText>
+            </RightText> */}
           </SignInContainer>
           <Title>Sign in</Title>
-          {/* Form */}
-          <form onSubmit={handleSubmit(userSignIn)}>
+          <Form onSubmit={handleSubmit(userSignIn)}>
             <InputField>
               <Typography>Username or email address</Typography>
               <TextField
@@ -186,18 +192,19 @@ export const SignIn = () => {
                 helperText={errors.password?.message}
               />
             </InputField>
-            <BaseContainer>
+            {/* <BaseContainer>
               <CustomLink to={"/"}>Forget Password?</CustomLink>
-            </BaseContainer>
+            </BaseContainer> */}
             <ButtonContainer>
               <CustomButton
                 type="submit"
                 variant="contained"
+                size="large"
               >
-                Sign in
+                Sign In
               </CustomButton>
             </ButtonContainer>
-          </form>
+          </Form>
         </FormContainer>
       </LeftContainer>
       <RightContainer>

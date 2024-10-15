@@ -60,7 +60,7 @@ const NotificationList = () => {
         <div>
             {/* Notification Button with Badge */}
             <IconButton color="inherit" onClick={handleClick}>
-                <Badge badgeContent={notifications.length} color="secondary">
+                <Badge badgeContent={notifications.length} color="primary">
                     <NotificationsIcon />
                 </Badge>
             </IconButton>

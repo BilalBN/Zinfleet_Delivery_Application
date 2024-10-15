@@ -1,6 +1,14 @@
 import styled from "@emotion/styled";
 import CustomPieChart from "./PieChart";
 import SquareIcon from "@mui/icons-material/Square";
+import { ManagersActitvity } from "../types/chart";
+
+const data: ManagersActitvity[] = [
+  { name: 'Manager A', value: 50, color: '#4A3AFF' },
+  { name: 'Manager B', value: 80, color: '#962DFF' },
+  { name: 'Manager C', value: 50, color: '#ACBEFF' },
+  { name: 'Manager D', value: 50, color: '#D7B5FE' },
+];
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -38,7 +46,7 @@ export const OrderCard = () => {
   return (
     <Container>
       <Title>Total Orders</Title>
-      <CustomPieChart />
+      <CustomPieChart data={data}/>
       <Branches>
         <BranchGroup>
           <BranchSubGroup>
