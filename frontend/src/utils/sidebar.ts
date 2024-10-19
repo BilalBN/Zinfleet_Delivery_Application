@@ -36,12 +36,12 @@ export const AdminSidebar: SideBarItem[] = [
   },
   {
     label: "Shops",
-    icon: "Driver",
+    icon: "Shops",
     path: "shops",
   },
   {
     label: "Fleets",
-    icon: "Settings",
+    icon: "Fleets",
     path: "fleets",
   },
   {

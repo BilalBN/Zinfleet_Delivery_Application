@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
-import { NoDataAvailable } from "../components/EmptyPage";
-import { SubNavBar } from "../components/SubNavBar";
+import { NoDataAvailable } from "../../core/components/EmptyPage";
+import { SubNavBar } from "../../core/components/SubNavBar";
 import { useAppSelector } from "../../../store/hook";
 import { OrderType } from "../../../types/order";
-import LiveOrdersTable from "../components/tables/LiveOrdersTable";
-import AssignedOrdersTable from "../components/tables/AssignedOrdersTable";
-import RejectedOrders from "../components/tables/RejectedTable";
-import AllOrders from "../components/tables/AllOrdersTable";
-import ProcessingOrder from "../components/tables/ProcessingOrdersTable";
+import LiveOrdersTable from "../../core/components/tables/LiveOrdersTable";
+import AssignedOrdersTable from "../../core/components/tables/AssignedOrdersTable";
+import RejectedOrders from "../../core/components/tables/RejectedTable";
+import AllOrders from "../../core/components/tables/AllOrdersTable";
+import ProcessingOrder from "../../core/components/tables/ProcessingOrdersTable";
 const Container = styled.div`
     display: flex;
     flex-direction: column;

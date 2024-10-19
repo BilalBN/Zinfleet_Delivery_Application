@@ -1,8 +1,8 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { ManagersActitvity } from '../types/chart';
+import { ManagersActitvity } from '../../../types/chart';
 
 const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);

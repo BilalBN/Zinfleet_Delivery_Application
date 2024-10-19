@@ -15,15 +15,15 @@ const AllOrdersTable = () => {
   const { data } = useAppSelector((state) => state.order);
 
   const AllOrdersTableColumns = [
-    { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Amount", dataIndex: "amount", key: "amount" },
-    { title: "Quantity", dataIndex: "quantity", key: "quantity" },
-    { title: "Date", dataIndex: "date", key: "date" },
-    { title: "Shop", dataIndex: "shop", key: "shop" },
-    { title: "Pick Up", dataIndex: "pickUp", key: "pickUp" },
-    { title: "Delivery", dataIndex: "delivery", key: "delivery" },
-    { title: "Assignee", dataIndex: "assignee", key: "assignee" },
-    { title: "Rejected By", dataIndex: "rejectedBy", key: "rejectedBy" },
+    { title: "ID", dataIndex: "id", key: "id", width: '100px' },
+    { title: "Amount", dataIndex: "amount", key: "amount", width: '100px' },
+    { title: "Quantity", dataIndex: "quantity", key: "quantity", width: '100px' },
+    { title: "Date", dataIndex: "date", key: "date", width: '100px' },
+    { title: "Shop", dataIndex: "shop", key: "shop", width: '100px' },
+    { title: "Pick Up", dataIndex: "pickUp", key: "pickUp", width: '100px' },
+    { title: "Delivery", dataIndex: "delivery", key: "delivery", width: '100px' },
+    { title: "Assignee", dataIndex: "assignee", key: "assignee", width: '100px' },
+    { title: "Rejected By", dataIndex: "rejectedBy", key: "rejectedBy", width: '100px' },
     {
       title: 'Status',
       dataIndex: 'status', // This won't map directly but will use a custom renderer
@@ -31,6 +31,7 @@ const AllOrdersTable = () => {
       render: (row: Order) => (
         row.status ? (<DeliveredOrder>Delivered</DeliveredOrder>) : <UnDeliveredOrder>UnDelivered</UnDeliveredOrder>
       ),
+      width: '100px'
     },
   ];
 

@@ -3,13 +3,9 @@ const Container = styled.div`
     display: flex;
     width: 100%;
     height: 100%;
-    padding: 10px;
+    align-items: center;
+    justify-content: center;
 `
-
 export const Settings = () => {
-    return (
-        <Container>
-           Settings
-        </Container>
-    )
-}
+    return <Container>Coming soon</Container>;
+};
