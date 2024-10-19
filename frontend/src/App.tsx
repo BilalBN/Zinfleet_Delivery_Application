@@ -6,7 +6,7 @@ import { CircularProgress } from "@mui/material";
 import { SnackbarProvider } from "./modules/core/components/SnackBar";
 import { theme } from "./utils/theme";
 import { useAppSelector } from "./store/hook";
-import { UserType } from "./store/authSlice";
+import { UserType } from "./types/user";
 
 /**Core Modules Components */
 import { SignIn } from "./modules/core/pages/SignIn";

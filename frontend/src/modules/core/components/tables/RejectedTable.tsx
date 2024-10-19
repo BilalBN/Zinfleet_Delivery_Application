@@ -19,14 +19,14 @@ const RejectedOrders = () => {
 
     // Define the columns specific to Rejected Orders
     const rejectedOrdersColumns = [
-        { title: 'Order ID', dataIndex: 'id', key: 'id' },
-        { title: 'Amount', dataIndex: 'amount', key: 'amount' },
-        { title: 'Quantity', dataIndex: 'quantity', key: 'quantity' },
-        { title: 'Date', dataIndex: 'date', key: 'date' },
-        { title: 'Shop Name', dataIndex: 'shop', key: 'shop' },
-        { title: 'Pick up location', dataIndex: 'pickUp', key: 'pickUp' },
-        { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery' },
-        { title: 'Rejected By', dataIndex: 'rejectedBy', key: 'rejectedBy' },
+        { title: 'Order ID', dataIndex: 'id', key: 'id' ,width: '100px'},
+        { title: 'Amount', dataIndex: 'amount', key: 'amount' ,width: '100px'},
+        { title: 'Quantity', dataIndex: 'quantity', key: 'quantity' ,width: '100px'},
+        { title: 'Date', dataIndex: 'date', key: 'date' ,width: '100px'},
+        { title: 'Shop Name', dataIndex: 'shop', key: 'shop' ,width: '100px'},
+        { title: 'Pick up location', dataIndex: 'pickUp', key: 'pickUp' ,width: '100px'},
+        { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery' ,width: '100px'},
+        { title: 'Rejected By', dataIndex: 'rejectedBy', key: 'rejectedBy' ,width: '100px'},
         {
             title: 'Reassign to',
             dataIndex: 'reassign', // This won't map directly but will use a custom renderer
@@ -47,7 +47,7 @@ const RejectedOrders = () => {
                     ))}
                 </Select>
             ),
-        },
+        width: '100px'},
     ];
 
     return <ReusableTable columns={rejectedOrdersColumns} data={data} />;

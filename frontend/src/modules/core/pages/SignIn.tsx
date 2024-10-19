@@ -3,12 +3,13 @@ import { Button, TextField, Typography } from "@mui/material";
 import signInImg from "../../../assets/images/signin.png";
 import LogoImg from "../../../assets/images/logo.png";
 import { useAppDispatch } from "../../../store/hook";
-import { UserType, login } from "../../../store/authSlice";
+import { login } from "../../../store/authSlice";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { setLoading } from "../../../store/rootslice";
 import { useSnackbar } from "../components/SnackBar";
+import { UserType } from "../../../types/user";
 
 // Validation schema
 const schema = yup.object().shape({

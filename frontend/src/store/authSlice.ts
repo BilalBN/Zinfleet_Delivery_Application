@@ -1,9 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-export enum UserType {
-  ADMIN_USER = "ADMIN_USER",
-  FLEET_USER = "FLEET_USER",
-  WAREHOUSE_USER = "WAREHOUSE_USER",
-}
+import {User} from '../types/user'
+
 const getUser = () => {
   const user = localStorage.getItem("user");
   if (user) {
@@ -11,12 +8,6 @@ const getUser = () => {
   }
   return null;
 };
-interface User {
-  name: string;
-  email: string;
-  companyName: string;
-  type: UserType;
-}
 
 interface AuthState {
   isAuthenticated: boolean;

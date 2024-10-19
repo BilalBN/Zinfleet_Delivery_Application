@@ -17,13 +17,13 @@ const ProcessingOrdersTable = () => {
         });
     };
     const ProcessingOrdersTableColumns = [
-        { title: 'Order ID', dataIndex: 'id', key: 'id' },
-        { title: 'Amount', dataIndex: 'amount', key: 'amount' },
-        { title: 'Quantity', dataIndex: 'quantity', key: 'quantity' },
-        { title: 'Date', dataIndex: 'date', key: 'date' },
-        { title: 'Shop Name', dataIndex: 'shop', key: 'shop' },
-        { title: 'Pick up location', dataIndex: 'pickUp', key: 'pickUp' },
-        { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery' },
+        { title: 'Order ID', dataIndex: 'id', key: 'id', width: '100px' },
+        { title: 'Amount', dataIndex: 'amount', key: 'amount', width: '100px' },
+        { title: 'Quantity', dataIndex: 'quantity', key: 'quantity', width: '100px' },
+        { title: 'Date', dataIndex: 'date', key: 'date', width: '100px' },
+        { title: 'Shop Name', dataIndex: 'shop', key: 'shop', width: '100px' },
+        { title: 'Pick up location', dataIndex: 'pickUp', key: 'pickUp', width: '100px' },
+        { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery', width: '100px' },
         {
             title: 'Assign',
             dataIndex: 'assign', // This won't map directly but will use a custom renderer
@@ -44,7 +44,9 @@ const ProcessingOrdersTable = () => {
                     ))}
                 </Select>
             ),
+            width: '100px'
         },
+
     ];
 
     return <ReusableTable columns={ProcessingOrdersTableColumns} data={data} />;

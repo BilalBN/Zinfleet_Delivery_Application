@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import CommonCard from "../components/CommonCard";
 import LineChart from "../components/LineChart";
 import CustomPieChart from "../components/PieChart";
-import { ManagersActitvity } from "../types/chart";
+import { ManagersActitvity } from "../../../types/chart";
 const data: ManagersActitvity[] = [
     { name: 'Manager A', value: 50, color: '#00C49F' },
     { name: 'Manager B', value: 80, color: '#FFBB28' },

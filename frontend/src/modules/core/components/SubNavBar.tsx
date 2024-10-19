@@ -3,10 +3,11 @@ import { Button, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useState } from "react";
-import Timer from "./Timer";
+import Timer from "../../fleets/components/Timer";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { OrderType } from "../../../types/order";
 import { setSelectedOrder } from "../../../store/orderslice";
+import { colors } from "../../../utils/theme";
 
 const Container = styled.div`
   display: flex;
@@ -63,8 +64,8 @@ const BottomRow = styled.div`
 `;
 const ListItem = styled.div<{ isActive: boolean }>`
   position: relative;
-  color: ${(props) => (props.isActive ? "#04009A" : "#6e6e6e")};
-  border-bottom: ${(props) => (props.isActive ? " 2px solid #04009A" : null)};
+  color: ${(props) => (props.isActive ? colors.primary : "#6e6e6e")};
+  border-bottom: ${(props) => (props.isActive ? `1px solid ${colors.primary}` : null)};
   padding-bottom: 20px;
   cursor: pointer;
 
@@ -84,8 +85,8 @@ const CustomSearch = styled(SearchOutlinedIcon)`
 const Count = styled.div<{ isActive: boolean }>`
   width: 36px;
   height: 22px;
-  color: ${(props) => (props.isActive ? "#04009A" : "#B5B5B5")};
-  border: ${(props) => (props.isActive ? " 1px solid #04009A" : '1px solid #B5B5B5')};
+  color: ${(props) => (props.isActive ? colors.primary : "#B5B5B5")};
+  border: ${(props) => (props.isActive ? `1px solid ${colors.primary}`: '1px solid #B5B5B5')};
   display: flex;
   align-items: center;
   justify-content:center;

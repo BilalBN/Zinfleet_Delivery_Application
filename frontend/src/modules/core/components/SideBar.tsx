@@ -7,9 +7,10 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../store/hook";
 import { SideBarItem } from "../../../types/sidebar";
-import { UserType } from "../../../store/authSlice";
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import { UserType } from "../../../types/user";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import { colors } from "../../../utils/theme";
 
 type SidebarProps = {
   items: SideBarItem[];
@@ -36,7 +37,7 @@ const ListItemContainer = styled.div<{ isActive: boolean }>`
   display: flex;
   gap: 5px;
   cursor: pointer;
-  background-color: ${(props) => (props.isActive ? "#A5A2FF36" : "#fff")};
+  background-color: ${(props) => (props.isActive ? colors.secondary : "#fff")};
   padding: 10px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
@@ -47,11 +48,9 @@ const Statuscontainer = styled.div`
   align-items: center;
   padding-left: 10px;
 `;
-const active = "#04009A";
-const normal = "#6E6E6E";
 
 const NavigationTitle = styled.div<{ isActive: boolean }>`
-  color: ${(props) => (props.isActive ? active : normal)};
+  color: ${(props) => (props.isActive ? colors.primary : colors.default)};
 `;
 
 export const SideBar = ({ items }: SidebarProps) => {
@@ -60,33 +59,46 @@ export const SideBar = ({ items }: SidebarProps) => {
   const { user } = useAppSelector((state) => state.auth);
 
   const navigateUser = (path: string) => {
-    const targetPath = user?.type === UserType.FLEET_USER ? `/${user?.companyName}/${path}` : user?.type === UserType.ADMIN_USER ? `/admin/${path}`:`/warehouse/${path}`;
+    const targetPath =
+      user?.type === UserType.FLEET_USER
+        ? `/${user?.companyName}/${path}`
+        : user?.type === UserType.ADMIN_USER
+        ? `/admin/${path}`
+        : `/warehouse/${path}`;
     navigation(targetPath);
   };
 
+  const isActivePath = (currentPath: string, item: SideBarItem) => {
+    return currentPath.split("/").filter(Boolean).includes(item.path);
+  };
 
   const getSideBarIcon = (item: SideBarItem) => {
     switch (item.icon) {
       case "Dashboard":
-        return <SpaceDashboardIcon sx={{ color: location.pathname === `/${user?.companyName}` ? active : normal }} />;
+        return (
+          <SpaceDashboardIcon sx={{ color: isActivePath(location.pathname, item) ? colors.primary : colors.default }} />
+        );
       case "Order":
-        return <ListAltIcon sx={{ color: location.pathname === `/${user?.companyName}` ? active : normal }} />;
+        return <ListAltIcon sx={{ color: isActivePath(location.pathname, item) ? colors.primary : colors.default }} />;
       case "Driver":
-        return <ManageAccountsIcon sx={{ color: location.pathname === `/${user?.companyName}` ? active : normal }} />;
+        return (
+          <ManageAccountsIcon sx={{ color: isActivePath(location.pathname, item) ? colors.primary : colors.default }} />
+        );
       case "Settings":
-        return <SettingsIcon sx={{ color: location.pathname === `/${user?.companyName}` ? active : normal }} />;
+        return <SettingsIcon sx={{ color: isActivePath(location.pathname, item) ? colors.primary : colors.default }} />;
       case "Shops":
-        return <StorefrontIcon sx={{ color: location.pathname === `/${user?.companyName}` ? active : normal }} />;
+        return (
+          <StorefrontIcon sx={{ color: isActivePath(location.pathname, item) ? colors.primary : colors.default }} />
+        );
       case "Fleets":
-        return <LocalShippingIcon sx={{ color: location.pathname === `/${user?.companyName}` ? active : normal }} />;
+        return (
+          <LocalShippingIcon sx={{ color: isActivePath(location.pathname, item) ? colors.primary : colors.default }} />
+        );
       default:
-        <div></div>
+        <div></div>;
     }
   };
 
-  const isActivePath = (currentPath: string, item: SideBarItem) => {
-    return currentPath.split('/').filter(Boolean).includes(item.path)
-  }
   return (
     <Sidebar>
       <Container>
@@ -101,10 +113,9 @@ export const SideBar = ({ items }: SidebarProps) => {
             {getSideBarIcon(item)}
             <NavigationTitle isActive={isActivePath(location.pathname, item)}>{item.label}</NavigationTitle>
           </ListItemContainer>
-
         ))}
         <Statuscontainer>
-          <NavigationTitle isActive={location.pathname === ''}>Online Status</NavigationTitle>
+          <NavigationTitle isActive={location.pathname === ""}>Online Status</NavigationTitle>
           <Switch />
         </Statuscontainer>
       </Container>

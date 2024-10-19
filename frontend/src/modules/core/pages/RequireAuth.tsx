@@ -3,7 +3,7 @@ import { NavBar } from "../components/Navbar";
 import { SideBar } from "../components/SideBar";
 import styled from "@emotion/styled";
 import { useAppSelector } from "../../../store/hook";
-import { UserType } from "../../../store/authSlice";
+import { UserType } from "../../../types/user";
 import { AdminSidebar, FleetSidebar, WareHouseSidebar } from "../../../utils/sidebar";
 
 // Styled components
