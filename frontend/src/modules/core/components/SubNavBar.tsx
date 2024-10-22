@@ -4,10 +4,6 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useState } from "react";
 import Timer from "../../fleets/components/Timer";
-import { useAppDispatch, useAppSelector } from "../../../store/hook";
-import { OrderType } from "../../../types/order";
-import { setSelectedOrder } from "../../../store/orderslice";
-import { useCurrentColors } from "../../../hooks/useCurrentColors";
 
 const Container = styled.div`
   display: flex;

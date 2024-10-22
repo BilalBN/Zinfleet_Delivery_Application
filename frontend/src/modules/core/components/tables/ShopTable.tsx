@@ -1,5 +1,4 @@
 import ReusableTable from './ReusableOrdersTable'; 
-import { Order } from '../../../../types/order';
 import { Button } from '@mui/material';
 
 const ShopTable = () => {
@@ -44,7 +43,7 @@ const ShopTable = () => {
       title: 'Actions',
       dataIndex: 'actions',
       key: 'actions',
-      render: (row: Order) => (
+      render: () => (
         <div>
           <Button>View</Button>
           <Button>Edit</Button>
