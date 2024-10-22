@@ -7,7 +7,7 @@ import Timer from "../../fleets/components/Timer";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { OrderType } from "../../../types/order";
 import { setSelectedOrder } from "../../../store/orderslice";
-import { colors } from "../../../utils/theme";
+import { useCurrentColors } from "../../../hooks/useCurrentColors";
 
 const Container = styled.div`
   display: flex;
@@ -57,54 +57,21 @@ const FilterBox = styled.div`
   justify-content: center;
   color: #777777;
 `;
-const BottomRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 0.5px solid #6e6e6e;
-`;
-const ListItem = styled.div<{ isActive: boolean }>`
-  position: relative;
-  color: ${(props) => (props.isActive ? colors.primary : "#6e6e6e")};
-  border-bottom: ${(props) => (props.isActive ? `1px solid ${colors.primary}` : null)};
-  padding-bottom: 20px;
-  cursor: pointer;
-
-  /* Add transition for color */
-  transition: color 0.3s ease;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  line-height: 20px;
-`;
-
-
 
 const CustomSearch = styled(SearchOutlinedIcon)`
   cursor: pointer;
 `
-const Count = styled.div<{ isActive: boolean }>`
-  width: 36px;
-  height: 22px;
-  color: ${(props) => (props.isActive ? colors.primary : "#B5B5B5")};
-  border: ${(props) => (props.isActive ? `1px solid ${colors.primary}`: '1px solid #B5B5B5')};
-  display: flex;
-  align-items: center;
-  justify-content:center;
-`
+
 const TimerContainer = styled.div`
     display: flex;
     justify-content: flex-end;
 `
 export const SubNavBar = () => {
   const [searchBy, setSearchBy] = useState("orderid");
-  const { selectedOrder, data } = useAppSelector(state => state.order)
-  const dispatch = useAppDispatch()
   const handleChange = (event: SelectChangeEvent) => {
     setSearchBy(event.target.value as string);
   };
-  const onSlectedOrderTypeChange = (orderType: OrderType) => {
-    dispatch(setSelectedOrder(orderType))
-  }
+
   return (
     <Container>
       <TopRow>
@@ -141,48 +108,6 @@ export const SubNavBar = () => {
         </Button>
       </TopRow>
       <TimerContainer><Timer /></TimerContainer>
-      <BottomRow>
-        <ListItem
-          isActive={selectedOrder === OrderType.Live}
-          onClick={() => {
-            onSlectedOrderTypeChange(OrderType.Live);
-          }}
-        >
-          Live Orders
-          <Count isActive={selectedOrder === OrderType.Live}>{data.length}</Count></ListItem>
-        <ListItem
-          isActive={selectedOrder === OrderType.Processing}
-          onClick={() => {
-            onSlectedOrderTypeChange(OrderType.Processing);
-          }}
-        >
-          Processing Orders
-          <Count isActive={selectedOrder === OrderType.Processing}>{data.length}</Count></ListItem>
-        <ListItem
-          isActive={selectedOrder === OrderType.Assigned}
-          onClick={() => {
-            onSlectedOrderTypeChange(OrderType.Assigned);
-          }}
-        >
-          Assigned Orders
-          <Count isActive={selectedOrder === OrderType.Assigned}>{data.length}</Count></ListItem>
-        <ListItem
-          isActive={selectedOrder === OrderType.Rejected}
-          onClick={() => {
-            onSlectedOrderTypeChange(OrderType.Rejected);
-          }}
-        >
-          Rejected Orders
-          <Count isActive={selectedOrder === OrderType.Rejected}>{data.length}</Count></ListItem>
-        <ListItem
-          isActive={selectedOrder === OrderType.All}
-          onClick={() => {
-            onSlectedOrderTypeChange(OrderType.All);
-          }}
-        >
-          All Orders{" "}
-          <Count isActive={selectedOrder === OrderType.All}>{data.length}</Count></ListItem>
-      </BottomRow>
     </Container>
   );
 };

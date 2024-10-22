@@ -63,7 +63,7 @@ function App() {
             {/* Redirect root to the company-specific route if authenticated */}
             {isAuthenticated && user ? (
               user?.type === UserType.FLEET_USER ? (
-                <Route path="/" element={<Navigate to={`/${user?.companyName}/ `} />} />
+                <Route path="/" element={<Navigate to={`/${user?.companyName} `} />} />
               ) : user?.type === UserType.ADMIN_USER ? (
                 <Route path="/" element={<Navigate to="/admin" />} />
               ) : (
@@ -77,7 +77,7 @@ function App() {
             {/* Routes for Fleet Users */}
             {isAuthenticated && user?.type === UserType.FLEET_USER ? (
               <Route element={<RequireAuth auth={true} />}>
-                <Route path="/:companyName/" element={<Dashboard />} />
+                <Route path="/:companyName" element={<Dashboard />} />
                 <Route path="/:companyName/orders" element={<OrderManagment />} />
                 <Route path="/:companyName/settings" element={<Settings />} />
                 <Route path="/:companyName/drivermanagement" element={<DriverManagment />} />

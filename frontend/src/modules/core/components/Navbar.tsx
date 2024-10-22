@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import logo from "../../../assets/images/logo.png";
+import Logo2 from "../../../assets/images/warehouse.svg";
 import { Menu, MenuItem, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { grey } from "@mui/material/colors";
@@ -11,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { setLoading } from "../../../store/rootslice";
 import { logout } from "../../../store/authSlice";
 import NotificationList from "../../fleets/components/Notifications";
+import { UserType } from "../../../types/user";
 
 const Navbar = styled.div`
   display: flex;
@@ -72,7 +74,7 @@ export const NavBar = () => {
   const location = useLocation();
   const navigation = useNavigate();
   const dispatch = useAppDispatch();
-  const {user}  = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,7 +97,7 @@ export const NavBar = () => {
         return "";
     }
   };
-  const logoutUser=()=>{
+  const logoutUser = () => {
     setAnchorEl(null);
     dispatch(setLoading(true));
     setTimeout(() => {
@@ -103,13 +105,13 @@ export const NavBar = () => {
       navigation('/')
       dispatch(setLoading(false));
     }, 1000);
-   
+
   }
   return (
     <Navbar>
       <NavbarRight>
         <LogoWrapper>
-          <Logo src={logo} />
+          <Logo src={user?.type === UserType.WAREHOUSE_USER ? Logo2 : logo} />
         </LogoWrapper>
 
         <Title>
@@ -122,7 +124,7 @@ export const NavBar = () => {
         </SearchIcon>
         <InputField type="text" placeholder="Search here" />
         <Divider></Divider>
-        <NotificationList/>
+        <NotificationList />
         <IconButton onClick={handleClick}>
           <PermIdentityOutlinedIcon />
         </IconButton>

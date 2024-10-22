@@ -1,11 +1,4 @@
 import { createTheme } from "@mui/material";
-import { User, UserType } from "../types/user";
-
-type Color = {
-  primary: string;
-  secondary: string;
-  default: string;
-};
 export const theme = createTheme({
   palette: {
     primary: {
@@ -44,31 +37,4 @@ export const theme = createTheme({
     },
   },
 });
-const data = localStorage.getItem("user");
-const user = data ? (JSON.parse(data) as User) : null;
 
-const Fleet: Color = {
-  primary: "#04009A",
-  secondary: "#A5A2FF36",
-  default: "#6E6E6E",
-};
-
-const Admin: Color = {
-  primary: "#0066AD",
-  secondary: "#D7E4ED",
-  default: "#6E6E6E",
-};
-
-const Warehouse: Color = {
-  primary: "#04009A",
-  secondary: "#A5A2FF36",
-  default: "#6E6E6E",
-};
-const currentColors = (): Color => {
-  if (user) {
-    return user.type === UserType.ADMIN_USER ? Admin : user.type === UserType.FLEET_USER ? Fleet : Warehouse;
-  }
-  return Admin;
-};
-
-export const colors = currentColors();

@@ -33,12 +33,13 @@ const CustomPaginationContainer = styled(Box)`
 `;
 
 const CustomTableContainer = styled(TableContainer)`
-    background-color: #fff;
+  background-color: #fff;
 `;
 
 const CustomTableHead = styled(TableHead)`
   background-color: #f2f5f9ad;
 `;
+
 interface Props {
   columns: Column[];
   data: any[];
@@ -59,31 +60,34 @@ const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 8 }) => {
   return (
     <CustomContainer>
       <CustomTableContainer>
-          <Table>
-            <CustomTableHead>
-              <TableRow>
+        <Table stickyHeader> {/* Sticky header to keep the table head fixed while scrolling */}
+          <CustomTableHead>
+            <TableRow>
+              {columns.map((col) => (
+                <TableCell key={col.key} width={col.width}>
+                  {col.title}
+                </TableCell>
+              ))}
+            </TableRow>
+          </CustomTableHead>
+          <TableBody>
+            {currentRows.map((row) => (
+              <TableRow key={row.id}>
                 {columns.map((col) => (
-                  <TableCell key={col.key} width={col.width}>{col.title}</TableCell>
+                  <TableCell key={col.key} width={col.width}>
+                    {col.render ? col.render(row) : row[col.dataIndex]}
+                  </TableCell>
                 ))}
               </TableRow>
-            </CustomTableHead>
-            <TableBody>
-              {currentRows.map((row) => (
-                <TableRow key={row.id}>
-                  {columns.map((col) => (
-                    <TableCell key={col.key} width={col.width}>
-                      {col.render ? col.render(row) : row[col.dataIndex]}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+            ))}
+          </TableBody>
+        </Table>
       </CustomTableContainer>
-      {/* Pagination Component */}
       <CustomPaginationContainer>
         {/* Displaying the results */}
-        <div>Showing {(page - 1) * rowsPerPage + 1} to {Math.min(page * rowsPerPage, data.length)} of {data.length} results</div>
+        <div>
+          Showing {(page - 1) * rowsPerPage + 1} to {Math.min(page * rowsPerPage, data.length)} of {data.length} results
+        </div>
 
         {/* Pagination controls */}
         <Pagination

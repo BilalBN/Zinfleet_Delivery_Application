@@ -8,11 +8,15 @@ import AssignedOrdersTable from "../../core/components/tables/AssignedOrdersTabl
 import RejectedOrders from "../../core/components/tables/RejectedTable";
 import AllOrders from "../../core/components/tables/AllOrdersTable";
 import ProcessingOrder from "../../core/components/tables/ProcessingOrdersTable";
+import { OrderTabs } from "../../core/components/OrderTabs";
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 110px);
+    gap: 10px;
+    padding: 10px 10px 0 10px;
+    box-sizing: border-box;
 `
 
 export const Orders = () => {
@@ -37,6 +41,7 @@ export const Orders = () => {
     return (
         <Container>
             <SubNavBar />
+            <OrderTabs/>
             {data.length ? (
                 renderTable()
             ) : (<NoDataAvailable />)}
