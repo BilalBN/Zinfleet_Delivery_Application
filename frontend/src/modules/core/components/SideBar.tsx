@@ -10,8 +10,7 @@ import { SideBarItem } from "../../../types/sidebar";
 import { UserType } from "../../../types/user";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import { colors } from "../../../utils/theme";
-
+import { useCurrentColors } from "../../../hooks/useCurrentColors";
 type SidebarProps = {
   items: SideBarItem[];
 };
@@ -33,42 +32,56 @@ const Container = styled.div`
   padding: 30px 10px 10px 10px;
   box-sizing: border-box;
 `;
-const ListItemContainer = styled.div<{ isActive: boolean }>`
+const ListItemContainer = styled.div<{ backgroundColor: string }>`
   display: flex;
-  gap: 5px;
+  gap: 10px;
   cursor: pointer;
-  background-color: ${(props) => (props.isActive ? colors.secondary : "#fff")};
-  padding: 10px;
-  border-radius: 5px;
+  background-color: ${(props) => props.backgroundColor};
+  padding: 10px 10px 10px 20px;
+  border-radius: 56px;
   transition: background-color 0.3s ease;
 `;
 
 const Statuscontainer = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  padding-left: 30px;
 `;
 
-const NavigationTitle = styled.div<{ isActive: boolean }>`
-  color: ${(props) => (props.isActive ? colors.primary : colors.default)};
+const NavigationTitle = styled.div<{ color: string }>`
+  color: ${(props) => (props.color)};
 `;
 
 export const SideBar = ({ items }: SidebarProps) => {
   const navigation = useNavigate();
   const location = useLocation();
   const { user } = useAppSelector((state) => state.auth);
+  const colors=useCurrentColors(user)
 
   const navigateUser = (path: string) => {
     const targetPath =
       user?.type === UserType.FLEET_USER
-        ? `/${user?.companyName}/${path}`
+        ? path
+          ? `/${user?.companyName}/${path}`
+          : `/${user?.companyName}`
         : user?.type === UserType.ADMIN_USER
-        ? `/admin/${path}`
-        : `/warehouse/${path}`;
+          ? path
+            ? `/admin/${path}`
+            : "/admin"
+          : path
+            ? `/warehouse/${path}`
+            : "/warehouse";
     navigation(targetPath);
   };
 
   const isActivePath = (currentPath: string, item: SideBarItem) => {
+    if (
+      (currentPath === "/admin" && item.path === "") ||
+      (currentPath === "/warehouse" && item.path === "") ||
+      (currentPath === `/${user?.companyName}` && item.path === "")
+    ) {
+      return true;
+    }
     return currentPath.split("/").filter(Boolean).includes(item.path);
   };
 
@@ -105,17 +118,17 @@ export const SideBar = ({ items }: SidebarProps) => {
         {items.map((item) => (
           <ListItemContainer
             key={item.path}
-            isActive={isActivePath(location.pathname, item)}
+            backgroundColor={isActivePath(location.pathname, item)?colors.secondary:"#fff"}
             onClick={() => {
               navigateUser(item.path);
             }}
           >
             {getSideBarIcon(item)}
-            <NavigationTitle isActive={isActivePath(location.pathname, item)}>{item.label}</NavigationTitle>
+            <NavigationTitle color={isActivePath(location.pathname, item)?colors.primary : colors.default}>{item.label}</NavigationTitle>
           </ListItemContainer>
         ))}
         <Statuscontainer>
-          <NavigationTitle isActive={location.pathname === ""}>Online Status</NavigationTitle>
+          <NavigationTitle color={location.pathname === ""?colors.primary : colors.default}>Online Status</NavigationTitle>
           <Switch />
         </Statuscontainer>
       </Container>

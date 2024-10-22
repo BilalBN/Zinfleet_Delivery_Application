@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import CustomTable from "../../core/components/tables/Drivers";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-// import { DriverDetails } from "../components/DriverDetails";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import { FleetDetails } from "../components/AddFleet";
+import FleetTable from "../../core/components/tables/FleetTable";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,9 +58,9 @@ export const Fleets = () => {
             <FilterAltOutlinedIcon />
           </FilterBox>
         </SerachFilterContainer>
-        {/* <DriverDetails /> */}
+        <FleetDetails />
       </SubNavBar>
-      <CustomTable></CustomTable>
+      <FleetTable />
     </Container>
   );
 };

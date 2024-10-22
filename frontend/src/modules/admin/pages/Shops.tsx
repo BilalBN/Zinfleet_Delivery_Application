@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
-import CustomTable from "../../core/components/tables/Drivers";
+import CustomTable from "../../core/components/tables/DriverTable";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 // import { DriverDetails } from "../components/DriverDetails";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import { ShopDetails } from "../components/AddShop";
+import ShopTable from "../../core/components/tables/ShopTable";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,9 +60,9 @@ export const Shops = () => {
             <FilterAltOutlinedIcon />
           </FilterBox>
         </SerachFilterContainer>
-        {/* <DriverDetails /> */}
+        <ShopDetails/>
       </SubNavBar>
-      <CustomTable></CustomTable>
+      <ShopTable/>
     </Container>
   );
 };
