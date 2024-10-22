@@ -40,10 +40,6 @@ const Count = styled.div<{ color: string, active: boolean }>`
   align-items: center;
   justify-content:center;
 `
-const TimerContainer = styled.div`
-    display: flex;
-    justify-content: flex-end;
-`
 export const OrderTabs = () => {
   
   const { selectedOrder, data } = useAppSelector(state => state.order)
