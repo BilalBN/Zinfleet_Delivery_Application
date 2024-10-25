@@ -8,6 +8,7 @@ class DriverService {
   }
 
   async getDriverById(id) {
+
     const driver = await Driver.findByPk(id);
     if (!driver) {
       throw new Error('Driver not found');

@@ -1,15 +1,12 @@
+
 const express = require('express');
+const authController = require('../controllers/authController');
+const {
+    loginValidation,
+  } = require('../validations/authValidation');
 const router = express.Router();
-const { register, login, getUser } = require('../controllers/authController');
-const authMiddleware = require('../middleware/authMiddleware');
 
-// Register a new user
-router.post('/register', register);
-
-// Login a user
-router.post('/login', login);
-
-// Get logged-in user's info (protected route)
-router.get('/me', authMiddleware, getUser);
+// CRUD routes for drivers
+router.post('/login', loginValidation,authController.login);
 
 module.exports = router;
