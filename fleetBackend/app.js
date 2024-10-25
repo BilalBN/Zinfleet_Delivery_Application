@@ -4,7 +4,12 @@ const cors = require('cors');
 const userRoutes = require('./routes/userManagement');
 const authRoutes = require('./routes/authentication');
 const driverRoutes = require('./routes/driver');
+const fleetRoutes = require('./routes/fleet');
+const shopRoutes = require('./routes/shop');
+
+
 const errorMiddleware = require('./middleware/errorMiddleware');
+const crypto = require('crypto');
 
 
 const app = express();
@@ -26,11 +31,18 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/auth', authRoutes);
 app.use('/api/drivers', driverRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/fleets', fleetRoutes);
+app.use('/api/shops', shopRoutes);
+
+
+
 
 app.use(errorMiddleware);
 app.get('/', (req, res) => {
+// const secret = crypto.randomBytes(32).toString('hex');
+// console.log(secret);
   res.send('Hello World!');
 });
 
