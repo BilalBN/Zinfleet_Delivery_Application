@@ -4,16 +4,21 @@ const bcrypt = require('bcrypt');
 
 const { Op } = require('sequelize');
 const Fleet = require('../models/fleetModel');
+const Shop = require('../models/shopModel');
+const Driver = require('../models/driverModel');
 
 class FleetService {
-    async getAllFleets(limit,page) {
+    async getAllFleets(limit, page) {
         try {
-          // Calculate offset
-          const offset = (page - 1) * limit;
+          // Determine if pagination is needed
+          const shouldPaginate = limit && page;
       
-          // Fetch fleets with pagination
+          // Calculate offset only if pagination parameters are provided
+          const offset = shouldPaginate ? (page - 1) * limit : undefined;
+      
+          // Fetch fleets with or without pagination
           const fleets = await Fleet.findAll({
-            limit: limit,
+            limit: shouldPaginate ? limit : undefined,
             offset: offset,
           });
       
@@ -25,22 +30,26 @@ class FleetService {
             fleets.map(async (fleet) => {
               const user = await MainUsers.findOne({
                 where: { fleet_id: fleet.id },
-              });
-      
+              }); 
+              const totalShops = await Shop.findAndCountAll({where:{fleet_id:fleet.id}})
+              const totalDrivers = await Driver.findAndCountAll({where:{fleet_id:fleet.id}})
+
               return {
                 ...fleet.dataValues,
                 username: user ? user.user_name : null,
+                total_shops:totalShops.count,
+                total_drivers:totalDrivers.count
               };
             })
           );
       
-          // Calculate total pages
-          const totalPages = Math.ceil(totalFleets / limit);
+          // Calculate total pages only if pagination parameters are provided
+          const totalPages = shouldPaginate ? Math.ceil(totalFleets / limit) : 1;
       
           return {
             total: totalFleets,
             totalPages: totalPages,
-            currentPage: page,
+            currentPage: page || 1,
             data: fleetsWithUsernames,
           };
         } catch (error) {
@@ -48,6 +57,7 @@ class FleetService {
           throw error;
         }
       }
+      
       
     async getFleetsById(id) {
         try{

@@ -19,23 +19,23 @@ class AuthService {
     return driver;
   }
 
-  async login(data,) {
+  async login(data,res) {
     try {
             const { username, password } =data;
           
             // Check if user exists
             const user =await MainUsers.findOne({ where: { user_name: username } })
             if (!user) {
-              return res.status(400).json({ message: 'Invalid credentials' });
+              throw new Error('Invalid credentials');
             }
           
             // Check if the password matches
             const passwordIsValid = bcrypt.compareSync(password, user.password);
             if (!passwordIsValid) {
-              return res.status(400).json({ message: 'Invalid credentials' });
+              throw new Error('Invalid credentials');
             }
             // Generate JWT token
-            const token = jwt.sign({ id: user.id, username: user.user_name }, process.env.JWT_SECRET, {
+            const token = jwt.sign({ id: user.id, username: user.user_name,role:user.role }, process.env.JWT_SECRET, {
               expiresIn: process.env.JWT_EXPIRES_IN,
             });
           
@@ -45,7 +45,7 @@ class AuthService {
               token,
               user:user.id
             };
-      } catch (error) {console.log(3)
+      } catch (error) {
         if (error instanceof UniqueConstraintError) {
           // Handle unique constraint error
           const duplicateField = error.errors[0].path; // This will tell you which field is duplicated

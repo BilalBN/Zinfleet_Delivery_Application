@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/db'); // Adjust this path according to your project
+const Fleet = require('./fleetModel');
 
 const Driver = sequelize.define('Driver', {
   id: {
@@ -7,6 +8,14 @@ const Driver = sequelize.define('Driver', {
     autoIncrement: true,
     primaryKey: true,
     allowNull: false
+  },
+  fleet_id: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: 'Fleets', // The name of the target model (the table you are referencing)
+      key: 'id' // The key in the target model that this foreign key references
+    }
   },
   name: {
     type: DataTypes.STRING,
@@ -48,5 +57,5 @@ const Driver = sequelize.define('Driver', {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'drivers'
 });
-
+Driver.belongsTo(Fleet, { foreignKey: 'fleet_id', as: 'fleet' }); 
 module.exports = Driver;

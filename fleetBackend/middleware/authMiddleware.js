@@ -6,11 +6,12 @@ function authMiddleware(req, res, next) {
         return res.sendStatus(401); // Unauthorized
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user,role) => {
         if (err) {
             return res.sendStatus(403); // Forbidden
         }
         req.user = user; // Save user info for later use
+        console.log(user.role)
         next();
     });
 }
