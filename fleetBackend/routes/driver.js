@@ -9,9 +9,9 @@ const {
 const router = express.Router();
 
 // CRUD routes for drivers
-router.get('/', getDriverByIdValidation,driverController.getAllDrivers);
+router.post('/', getDriverByIdValidation,driverController.getAllDrivers);
 router.get('/:id', createDriverValidation,driverController.getDriverById);
-router.post('/', updateDriverValidation,driverController.createDriver);
+router.post('/add', updateDriverValidation,driverController.createDriver);
 router.put('/:id', updateDriverValidation,driverController.updateDriver);
 router.delete('/:id', deleteDriverValidation,driverController.deleteDriver);
 

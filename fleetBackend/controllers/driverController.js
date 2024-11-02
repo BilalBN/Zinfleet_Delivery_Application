@@ -5,7 +5,7 @@ const CustomError = require('../utils/customError');
 class DriverController {
   async getAllDrivers(req, res, next) {
     try {
-      const drivers = await driverService.getAllDrivers();
+      const drivers = await driverService.getAllDrivers(req.body.limit,req.body.page);
       ResponseHandler.success(res, drivers, 'Drivers fetched successfully');
     } catch (error) {
       next(new CustomError(error.message, 500));

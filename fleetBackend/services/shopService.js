@@ -7,48 +7,56 @@ const Fleet = require('../models/fleetModel');
 const Shop = require('../models/shopModel');
 
 class ShopService {
-  async getAllShops(limit,page) {
-    try {
-        // Calculate offset
-        const offset = (page - 1) * limit;
-    
-        // Fetch fleets with pagination
-        const shops = await Shop.findAll({
-        limit: limit,
-        offset: offset,
-        });
-    
-        // Get the total count of fleets for pagination info
-        const totalShops = await Shop.count();
-    
-        // Fetch associated users for the fetched fleets
-        const shopWithUsernames = await Promise.all(
-        shops.map(async (shop) => {
-            const user = await MainUsers.findOne({
-            where: { shop_id: shop.id },
-            });
-    
-            return {
-            ...shop.dataValues,
-            username: user ? user.user_name : null,
-            };
-        })
-        );
-    
-        // Calculate total pages
-        const totalPages = Math.ceil(totalShops / limit);
-    
-        return {
-        total: totalShops,
-        totalPages: totalPages,
-        currentPage: page,
-        data: shopWithUsernames,
-        };
-    } catch (error) {
-        console.error('Error fetching shops with usernames:', error);
-        throw error;
-    }  
-}
+    async getAllShops(limit, page) {
+        try {
+          // Determine if pagination is needed
+          const shouldPaginate = limit && page;
+      
+          // Calculate offset only if pagination parameters are provided
+          const offset = shouldPaginate ? (page - 1) * limit : undefined;
+      
+          // Fetch shops with or without pagination
+          const shops = await Shop.findAll({
+            limit: shouldPaginate ? limit : undefined,
+            offset: offset,
+          });
+      
+          // Get the total count of shops for pagination info
+          const totalShops = await Shop.count();
+      
+          // Fetch associated users for the fetched shops
+          const shopWithUsernames = await Promise.all(
+            shops.map(async (shop) => {
+              const user = await MainUsers.findOne({
+                where: { shop_id: shop.id },
+              });
+              const fleetName = await Fleet.findOne({
+                where: { id: shop.fleet_id },
+              });
+              return {
+                ...shop.dataValues,
+                username: user ? user.user_name : null,
+                fleetName: fleetName ? fleetName.name : null,
+
+              };
+            })
+          );
+      
+          // Calculate total pages only if pagination parameters are provided
+          const totalPages = shouldPaginate ? Math.ceil(totalShops / limit) : 1;
+      
+          return {
+            total: totalShops,
+            totalPages: totalPages,
+            currentPage: page || 1,
+            data: shopWithUsernames,
+          };
+        } catch (error) {
+          console.error('Error fetching shops with usernames:', error);
+          throw error;
+        }
+      }
+      
 
   async getShopById(id) {
     try{
@@ -65,11 +73,16 @@ class ShopService {
             where: { shop_id: id },
             attributes: ['user_name']  // Fetch only the user_name field
         });
+        const fleetName = await Fleet.findOne({
+            where: { fleet_id: shops.fleet_id },
+          });
 
         // Step 3: Combine the shop data with the user_name
         const result = {
             ...shops.get(),  // Get shop data
-            user_name: mainUser ? mainUser.user_name : null  // Add user_name if found, otherwise null
+            user_name: mainUser ? mainUser.user_name : null,  // Add user_name if found, otherwise null
+            fleetName: fleetName ? fleetName.name : null,
+
         };
 
         return result;

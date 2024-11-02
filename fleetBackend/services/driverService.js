@@ -1,19 +1,92 @@
 const { UniqueConstraintError } = require('sequelize');
 const Driver = require('../models/driverModel');
 const { Op } = require('sequelize');
+const Fleet = require('../models/fleetModel');
 
 class DriverService {
-  async getAllDrivers() {
-    return await Driver.findAll();
-  }
+  async getAllDrivers(limit,page) {
+      try {
+        // Determine if pagination is needed
+        const shouldPaginate = limit && page;
+    
+        // Calculate offset only if pagination parameters are provided
+        const offset = shouldPaginate ? (page - 1) * limit : undefined;
+    
+        // Fetch shops with or without pagination
+        const drivers = await Driver.findAll({
+          limit: shouldPaginate ? limit : undefined,
+          offset: offset,
+        });
+    
+        // Get the total count of shops for pagination info
+        const totalDrivers = await Driver.count();
+    
+        // Fetch associated users for the fetched shops
+        const driverWithUsernames = await Promise.all(
+          drivers.map(async (driver) => {
+            // const user = await MainUsers.findOne({
+            //   where: { shop_id: shop.id },
+            // });
+            const fleetName = await Fleet.findOne({
+              where: { id: driver.fleet_id },
+            });
+            return {
+              ...driver.dataValues,
+              // username: user ? user.user_name : null,
+              fleetName: fleetName ? fleetName.name : null,
+
+            };
+          })
+        );
+    
+        // Calculate total pages only if pagination parameters are provided
+        const totalPages = shouldPaginate ? Math.ceil(totalDrivers / limit) : 1;
+    
+        return {
+          total: totalDrivers,
+          totalPages: totalPages,
+          currentPage: page || 1,
+          data: driverWithUsernames,
+        };
+      } catch (error) {
+        console.error('Error fetching driver with usernames:', error);
+        throw error;
+      }
+    }
 
   async getDriverById(id) {
 
-    const driver = await Driver.findByPk(id);
-    if (!driver) {
-      throw new Error('Driver not found');
-    }
-    return driver;
+    try{
+      const drivers = await Driver.findByPk(id, {
+          include: [
+              { model: Fleet, as: 'fleet' },  
+          ]
+      });
+      if (!drivers) {
+      throw new Error('Drivers not found');
+      }
+      // Step 2: Fetch the user_name from MainUsers using the shop_id
+      // const mainUser = await MainUsers.findOne({
+      //     where: { shop_id: id },
+      //     attributes: ['user_name']  // Fetch only the user_name field
+      // });
+      const fleetName = await Fleet.findOne({
+          where: { fleet_id: drivers.fleet_id },
+        });
+
+      // Step 3: Combine the shop data with the user_name
+      const result = {
+          ...drivers.get(),  // Get shop data
+          // user_name: mainUser ? mainUser.user_name : null,  // Add user_name if found, otherwise null
+          fleetName: fleetName ? fleetName.name : null,
+
+      };
+
+      return result;
+  } catch (error) {
+      console.error('Error fetching drivers with usernames:', error);
+      throw error;
+  }
   }
 
   async createDriver(driverData) {
