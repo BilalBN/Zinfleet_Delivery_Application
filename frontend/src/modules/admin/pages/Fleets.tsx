@@ -1,8 +1,14 @@
 import styled from "@emotion/styled";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { FleetDetails } from "../components/AddFleet";
+import { FleetDialog } from "../components/dialog/Fleet";
 import FleetTable from "../../core/components/tables/FleetTable";
+import { Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { useAppDispatch } from "../../../store/hook";
+import { useState } from "react";
+import { addFleet } from "../../../store/fleetSlice";
+import { FleetPayload } from "../../../types/fleet";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -46,6 +52,22 @@ const FilterBox = styled.div`
   color: #777777;
 `;
 export const Fleets = () => {
+  const dispatch = useAppDispatch();
+  const [open, setOpen] = useState(false);
+  const handleSave = async (fleet: FleetPayload) => {
+    setOpen(false)
+    dispatch(addFleet(fleet))
+  };
+
+  const handleClickOpen = (value: boolean) => {
+    setOpen(value);
+  };
+
+  const handleClose = (_event: React.MouseEvent, reason: string) => {
+    if (reason !== "backdropClick") {
+      setOpen(false);
+    }
+  };
   return (
     <Container>
       <SubNavBar>
@@ -58,7 +80,11 @@ export const Fleets = () => {
             <FilterAltOutlinedIcon />
           </FilterBox>
         </SerachFilterContainer>
-        <FleetDetails />
+        <Button variant="contained" onClick={()=>{handleClickOpen(true)}}>
+          <AddIcon />
+          Add new fleet
+        </Button>
+        {open ? (<FleetDialog open={open}  handleClose={handleClose} handleClickOpen={handleClickOpen} handleSave={handleSave} title={"Add new fleet"} />) : null}
       </SubNavBar>
       <FleetTable />
     </Container>

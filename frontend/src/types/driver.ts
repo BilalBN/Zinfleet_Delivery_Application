@@ -1,7 +1,25 @@
-export type Driver = {
+export type DriverPayload = {
   name: string;
-  id: string;
+  phoneNumber: string;
+  licenseNumber: string;
   address: string;
-  contact: string;
-  vehicle: string;
+  age: number;
+};
+
+export type DriverUpdatePayload = {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  licenseNumber: string;
+  address: string;
+  age: number;
+};
+
+export type Driver = {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  licenseNumber: string;
+  address: string;
+  age: number;
 };

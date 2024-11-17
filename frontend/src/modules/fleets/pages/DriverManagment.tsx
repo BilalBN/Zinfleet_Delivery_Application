@@ -1,15 +1,21 @@
 import styled from "@emotion/styled";
-import CustomTable from "../../core/components/tables/DriverTable";
+import DriverTable from "../../core/components/tables/DriverTable";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { DriverDetails } from "../components/DriverDetails";
+import { DriverDialog } from "../components/dialog/Driver";
+import AddIcon from "@mui/icons-material/Add";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import { Button } from "@mui/material";
+import { useState } from "react";
+import { useAppDispatch } from "../../../store/hook";
+import { DriverPayload } from "../../../types/driver";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  padding: 10px 20px 20px 20px;
-  gap: 15px;
+  height: calc(100% - 60px);
+  gap: 10px;
+  padding: 10px 10px 0 10px;
+  box-sizing: border-box;
 `;
 const SubNavBar = styled.div`
   display: flex;
@@ -27,7 +33,7 @@ const SearchBox = styled.div`
 `;
 const InputField = styled.input`
   border: none;
-  &:focus{
+  &:focus {
     outline: none;
   }
 `;
@@ -46,6 +52,23 @@ const FilterBox = styled.div`
   color: #777777;
 `;
 const DriverManagment = () => {
+  const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const handleSave = async (shop: DriverPayload) => {
+    setOpen(false)
+    dispatch(AddDriver(shop))
+  };
+
+  const handleClickOpen = (value: boolean) => {
+    setOpen(value);
+  };
+
+  const handleClose = (_event: React.MouseEvent, reason: string) => {
+    if (reason !== "backdropClick") {
+      setOpen(false);
+    }
+  };
   return (
     <Container>
       <SubNavBar>
@@ -58,11 +81,19 @@ const DriverManagment = () => {
             <FilterAltOutlinedIcon />
           </FilterBox>
         </SerachFilterContainer>
-        <DriverDetails />
+        <Button variant="contained" onClick={() => { handleClickOpen(true) }}>
+          <AddIcon />
+          Add Driver
+        </Button>
+        <DriverDialog open={open} handleClose={handleClose} handleClickOpen={handleClickOpen} handleSave={handleSave} title="Add new Driver" />
       </SubNavBar>
-      <CustomTable></CustomTable>
+      <DriverTable />
     </Container>
   );
 };
 
 export default DriverManagment;
+function AddDriver(shop: DriverPayload): any {
+  throw new Error("Function not implemented.");
+}
+

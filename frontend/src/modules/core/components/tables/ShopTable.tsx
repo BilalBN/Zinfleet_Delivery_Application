@@ -1,59 +1,95 @@
-import ReusableTable from './ReusableOrdersTable'; 
-import { Button } from '@mui/material';
+import { useEffect, useState } from "react";
+import { Align } from "../../../../types/table";
+import ReusableTable from "./ReusableOrdersTable";
+import { Button } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { ShopItem, ShopPayload, ShopUpdatePayload } from "../../../../types/shop";
+import styled from "@emotion/styled";
+import { NoDataAvailable } from "../EmptyPage";
+import { deleteShop, fetchShops, updateShop } from "../../../../store/shopSlice";
+import { fetchFleets } from "../../../../store/fleetSlice";
+import { ShopDialog } from "../../../admin/components/dialog/Shop";
+import { useSnackbar } from "../SnackBar";
 
+const ShopActions = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+`
 const ShopTable = () => {
-  const data=[
-    {
-      sn:"1",
-      name:"Quickship",
-      address:'Prestige Ozone',
-      warehouseAddress:"quickship@gmail.com",
-      fleetName:'+919453889019'
-    },
-    {
-      sn:"2",
-      name:"expresszone",
-      address:'Church street, Saudi',
-      warehouseAddress:"expresszone@gmail.com",
-      fleetName:'+919453889019'
-    },
-    {
-      sn:"3",
-      name:"expresszone",
-      address:'All store,  Dubai',
-      warehouseAddress:"swift.ship@gmail.com",
-      fleetName:'+919453889019'
-    },
-    {
-      sn:"4",
-      name:"urban move",
-      address:'All Rolla street, Dubai',
-      warehouseAddress:"quickship@gmail.com",
-      fleetName:'+919453889019'
+  const { data } = useAppSelector((state) => state.shop)
+  const [selectedShop, setSelectedShop] = useState<ShopItem | null>(null);
+  const snackbar = useSnackbar()
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchShops())
+    dispatch(fetchFleets())
+  }, []);
+  const [open, setOpen] = useState(false);
+  const handleSave = async (shop: ShopPayload) => {
+    try {
+
+
+      setOpen(false)
+      if (selectedShop) {
+        const payload: ShopUpdatePayload = { id: selectedShop.id, ...shop }
+        dispatch(updateShop(payload))
+      }
+      setSelectedShop(null)
+    } catch (error) {
+
     }
-  ]
+  };
+
+  const handleClickOpen = (value: boolean) => {
+    setOpen(value);
+  };
+
+  const handleClose = (_event: React.MouseEvent, reason: string) => {
+    if (reason !== "backdropClick") {
+      setOpen(false);
+    }
+  };
+
+
+
 
   const ShopColumns = [
-    { title: "Sn", dataIndex: "sn", key: "sn", width: '100px' },
-    { title: "Shop Name", dataIndex: "name", key: "name", width: '100px' },
-    { title: "Address", dataIndex: "address", key: "address", width: '200px' },
-    { title: "Warehouse location", dataIndex: "warehouseAddress", key: "warehouseAddress", width: '200px' },
+    { title: "Shop Name", dataIndex: "name", key: "name", width: "100px" },
+    { title: "Address", dataIndex: "address", key: "address", width: "200px" },
+    { title: "Warehouse location", dataIndex: "warehouse_address", key: "warehouseAddress", width: "200px" },
     { title: "Fleet Name", dataIndex: "fleetName", key: "fleetName", width: '100px' },
     {
-      title: 'Actions',
-      dataIndex: 'actions',
-      key: 'actions',
-      render: () => (
-        <div>
-          <Button>View</Button>
-          <Button>Edit</Button>
-        </div>
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
+      render: (item: ShopItem) => (
+        <ShopActions>
+          <Button variant="contained" color="success" onClick={() => {
+            setSelectedShop(item)
+            setOpen(true)
+          }}>Edit</Button>
+          <Button variant="contained" color="error" onClick={() => {
+            dispatch(deleteShop(item.id))
+          }}>Delete</Button>
+        </ShopActions>
       ),
-      width: '200px'
+      width: "200px",
+      align: Align.center,
     },
   ];
 
-  return <ReusableTable columns={ShopColumns} data={data} />;
+  return (<>
+    {data.length ? (<ReusableTable columns={ShopColumns} data={data} />) : (<NoDataAvailable message="No shops found" />)}
+    {open && selectedShop ? (<ShopDialog handleClickOpen={handleClickOpen} open={open} handleClose={handleClose} handleSave={handleSave} title={"Edit fleet"} initialData={{
+      name: selectedShop.name,
+      warehouseAddress: selectedShop.warehouse_address,
+      address: selectedShop.address,
+      fleet_id: selectedShop.fleet_id,
+      userName: selectedShop.name,
+      password: "",
+    }} />) : null}
+  </>);
 };
 
 export default ShopTable;

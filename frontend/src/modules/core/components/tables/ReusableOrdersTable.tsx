@@ -11,7 +11,7 @@ import {
   Box,
 } from '@mui/material';
 import styled from '@emotion/styled';
-import { Column } from '../../../../types/order';
+import { Column } from '../../../../types/table';
 
 // Styled Components
 const CustomContainer = styled(Paper)`
@@ -46,7 +46,7 @@ interface Props {
   rowsPerPage?: number;
 }
 
-const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 8 }) => {
+const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 10 }) => {
   const [page, setPage] = useState(1);
 
   // Handle page change
@@ -64,7 +64,7 @@ const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 8 }) => {
           <CustomTableHead>
             <TableRow>
               {columns.map((col) => (
-                <TableCell key={col.key} width={col.width}>
+                <TableCell key={`header-${col.key}`} width={col.width} align={col?.align ? col.align : 'left'}>
                   {col.title}
                 </TableCell>
               ))}
@@ -74,7 +74,7 @@ const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 8 }) => {
             {currentRows.map((row) => (
               <TableRow key={row.id}>
                 {columns.map((col) => (
-                  <TableCell key={col.key} width={col.width}>
+                  <TableCell key={`${col.key}-${row.id}`} width={col.width}>
                     {col.render ? col.render(row) : row[col.dataIndex]}
                   </TableCell>
                 ))}
