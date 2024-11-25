@@ -6,6 +6,8 @@ const authRoutes = require('./routes/authentication');
 const driverRoutes = require('./routes/driver');
 const fleetRoutes = require('./routes/fleet');
 const shopRoutes = require('./routes/shop');
+const trackingRoutes = require('./routes/drivertracking');
+
 
 
 const errorMiddleware = require('./middleware/errorMiddleware');
@@ -35,6 +37,8 @@ app.use('/api/drivers', driverRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/fleets', fleetRoutes);
 app.use('/api/shops', shopRoutes);
+app.use('/api/tracking', trackingRoutes);
+
 
 
 
