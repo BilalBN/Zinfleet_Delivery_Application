@@ -63,8 +63,7 @@ class FleetService {
         try{
             console.log(id,'koko')
 
-            const fleets = await Fleet.findByPk(7);
-            console.log(fleets)
+            const fleets = await Fleet.findByPk(id);
             if (!fleets) {
             throw new Error('Fleets not found');
             }
