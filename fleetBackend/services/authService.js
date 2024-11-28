@@ -4,6 +4,8 @@ const { Op } = require('sequelize');
 const MainUsers = require('../models/mainUserModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const constants = require('../config/constants');
+const Shop = require('../models/shopModel');
 require('dotenv').config();
 
 class AuthService {
@@ -20,7 +22,7 @@ class AuthService {
   }
 
   async login(data,res) {
-    try {
+    // try {
             const { username, password } =data;
           
             // Check if user exists
@@ -34,8 +36,14 @@ class AuthService {
             if (!passwordIsValid) {
               throw new Error('Invalid credentials');
             }
+            let fleet_id=null;
+            if(user.role==constants.shop)
+              {
+                const shopUser =await Shop.findByPk(user.shop_id)
+                fleet_id=shopUser.fleet_id;
+              }
             // Generate JWT token
-            const token = jwt.sign({ id: user.id, username: user.user_name,role:user.role }, process.env.JWT_SECRET, {
+            const token = jwt.sign({ id: user.id, username: user.user_name,role:user.role,fleet_id:fleet_id }, process.env.JWT_SECRET, {
               expiresIn: process.env.JWT_EXPIRES_IN,
             });
           
@@ -45,14 +53,14 @@ class AuthService {
               token,
               user:user.id
             };
-      } catch (error) {
-        if (error instanceof UniqueConstraintError) {
-          // Handle unique constraint error
-          const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
-          throw new Error(`${duplicateField} already exists.`);
-        }
-        throw error;
-      }
+      // } catch (error) {
+      //   if (error instanceof UniqueConstraintError) {
+      //     // Handle unique constraint error
+      //     const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
+      //     throw new Error(`${duplicateField} already exists.`);
+      //   }
+      //   throw error;
+      // }
   }
 
   async updateDriver(id, updateData) {

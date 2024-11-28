@@ -44,6 +44,10 @@ const Driver = sequelize.define('Driver', {
     type: DataTypes.INTEGER,
     allowNull: true
   },
+  vehicle_type: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
