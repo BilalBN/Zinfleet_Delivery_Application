@@ -22,7 +22,7 @@
 const { Sequelize } = require('sequelize');
 
 // Initialize Sequelize instance
-const sequelize = new Sequelize('fleet_db', 'root', '', {
+const sequelize = new Sequelize('fleet_db', 'root', 'root', {
   host: 'localhost',
   dialect: 'mysql', // You can change this if you're using another DBMS
 });
