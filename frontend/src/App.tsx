@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import styled from "@emotion/styled";
 import { CircularProgress } from "@mui/material";
-import { SnackbarProvider } from "./modules/core/components/SnackBar";
-import { theme } from "./utils/theme";
+import { AdminTheme, FleetTheme, WareHousetheme } from "./utils/theme";
 import { useAppSelector } from "./store/hook";
 import { UserType } from "./types/user";
 
@@ -27,6 +26,7 @@ import { Dashboard as AdminDashboard } from "./modules/admin/pages/Dashboard";
 /** Warehouse Route Components */
 import WareHouseDashboard from "./modules/warehouse/pages/Dashboard";
 import WarehouseSettings from "./modules/warehouse/pages/Settings";
+import { SnackbarComponent } from "./modules/core/components/SnackBar";
 
 const Loader = styled.div`
   top: 0;
@@ -44,7 +44,13 @@ const Loader = styled.div`
 function App() {
   const loading = useAppSelector((state) => state.root.loading);
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-
+  const theme = user
+    ? user.type === UserType.ADMIN_USER
+      ? AdminTheme
+      : user.type === UserType.FLEET_USER
+        ? FleetTheme
+        : user.type === UserType.WAREHOUSE_USER ? WareHousetheme : FleetTheme
+    : FleetTheme;
   return (
     <ThemeProvider theme={theme}>
       {loading ? (
@@ -52,7 +58,7 @@ function App() {
           <CircularProgress />
         </Loader>
       ) : null}
-      <SnackbarProvider>
+       <SnackbarComponent />
         <BrowserRouter>
           <Routes>
             {/* Define the layout route with nested routes */}
@@ -73,7 +79,6 @@ function App() {
               <Route path="/" element={<Navigate to="/signin" />} />
             )}
 
- 
             {/* Routes for Fleet Users */}
             {isAuthenticated && user?.type === UserType.FLEET_USER ? (
               <Route element={<RequireAuth auth={true} />}>
@@ -104,7 +109,6 @@ function App() {
             ) : null}
           </Routes>
         </BrowserRouter>
-      </SnackbarProvider>
     </ThemeProvider>
   );
 }

@@ -35,7 +35,7 @@ const OrderManagment = () => {
             case OrderType.All:
                 return <AllOrders />
             default:
-                return <NoDataAvailable />
+                return <NoDataAvailable message="No orders found"/>
         }
     }
     return (
@@ -44,7 +44,7 @@ const OrderManagment = () => {
             <OrderTabs />
             {data.length ? (
                 renderTable()
-            ) : (<NoDataAvailable />)}
+            ) : (<NoDataAvailable message="No orders found"/>)}
         </Container>
     );
 
