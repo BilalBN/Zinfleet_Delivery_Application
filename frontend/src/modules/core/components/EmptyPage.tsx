@@ -15,11 +15,11 @@ const EmptyImage = styled.img`
   height: 367px;
   width: 366px;
 `;
-export const NoDataAvailable = () => {
+export const NoDataAvailable = ({message}:{message: string}) => {
   return (
     <EmptyImageWrapper>
       <EmptyImage src={Emptyimagesrc} />
-      <div>No Orders Found</div>
+      <div>{message}</div>
     </EmptyImageWrapper>
   );
 };
