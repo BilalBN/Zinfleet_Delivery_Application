@@ -33,22 +33,25 @@ export const fetchFleets = createAsyncThunk("fleet/fetchFleets", async (_, { dis
 export const addFleet = createAsyncThunk("fleet/fleets", async (newFleet: FleetPayload, { dispatch }) => {
   dispatch(setLoading(true));
   await apiService.post("/api/fleets", newFleet);
-  dispatch(showSnackbar({ message: "Successfully added fleet", severity: "success"}));
+  dispatch(showSnackbar({ message: "Successfully added fleet", severity: "success" }));
   await dispatch(fetchFleets()); // Fetch fleets again after adding
 });
 
-export const updateFleet = createAsyncThunk("fleet/updateFleet", async (updatedFleet: FleetUpdatePayload, { dispatch }) => {
-  dispatch(setLoading(true));
-  const response: any = await apiService.put(`/api/fleets/${updatedFleet.id}`, updatedFleet);
-  dispatch(showSnackbar({ message: "Successfully updated fleet", severity: "success"}));
-  dispatch(setLoading(false));
-  return response.data;
-});
+export const updateFleet = createAsyncThunk(
+  "fleet/updateFleet",
+  async (updatedFleet: FleetUpdatePayload, { dispatch }) => {
+    dispatch(setLoading(true));
+    const response: any = await apiService.put(`/api/fleets/${updatedFleet.id}`, updatedFleet);
+    dispatch(showSnackbar({ message: "Successfully updated fleet", severity: "success" }));
+    dispatch(setLoading(false));
+    return response.data;
+  }
+);
 
 export const deleteFleet = createAsyncThunk("fleet/deleteFleet", async (fleetId: number, { dispatch }) => {
   dispatch(setLoading(true));
   await apiService.delete(`/api/fleets/${fleetId}`);
-  dispatch(showSnackbar({ message: "Successfully deleted fleet", severity: "success"}));
+  dispatch(showSnackbar({ message: "Successfully deleted fleet", severity: "success" }));
   await dispatch(fetchFleets()); // Fetch fleets again after deleting
 });
 

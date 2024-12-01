@@ -69,8 +69,8 @@ export const DriverDialog = ({
     });
 
     const saveChanges: SubmitHandler<DriverPayload> = (data) => {
-        const decodedToken = decodeToken(localStorage.getItem('authtoken') ?? '')
-        const payload = { ...data }
+        const decodedToken = decodeToken(localStorage.getItem('authToken') ?? '')
+        const payload = { ...data, fleet_id: decodedToken.fleet_id }
         handleSave(payload);
     };
 
