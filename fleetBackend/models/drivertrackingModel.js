@@ -11,7 +11,7 @@ const DriverTracking = sequelize.define('DriverTracking', {
     allowNull: false
   },
   fleet_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'Fleets', // The name of the target model (the table you are referencing)
@@ -19,7 +19,7 @@ const DriverTracking = sequelize.define('DriverTracking', {
     }
   },
   driver_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'Drivers', // The name of the target model (the table you are referencing)
@@ -70,7 +70,7 @@ const DriverTracking = sequelize.define('DriverTracking', {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'driver_tracking'
 });
-DriverTracking.belongsTo(Fleet, { foreignKey: 'fleet_id', as: 'fleet' });  // Define the association
-DriverTracking.belongsTo(Driver, { foreignKey: 'driver_id', as: 'driver' });  // Define the association
+DriverTracking.belongsTo(Fleet);  // Define the association
+DriverTracking.belongsTo(Driver);  // Define the association
 
 module.exports = DriverTracking;

@@ -32,6 +32,10 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Connection to MySQL database has been established successfully.');
+    return sequelize.sync({force : false})
+  })
+  .then(()=>{
+    console.log('Data sync completed')
   })
   .catch((err) => {
     console.error('Unable to connect to the MySQL database:', err);
