@@ -10,7 +10,7 @@ const MainUsers = sequelize.define('MainUsers', {
     allowNull: false
   },
   fleet_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: true,
     references: {
       model: 'Fleets', // The name of the target model (the table you are referencing)
@@ -18,7 +18,7 @@ const MainUsers = sequelize.define('MainUsers', {
     }
   },
   shop_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: true,
     references: {
       model: 'Shops', // The name of the target model (the table you are referencing)

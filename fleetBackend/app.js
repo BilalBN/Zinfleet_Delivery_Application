@@ -7,6 +7,7 @@ const driverRoutes = require('./routes/driver');
 const fleetRoutes = require('./routes/fleet');
 const shopRoutes = require('./routes/shop');
 const trackingRoutes = require('./routes/drivertracking');
+const otpVerificationRouted = require('./routes/otpVeirification');
 
 
 
@@ -38,6 +39,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/fleets', fleetRoutes);
 app.use('/api/shops', shopRoutes);
 app.use('/api/tracking', trackingRoutes);
+app.use('/api/otp', otpVerificationRouted);
 
 
 

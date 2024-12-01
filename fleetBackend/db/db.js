@@ -22,7 +22,7 @@
 const { Sequelize } = require('sequelize');
 
 // Initialize Sequelize instance
-const sequelize = new Sequelize('fleet_db', 'root', '', {
+const sequelize = new Sequelize('fleet_db', 'root', 'root', {
   host: 'localhost',
   dialect: 'mysql', // You can change this if you're using another DBMS
 });
@@ -32,6 +32,10 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Connection to MySQL database has been established successfully.');
+    return sequelize.sync({force : false})
+  })
+  .then(()=>{
+    console.log('Data sync completed')
   })
   .catch((err) => {
     console.error('Unable to connect to the MySQL database:', err);
