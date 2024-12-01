@@ -30,7 +30,7 @@ export const fetchFleets = createAsyncThunk("fleet/fetchFleets", async (_, { dis
   return response.data.data;
 });
 
-export const addFleet = createAsyncThunk("fleet/addFleet", async (newFleet: FleetPayload, { dispatch }) => {
+export const addFleet = createAsyncThunk("fleet/fleets", async (newFleet: FleetPayload, { dispatch }) => {
   dispatch(setLoading(true));
   await apiService.post("/api/fleets", newFleet);
   dispatch(showSnackbar({ message: "Successfully added fleet", severity: "success"}));
