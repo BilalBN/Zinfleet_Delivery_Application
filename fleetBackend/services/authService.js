@@ -42,6 +42,9 @@ class AuthService {
                 const shopUser =await Shop.findByPk(user.shop_id)
                 fleet_id=shopUser.fleet_id;
               }
+              if (user.role === constants.fleet) {
+                fleet_id = user.fleet_id;
+              }
             // Generate JWT token
             const token = jwt.sign({ id: user.id, username: user.user_name,role:user.role,fleet_id:fleet_id }, process.env.JWT_SECRET, {
               expiresIn: process.env.JWT_EXPIRES_IN,

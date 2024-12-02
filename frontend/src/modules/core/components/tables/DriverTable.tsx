@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import ReusableTable from "./ReusableOrdersTable";
 import styled from "@emotion/styled";
 import { fetchDrivers } from "../../../../store/driverSlice";
+import { NoDataAvailable } from "../EmptyPage";
 const Comman = styled.div`
     display: flex;
     align-items: center;
@@ -40,13 +41,14 @@ const CustomTable = () => {
             ),
             width: '100px'
         },
-        { title: "Vehicle", dataIndex: "vehicle", key: "vehicle", width: '200px' },
+        { title: "Vehicle", dataIndex: "vehicle_type", key: "vehicle", width: '200px' },
         { title: "Active Hours", dataIndex: "activeHours", key: "activeHours", width: '100px' },
         { title: "Completed Orders", dataIndex: "activeHours", key: "orderscompleted", width: '200px' },
 
     ];
     return (
-        <ReusableTable columns={ShopColumns} data={data} />
+        data.length?( <ReusableTable columns={ShopColumns} data={data} />):(<NoDataAvailable message={"No drivers available yet. Click 'Add Driver' to get started!"}/>)
+       
     );
 };
 
