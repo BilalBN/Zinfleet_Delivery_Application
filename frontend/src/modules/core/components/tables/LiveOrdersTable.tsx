@@ -1,5 +1,6 @@
 import ReusableTable from './ReusableOrdersTable'; // Import the reusable table component
 import { useAppSelector } from '../../../../store/hook';
+import { NoDataAvailable } from '../EmptyPage';
 
 const LiveOrders = () => {
     const { data } = useAppSelector((state) => state.order);
@@ -14,7 +15,7 @@ const LiveOrders = () => {
         { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery', width: '100px' },
     ];
 
-    return <ReusableTable columns={liveOrdersColumns} data={data} />;
+    return (data.length?(<ReusableTable columns={liveOrdersColumns} data={data} />):(<NoDataAvailable message={"No orders available yet."}/>))
 };
 
 export default LiveOrders;

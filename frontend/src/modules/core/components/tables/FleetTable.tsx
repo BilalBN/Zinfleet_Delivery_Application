@@ -72,7 +72,7 @@ const FleetTable = () => {
     },
   ];
 
-  return (<>{data.length ? <ReusableTable columns={FleetColumns} data={data} /> : <NoDataAvailable message={"No fleets found"}/>}
+  return (<>{data.length ? <ReusableTable columns={FleetColumns} data={data} /> : <NoDataAvailable message={"No fleets available yet. Click 'Add Fleet' to create your first one!"}/>}
     {open && selectedFleet ? (<FleetDialog handleClickOpen={handleClickOpen} open={open} handleClose={handleClose} handleSave={handleSave} title={"Edit fleet"} initialData={{
       name: selectedFleet.name,
       email: selectedFleet.email,

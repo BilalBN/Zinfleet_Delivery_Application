@@ -4,6 +4,7 @@ import ReusableTable from "../../core/components/tables/ReusableOrdersTable";
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { useState } from "react";
 import { OrderDialog } from "./OrderDetailsDialog";
+import { NoDataAvailable } from "../../core/components/EmptyPage";
 const Deleivered = styled.div`
     display: flex;
     align-items: center;
@@ -84,7 +85,7 @@ const WarehouseOrdersTable = () => {
 
     ];
     return (<>
-        <ReusableTable columns={orderColumns} data={data} />
+        {data.length?(<ReusableTable columns={orderColumns} data={data} />):(<NoDataAvailable message={"No orders available yet."}/>)}
         <OrderDialog open={open} onClose={handleClose} handleClickOpen={handleClickOpen}/>
     </>);
 };

@@ -7,6 +7,7 @@ import ShoptSlice from "./shopSlice";
 import DriverSlice from "./driverSlice";
 import SnackbarReducer from "./snackbarSlice";
 import WarehouseReducer from "./warehouse";
+import { loadingMiddleware } from "./middleware/loading";
 
 export const store = configureStore({
   reducer: {
@@ -19,4 +20,6 @@ export const store = configureStore({
     snackbar: SnackbarReducer,
     warehouse: WarehouseReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware().concat(loadingMiddleware), 
 });

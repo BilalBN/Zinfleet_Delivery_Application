@@ -3,6 +3,7 @@ import ReusableTable from './ReusableOrdersTable'; // Import the reusable table 
 import { useAppSelector } from '../../../../store/hook';
 import { Select, MenuItem } from '@mui/material';
 import { Order } from '../../../../types/order';
+import { NoDataAvailable } from '../EmptyPage';
 
 const RejectedOrders = () => {
     const { data } = useAppSelector((state) => state.order);
@@ -19,14 +20,14 @@ const RejectedOrders = () => {
 
     // Define the columns specific to Rejected Orders
     const rejectedOrdersColumns = [
-        { title: 'Order ID', dataIndex: 'id', key: 'id' ,width: '100px'},
-        { title: 'Amount', dataIndex: 'amount', key: 'amount' ,width: '100px'},
-        { title: 'Quantity', dataIndex: 'quantity', key: 'quantity' ,width: '100px'},
-        { title: 'Date', dataIndex: 'date', key: 'date' ,width: '100px'},
-        { title: 'Shop Name', dataIndex: 'shop', key: 'shop' ,width: '100px'},
-        { title: 'Pick up location', dataIndex: 'pickUp', key: 'pickUp' ,width: '100px'},
-        { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery' ,width: '100px'},
-        { title: 'Rejected By', dataIndex: 'rejectedBy', key: 'rejectedBy' ,width: '100px'},
+        { title: 'Order ID', dataIndex: 'id', key: 'id', width: '100px' },
+        { title: 'Amount', dataIndex: 'amount', key: 'amount', width: '100px' },
+        { title: 'Quantity', dataIndex: 'quantity', key: 'quantity', width: '100px' },
+        { title: 'Date', dataIndex: 'date', key: 'date', width: '100px' },
+        { title: 'Shop Name', dataIndex: 'shop', key: 'shop', width: '100px' },
+        { title: 'Pick up location', dataIndex: 'pickUp', key: 'pickUp', width: '100px' },
+        { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery', width: '100px' },
+        { title: 'Rejected By', dataIndex: 'rejectedBy', key: 'rejectedBy', width: '100px' },
         {
             title: 'Reassign to',
             dataIndex: 'reassign', // This won't map directly but will use a custom renderer
@@ -47,10 +48,11 @@ const RejectedOrders = () => {
                     ))}
                 </Select>
             ),
-        width: '100px'},
+            width: '100px'
+        },
     ];
 
-    return <ReusableTable columns={rejectedOrdersColumns} data={data} />;
+    return (data.length ? (<ReusableTable columns={rejectedOrdersColumns} data={data} />) : (<NoDataAvailable message={"No orders available yet."} />));
 };
 
 export default RejectedOrders;

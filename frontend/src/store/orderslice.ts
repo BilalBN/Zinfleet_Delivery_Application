@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Order, OrderType } from "../types/order";
-import { combinedData } from "../utils/ordermock";
 
 interface IOrderSlice {
   loading: boolean;
@@ -12,7 +11,7 @@ interface IOrderSlice {
 const initialState: IOrderSlice = {
   loading: false,
   selectedOrder: OrderType.Live,
-  data: combinedData,
+  data: [],
   fetched: false,
 };
 

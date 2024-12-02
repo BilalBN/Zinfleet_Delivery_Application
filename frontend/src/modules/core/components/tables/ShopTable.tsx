@@ -78,7 +78,7 @@ const ShopTable = () => {
   ];
 
   return (<>
-    {data.length ? (<ReusableTable columns={ShopColumns} data={data} />) : (<NoDataAvailable message="No shops found" />)}
+    {data.length ? (<ReusableTable columns={ShopColumns} data={data} />) : (<NoDataAvailable message="No shops available yet. Click 'Add Shop' to set up your first shop today!" />)}
     {open && selectedShop ? (<ShopDialog handleClickOpen={handleClickOpen} open={open} handleClose={handleClose} handleSave={handleSave} title={"Edit fleet"} initialData={{
       name: selectedShop.name,
       warehouseAddress: selectedShop.warehouse_address,
