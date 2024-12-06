@@ -10,7 +10,7 @@ const Driver = sequelize.define('Driver', {
     allowNull: false
   },
   fleet_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'Fleets', // The name of the target model (the table you are referencing)
@@ -61,5 +61,5 @@ const Driver = sequelize.define('Driver', {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'drivers'
 });
-Driver.belongsTo(Fleet, { foreignKey: 'fleet_id', as: 'fleet' }); 
+Driver.belongsTo(Fleet); 
 module.exports = Driver;

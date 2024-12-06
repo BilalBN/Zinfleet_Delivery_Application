@@ -23,7 +23,7 @@ const Shop = sequelize.define('Shop', {
     allowNull: true
   },
   fleet_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'Fleets', // The name of the target model (the table you are referencing)
@@ -43,5 +43,5 @@ const Shop = sequelize.define('Shop', {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'shops'
 });
-Shop.belongsTo(Fleet, { foreignKey: 'fleet_id', as: 'fleet' });  // Define the association
+Shop.belongsTo(Fleet);  // Define the association
 module.exports = Shop;
