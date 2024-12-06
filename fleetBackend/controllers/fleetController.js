@@ -5,6 +5,7 @@ const CustomError = require('../utils/customError');
 class FleetController {
   async getAllFleets(req, res, next) {
     try {
+      console.log("API HITS");
       const fleets = await fleetService.getAllFleets(req.body.limit,req.body.page);
       ResponseHandler.success(res, fleets, 'Fleets fetched successfully');
     } catch (error) {
