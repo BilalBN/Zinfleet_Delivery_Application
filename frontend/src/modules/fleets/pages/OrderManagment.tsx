@@ -35,16 +35,15 @@ const OrderManagment = () => {
             case OrderType.All:
                 return <AllOrders />
             default:
-                return <NoDataAvailable />
+                return <NoDataAvailable message="No orders found" />
         }
     }
     return (
         <Container>
             <SubNavBar />
             <OrderTabs />
-            {data.length ? (
-                renderTable()
-            ) : (<NoDataAvailable />)}
+            {renderTable()}
+
         </Container>
     );
 

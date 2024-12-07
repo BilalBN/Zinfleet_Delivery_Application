@@ -33,7 +33,7 @@ sequelize
   .then(() => {
     console.log('Connection to MySQL database has been established successfully.');
     return sequelize.sync({force : false,
-      alter:true
+      alter:false
     })
   })
   .then(()=>{

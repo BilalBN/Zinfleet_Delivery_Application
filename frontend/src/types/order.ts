@@ -24,5 +24,6 @@ export type Column = {
   dataIndex: string;
   key: string;
   width: string;
+  align?: 'left'|'right'|'center';
   render?: (row: any) => JSX.Element | string;
 };

@@ -24,43 +24,47 @@ class AuthService {
 
   async login(data, res) {
     // try {
-    const { username, password } = data;
-
-    // Check if user exists
-    const user = await MainUsers.findOne({ where: { user_name: username } })
-    if (!user) {
-      throw new Error('Invalid credentials');
-    }
-
-    // Check if the password matches
-    const passwordIsValid = bcrypt.compareSync(password, user.password);
-    if (!passwordIsValid) {
-      throw new Error('Invalid credentials');
-    }
-    let fleet_id = null;
-    if (user.role == constants.shop) {
-      const shopUser = await Shop.findByPk(user.shop_id)
-      fleet_id = shopUser.fleet_id;
-    }
-    // Generate JWT token
-    const token = jwt.sign({ id: user.id, username: user.user_name, role: user.role, fleet_id: fleet_id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
-
-    // Return token
-    return {
-      message: 'Login successful',
-      token,
-      user: user.id
-    };
-    // } catch (error) {
-    //   if (error instanceof UniqueConstraintError) {
-    //     // Handle unique constraint error
-    //     const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
-    //     throw new Error(`${duplicateField} already exists.`);
-    //   }
-    //   throw error;
-    // }
+            const { username, password } =data;
+          
+            // Check if user exists
+            const user =await MainUsers.findOne({ where: { user_name: username } })
+            if (!user) {
+              throw new Error('Invalid credentials');
+            }
+          
+            // Check if the password matches
+            const passwordIsValid = bcrypt.compareSync(password, user.password);
+            if (!passwordIsValid) {
+              throw new Error('Invalid credentials');
+            }
+            let fleet_id=null;
+            if(user.role==constants.shop)
+              {
+                const shopUser =await Shop.findByPk(user.shop_id)
+                fleet_id=shopUser.fleet_id;
+              }
+              if (user.role === constants.fleet) {
+                fleet_id = user.fleet_id;
+              }
+            // Generate JWT token
+            const token = jwt.sign({ id: user.id, username: user.user_name,role:user.role,fleet_id:fleet_id }, process.env.JWT_SECRET, {
+              expiresIn: process.env.JWT_EXPIRES_IN,
+            });
+          
+            // Return token
+            return {
+              message: 'Login successful',
+              token,
+              user:user.id
+            };
+      // } catch (error) {
+      //   if (error instanceof UniqueConstraintError) {
+      //     // Handle unique constraint error
+      //     const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
+      //     throw new Error(`${duplicateField} already exists.`);
+      //   }
+      //   throw error;
+      // }
   }
 
   async updateDriver(id, updateData) {

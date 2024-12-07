@@ -3,6 +3,7 @@ import { useAppSelector } from '../../../../store/hook';
 import { Order } from '../../../../types/order';
 import { MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
+import { NoDataAvailable } from '../EmptyPage';
 
 const ProcessingOrdersTable = () => {
     const { data } = useAppSelector((state) => state.order);
@@ -49,7 +50,7 @@ const ProcessingOrdersTable = () => {
 
     ];
 
-    return <ReusableTable columns={ProcessingOrdersTableColumns} data={data} />;
+    return (data.length?(<ReusableTable columns={ProcessingOrdersTableColumns} data={data} />):(<NoDataAvailable message={"No orders available yet."}/>))
 };
 
 export default ProcessingOrdersTable;

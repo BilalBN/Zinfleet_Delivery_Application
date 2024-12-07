@@ -2,6 +2,7 @@ import ReusableTable from './ReusableOrdersTable'; // Import the reusable table 
 import { useAppSelector } from '../../../../store/hook';
 import { Order } from '../../../../types/order';
 import styled from '@emotion/styled';
+import { NoDataAvailable } from '../EmptyPage';
 const OutForDelivery = styled.div`
   color: #00D722;
   background-color: #C9FFC482;
@@ -42,7 +43,7 @@ const AssignedOrdersTable = () => {
     },
   ]
 
-  return <ReusableTable columns={AssignedOrdersTableColumns} data={data} />;
+  return (data.length ? (<ReusableTable columns={AssignedOrdersTableColumns} data={data} />) : (<NoDataAvailable message={"No orders available yet."} />))
 };
 
 export default AssignedOrdersTable;

@@ -2,6 +2,7 @@ import ReusableTable from './ReusableOrdersTable'; // Import the reusable table 
 import { useAppSelector } from '../../../../store/hook';
 import { Order } from '../../../../types/order';
 import styled from '@emotion/styled';
+import { NoDataAvailable } from '../EmptyPage';
 
 
 const DeliveredOrder = styled.div`
@@ -35,7 +36,7 @@ const AllOrdersTable = () => {
     },
   ];
 
-  return <ReusableTable columns={AllOrdersTableColumns} data={data} />;
+  return (data.length ? (<ReusableTable columns={AllOrdersTableColumns} data={data} />) : (<NoDataAvailable message={"No orders available yet."} />))
 };
 
 export default AllOrdersTable;
