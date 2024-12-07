@@ -139,9 +139,10 @@ class AuthService {
       const respData = {
         message: `Otp verified for:${phoneNumber}`,
         phoneNumber: phoneNumber,
-        sessionToken: driverToken
+        sessionToken: driverToken,
+        user: driver
       };
-      ResponseHandler.success(res, respData, "Otp verified");
+      ResponseHandler.success(res, respData, "Otp verified, Login succesfully");
     } else {
       const respData = {
         message: `May be your phone number not registered or otp expired:${phoneNumber}`,
