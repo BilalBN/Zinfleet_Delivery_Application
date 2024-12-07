@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const constants = require('../config/constants');
 const Shop = require('../models/shopModel');
+const ResponseHandler = require('../utils/responseHandler');
 require('dotenv').config();
 
 class AuthService {
@@ -21,92 +22,93 @@ class AuthService {
     return driver;
   }
 
-  async login(data,res) {
+  async login(data, res) {
     // try {
-            const { username, password } =data;
-          
-            // Check if user exists
-            const user =await MainUsers.findOne({ where: { user_name: username } })
-            if (!user) {
-              throw new Error('Invalid credentials');
-            }
-          
-            // Check if the password matches
-            const passwordIsValid = bcrypt.compareSync(password, user.password);
-            if (!passwordIsValid) {
-              throw new Error('Invalid credentials');
-            }
-            let fleet_id=null;
-            if(user.role==constants.shop)
-              {
-                const shopUser =await Shop.findByPk(user.shop_id)
-                fleet_id=shopUser.fleet_id;
-              }
-            // Generate JWT token
-            const token = jwt.sign({ id: user.id, username: user.user_name,role:user.role,fleet_id:fleet_id }, process.env.JWT_SECRET, {
-              expiresIn: process.env.JWT_EXPIRES_IN,
-            });
-          
-            // Return token
-            return {
-              message: 'Login successful',
-              token,
-              user:user.id
-            };
-      // } catch (error) {
-      //   if (error instanceof UniqueConstraintError) {
-      //     // Handle unique constraint error
-      //     const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
-      //     throw new Error(`${duplicateField} already exists.`);
-      //   }
-      //   throw error;
-      // }
+    const { username, password } = data;
+
+    // Check if user exists
+    const user = await MainUsers.findOne({ where: { user_name: username } })
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
+
+    // Check if the password matches
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
+    if (!passwordIsValid) {
+      throw new Error('Invalid credentials');
+    }
+    let fleet_id = null;
+    if (user.role == constants.shop) {
+      const shopUser = await Shop.findByPk(user.shop_id)
+      fleet_id = shopUser.fleet_id;
+    }
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id, username: user.user_name, role: user.role, fleet_id: fleet_id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+
+    // Return token
+    return {
+      message: 'Login successful',
+      token,
+      user: user.id
+    };
+    // } catch (error) {
+    //   if (error instanceof UniqueConstraintError) {
+    //     // Handle unique constraint error
+    //     const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
+    //     throw new Error(`${duplicateField} already exists.`);
+    //   }
+    //   throw error;
+    // }
   }
 
   async updateDriver(id, updateData) {
     try {
-        // Fetch the current driver to ensure the driver exists
-        const driver = await Driver.findByPk(id);
-        if (!driver) {
+      // Fetch the current driver to ensure the driver exists
+      const driver = await Driver.findByPk(id);
+      if (!driver) {
         throw new Error('Driver not found');
-        }
+      }
 
-        // Check if phoneNumber already exists for another user (excluding current driver)
-        if (updateData.phoneNumber) {
+      // Check if phoneNumber already exists for another user (excluding current driver)
+      if (updateData.phoneNumber) {
         const existingPhoneNumber = await Driver.findOne({
-            where: {
+          where: {
             phoneNumber: updateData.phoneNumber,
             id: { [Op.ne]: id } // Exclude the current driver
-            }
+          }
         });
         if (existingPhoneNumber) {
-            throw new Error('Phone number already exists');
+          throw new Error('Phone number already exists');
         }
-        }
+      }
 
-        // Check if licenseNumber already exists for another user (excluding current driver)
-        if (updateData.licenseNumber) {
+      // Check if licenseNumber already exists for another user (excluding current driver)
+      if (updateData.licenseNumber) {
         const existingLicenseNumber = await Driver.findOne({
-            where: {
+          where: {
             licenseNumber: updateData.licenseNumber,
-            id: { [Op.ne]: id }             }
+            id: { [Op.ne]: id }
+          }
         });
         if (existingLicenseNumber) {
-            throw new Error('License number already exists');
-        }
-        
+          throw new Error('License number already exists');
         }
 
-        // Update the driver with the new data
-        await driver.update(updateData);
-        return driver;
-    } catch (error) {console.log(3)
-        if (error instanceof UniqueConstraintError) {
+      }
+
+      // Update the driver with the new data
+      await driver.update(updateData);
+      return driver;
+    } catch (error) {
+      console.log(3)
+      if (error instanceof UniqueConstraintError) {
         // Handle unique constraint error
         const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
         throw new Error(`${duplicateField} already exists.`);
-        }
-        throw error;
+      }
+      throw error;
     }
   }
 
@@ -118,6 +120,34 @@ class AuthService {
     await driver.destroy();
     return { message: 'Driver deleted successfully' };
   }
+
+  async getDriverSession(phoneNumber, res) {
+    const driver = await Driver.findOne({
+      where: {
+        phoneNumber: phoneNumber
+      }
+    })
+    if (driver) {
+      console.log("Driver found:", driver)
+      const driverToken = jwt.sign({ id: driver.id, phone_number: driver.phoneNumber, fleet_id: driver.fleet_id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
+      const respData = {
+        message: `Otp verified for:${phoneNumber}`,
+        phoneNumber: phoneNumber,
+        sessionToken: driverToken
+      };
+      ResponseHandler.success(res, respData, "Otp verified");
+    } else {
+      const respData = {
+        message: `May be your phone number not registered or otp expired:${phoneNumber}`,
+        phoneNumber: phoneNumber
+      };
+      ResponseHandler.error(res, respData, 404);
+    }
+  }
 }
+
+
 
 module.exports = new AuthService();

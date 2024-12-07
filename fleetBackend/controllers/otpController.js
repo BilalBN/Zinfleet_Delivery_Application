@@ -18,19 +18,7 @@ class OtpController {
 
     async verifyOtp(req, res, next) {
         try {
-            const { phoneNumber, otp } = req.body
-            console.log(`OTP controller,phone number:${phoneNumber}, otp:${otp}`)
-            const otpResp = await otpAuthService.verifyOtp(phoneNumber, otp, OTPSERVICE.PHONE)
-            if (otpResp) {
-                const respData = {
-                    message: `Otp verified for:${phoneNumber}`
-                }
-                console.log(`OTP Verified data:${otpResp}`)
-                ResponseHandler.success(res, respData, "Otp verified")
-            } else {
-                ResponseHandler.error(res, "Invalid phone number or otp", 403)
-            }
-
+             await otpAuthService.verifyOtp(req, res)
         } catch (error) {
             console.log("Verify otp:", error)
             next(new CustomError(error.message, 500));
