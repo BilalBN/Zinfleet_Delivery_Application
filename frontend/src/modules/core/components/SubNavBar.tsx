@@ -2,8 +2,15 @@ import styled from "@emotion/styled";
 import { Button, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Timer from "../../fleets/components/Timer";
+import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import { UserType } from "../../../types/user";
+import { fetchFleets } from "../../../store/fleetSlice";
+import { Fleet } from "../../../types/fleet";
+const FixedWidthSelect = styled(Select)`
+  width: 120px; // Adjust width as needed
+`;
 
 const Container = styled.div`
   display: flex;
@@ -32,7 +39,6 @@ const InputField = styled.input`
 const SearchBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-around;
   width: 300px;
   height: 38px;
   background-color: #ffffff;
@@ -64,9 +70,23 @@ const TimerContainer = styled.div`
 `
 export const SubNavBar = () => {
   const [searchBy, setSearchBy] = useState("orderid");
-  const handleChange = (event: SelectChangeEvent) => {
+  const dispatch = useAppDispatch();
+  const [selectedFleet, setSelectedFleet] = useState<number>(-1);
+
+  const { user } = useAppSelector((state) => state.auth);
+  const { data } = useAppSelector((state) => state.fleet);
+
+  useEffect(() => {
+    dispatch(fetchFleets())
+  }, []);
+
+  const handleChange = (event: any) => {
     setSearchBy(event.target.value as string);
   };
+
+  const handleFleetChange = (event: SelectChangeEvent) => {
+    setSelectedFleet(Number(event.target.value))
+  }
 
   return (
     <Container>
@@ -79,31 +99,53 @@ export const SubNavBar = () => {
               value={searchBy}
               onChange={handleChange}
               sx={{
+                width: '125px',           // Fixed width for the Select component
+                minWidth: '125px',
                 "& .MuiOutlinedInput-notchedOutline": {
                   border: "none",
                 },
               }}
             >
               <MenuItem value={"orderid"}>Order ID</MenuItem>
-              <MenuItem value={"quantity"}>Quantity</MenuItem>
+              <MenuItem value={"fleet"}>Fleet</MenuItem>
               <MenuItem value={"shop"}>Shop</MenuItem>
             </Select>
 
             <Divider></Divider>
-            <InputField placeholder="Search" />
-            <CustomSearch />
+            {searchBy === 'orderid' ? (<><InputField placeholder="Search" />  <CustomSearch /></>) : (<Select
+              labelId="demo-simple-select-filled-label"
+              id="demo-simple-select-filled"
+              value={selectedFleet.toString()}
+              onChange={handleFleetChange}
+              placeholder="Please select a fleet"
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+              }}
+            >
+               <MenuItem value={-1}>Select a fleet</MenuItem>
+              {data.map((item: Fleet) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))}
+            </Select>)}
+
+
+
           </SearchBox>
 
           <FilterBox>
             <FilterAltOutlinedIcon />
           </FilterBox>
         </SearchFilterContainer>
-
-        <Button variant="contained" sx={{ textTransform: "None" }}>
+        {user?.type !== UserType.ADMIN_USER ? (<Button variant="contained" sx={{ textTransform: "None" }}>
           Process
-        </Button>
+        </Button>) : null}
+
       </TopRow>
-      <TimerContainer><Timer /></TimerContainer>
+      {user?.type !== UserType.ADMIN_USER ? (<TimerContainer><Timer /></TimerContainer>) : null}
+
     </Container>
   );
 };
