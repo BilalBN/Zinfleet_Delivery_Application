@@ -124,8 +124,8 @@ export const DriverDialog = ({
                                 rules={{
                                     required: "License number is required",
                                     pattern: {
-                                        value: /^[0-9]{8}$/,
-                                        message: "License number must be 8 digits",
+                                        value: /^[0-9]{10}$/,
+                                        message: "License number must be 10 digits",
                                     },
                                 }}
                                 render={({ field }) => (
