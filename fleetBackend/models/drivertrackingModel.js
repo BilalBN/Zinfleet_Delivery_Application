@@ -42,20 +42,10 @@ const DriverTracking = sequelize.define('DriverTracking', {
     type: DataTypes.FLOAT,
     allowNull: true,
   },
-  ordersPicked: {
+  orderStatus: {
     type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 0,
-  },
-  ordersDelivered: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 0,
-  },
-  ordersPending: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 0,
+    allowNull: false,
+    defaultValue: 1
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -70,7 +60,7 @@ const DriverTracking = sequelize.define('DriverTracking', {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'driver_tracking'
 });
-DriverTracking.belongsTo(Fleet);  // Define the association
-DriverTracking.belongsTo(Driver);  // Define the association
+DriverTracking.belongsTo(Fleet, { foreignKey: 'fleet_id' });  // Define the association
+DriverTracking.belongsTo(Driver, { foreignKey: 'driver_id' });  // Define the association
 
 module.exports = DriverTracking;

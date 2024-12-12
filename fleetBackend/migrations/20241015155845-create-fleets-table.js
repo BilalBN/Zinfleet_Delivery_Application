@@ -38,8 +38,15 @@ module.exports = {
         allowNull: false
       }
     });
+
+    await queryInterface.removeIndex("fleets", 'email');
+    //await queryInterface.removeIndex("fleets", 'phoneNumber');
   },
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.addIndex("fleets", ['email'], {
+      unique: true,
+      name: "email"
+    })
     await queryInterface.dropTable('fleets');
   }
 };

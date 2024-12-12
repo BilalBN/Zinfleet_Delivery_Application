@@ -24,17 +24,14 @@ const Driver = sequelize.define('Driver', {
   licenseNumber: {
     type: DataTypes.STRING,
     allowNull: true,
-    unique: true
   },
   uniqueId: {
     type: DataTypes.INTEGER,
     allowNull: true,
-    unique: true
   },
   phoneNumber: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
   address: {
     type: DataTypes.STRING,
@@ -60,6 +57,10 @@ const Driver = sequelize.define('Driver', {
 }, {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'drivers'
+}, {
+  indexes: [{
+    unique: true,
+    fields: ['phoneNumber', 'licenseNumber', 'uniqueId']
+  }]
 });
-Driver.belongsTo(Fleet); 
 module.exports = Driver;

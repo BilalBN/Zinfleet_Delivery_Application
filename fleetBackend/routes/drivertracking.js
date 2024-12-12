@@ -11,10 +11,11 @@ const { authMiddleware } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // CRUD routes for drivers
-router.post('/gettrackings', authMiddleware,trackingController.getAllTracking);
-router.post('/id', authMiddleware,trackingController.getTrackingById);
-router.post('/', authMiddleware,trackingController.createTracking);
-router.put('/:id', authMiddleware,trackingController.updateTracking);
-router.delete('/:id', authMiddleware,trackingController.deleteTracking);
+router.post('/gettrackings', authMiddleware, trackingController.getAllTracking);
+router.post('/id', authMiddleware, trackingController.getTrackingById);
+router.post('/', authMiddleware, trackingController.createTracking);
+router.put('/:id', authMiddleware, trackingController.updateTracking);
+router.delete('/:id', authMiddleware, trackingController.deleteTracking);
 
+router.post('/driver/jobs', authMiddleware, trackingController.getAllActiveJobs);
 module.exports = router;

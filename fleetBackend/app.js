@@ -8,6 +8,8 @@ const fleetRoutes = require('./routes/fleet');
 const shopRoutes = require('./routes/shop');
 const trackingRoutes = require('./routes/drivertracking');
 const otpVerificationRouted = require('./routes/otpVeirification');
+const FleetOrder = require('.//models/fleetOrder')
+const OrderAddress = require('.//models/orderAddress')
 
 
 
