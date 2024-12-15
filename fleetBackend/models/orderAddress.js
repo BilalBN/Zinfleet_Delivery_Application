@@ -12,7 +12,7 @@ const OrderAddress = sequelize.define("OrderAddress", {
         allowNull: false,
         references: {
             model: FleetOrder, // Reference the FleetOrder model directly
-            key: 'orderId' // The key in the target model that this foreign key references
+            key: 'id' // The key in the target model that this foreign key references
         }
     },
     name: {

@@ -1,6 +1,7 @@
+ //Create order
  curl -i -X POST http://localhost:3000/api/order -H 'Content-Type: application/json' -d '{
     "orderData": {
-        "orderId": 1005,
+        "orderId": 1001,
         "storeId": 2001,
         "orderCode": "ORD-1001",
         "orderUrl": "http://example.com/order/1001",
@@ -24,3 +25,9 @@
         "country": "India"
     }
 }'
+
+
+//Get the order orderData
+
+curl -i -X GET http://localhost:3000/api/orders \
+-H 'Content-Type: application/json' 

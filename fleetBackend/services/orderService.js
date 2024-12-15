@@ -4,7 +4,7 @@ const OrderAddress = require('../models/orderAddress')
 class OrderService {
     async createOrderWithAddress(orderData, addressData){
         const newOrder = await FleetOrder.create(orderData);
-        addressData.orderId = newOrder.orderId;
+        addressData.orderId = newOrder.id;
         const newAddress = await OrderAddress.create(addressData);
         return {newOrder, newAddress};
     }
