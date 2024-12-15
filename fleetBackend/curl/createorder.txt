@@ -1,0 +1,26 @@
+ curl -i -X POST http://localhost:3000/api/order -H 'Content-Type: application/json' -d '{
+    "orderData": {
+        "orderId": 1005,
+        "storeId": 2001,
+        "orderCode": "ORD-1001",
+        "orderUrl": "http://example.com/order/1001",
+        "orderStatus": 1,
+        "currencyCode": "INR",
+        "transactionReference": "TRX-123456",
+        "transactionAmount": 150000.00,
+        "transactionAmountString": "One Lakh Fifty Thousand",
+        "orderTotal": "150000"
+    },
+    "addressData": {
+        "name": "John Doe",
+        "contactNumber": "+91-9876543210",
+        "email": "johndoe@example.com",
+        "street": "No 02/07, Friends Colony",
+        "district": "Bengaluru Urban",
+        "formattedAddress": "No 02/07, Friends Colony, Bengaluru Urban, Karnataka - 560047",
+        "latitude": "12.9715987",
+        "longitude": "77.5945627",
+        "countryCode": "IN",
+        "country": "India"
+    }
+}'

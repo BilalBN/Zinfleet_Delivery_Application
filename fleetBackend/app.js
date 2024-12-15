@@ -8,8 +8,9 @@ const fleetRoutes = require('./routes/fleet');
 const shopRoutes = require('./routes/shop');
 const trackingRoutes = require('./routes/drivertracking');
 const otpVerificationRouted = require('./routes/otpVeirification');
-const FleetOrder = require('.//models/fleetOrder')
-const OrderAddress = require('.//models/orderAddress')
+const orderRoutes = require('./routes/orderRoutes');
+// const FleetOrder = require('.//models/fleetOrder')
+// const OrderAddress = require('.//models/orderAddress')
 
 
 
@@ -42,6 +43,7 @@ app.use('/api/fleets', fleetRoutes);
 app.use('/api/shops', shopRoutes);
 app.use('/api/tracking', trackingRoutes);
 app.use('/api/otp', otpVerificationRouted);
+app.use('/api', orderRoutes)
 
 
 
