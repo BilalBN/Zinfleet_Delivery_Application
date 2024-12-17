@@ -1,3 +1,4 @@
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/db'); // Adjust this path according to your project
 
@@ -19,14 +20,13 @@ const Fleet = sequelize.define('Fleet', {
   email: {
     type: DataTypes.STRING,
     allowNull: true,
-    unique: true
   },
+
   phoneNumber: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
-   createdAt: {
+  createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
@@ -38,5 +38,12 @@ const Fleet = sequelize.define('Fleet', {
 }, {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'fleets'
-});
+},
+  {
+    indexes: [{
+      unique: true,
+      fields: ['email', 'phoneNumber']
+    }]
+  }
+);
 module.exports = Fleet;
