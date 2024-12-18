@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/db')
-
+const FleetOrder = require('./fleetOrder');
 const OrderAddress = sequelize.define("OrderAddress", {
     id: {
         type: DataTypes.INTEGER,
@@ -10,10 +10,9 @@ const OrderAddress = sequelize.define("OrderAddress", {
     orderId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique:true,
         references: {
-            model: 'FleetOrder', // The name of the target model (the table you are referencing)
-            key: 'orderId' // The key in the target model that this foreign key references
+            model: FleetOrder, // Reference the FleetOrder model directly
+            key: 'id' // The key in the target model that this foreign key references
         }
     },
     name: {
@@ -27,12 +26,11 @@ const OrderAddress = sequelize.define("OrderAddress", {
     },
     street: {
         type: DataTypes.STRING,
-
     },
-    distirct: {
+    district: { 
         type: DataTypes.STRING
     },
-    formatedAddress: {
+    formattedAddress: { 
         type: DataTypes.STRING
     },
     latitude: {
@@ -46,10 +44,14 @@ const OrderAddress = sequelize.define("OrderAddress", {
     },
     country: {
         type: DataTypes.STRING
-    },
+    }
 }, {
-    timestamps: true,
-    tableName: 'orderaddress'
+    timestamps: true, // Enable timestamps for createdAt and updatedAt
+    tableName: 'orderaddress',
 });
+
+// Define associations after model definitions
+FleetOrder.hasMany(OrderAddress, { foreignKey: 'orderId' }); // One-to-many relationship
+OrderAddress.belongsTo(FleetOrder, { foreignKey: 'orderId' }); // Many-to-one relationship
 
 module.exports = OrderAddress;

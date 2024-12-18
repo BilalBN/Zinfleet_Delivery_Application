@@ -1,6 +1,7 @@
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db/db')
+const sequelize = require('../db/db');
+
 const FleetOrder = sequelize.define('FleetOrder', {
     id: {
         type: DataTypes.INTEGER,
@@ -8,19 +9,17 @@ const FleetOrder = sequelize.define('FleetOrder', {
         allowNull: false,
         primaryKey: true
     },
-
     orderId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique:true
+        unique: true
     },
-
     storeId: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
     orderCode: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
     },
     orderUrl: {
         type: DataTypes.STRING,
@@ -31,30 +30,22 @@ const FleetOrder = sequelize.define('FleetOrder', {
     },
     currencyCode: {
         type: DataTypes.STRING,
-
     },
     transactionReference: {
         type: DataTypes.STRING
     },
     transactionAmount: {
-        type: DataTypes.DECIMAL
+        type: DataTypes.DECIMAL(10, 2) // Specify precision and scale if needed
     },
     transactionAmountString: {
         type: DataTypes.STRING
     },
-
     orderTotal: {
         type: DataTypes.STRING,
-    },
+    }
 }, {
-    timestamps: true, // Disable auto timestamps if not needed
-    tableName: 'fleetorder'
-
-}, {
-    indexes: [{
-        unique: true,
-        fields: ['orderId']
-    }]
+    timestamps: true, // Enable timestamps for createdAt and updatedAt
+    tableName: 'fleetorder',
 });
 
 module.exports = FleetOrder;
