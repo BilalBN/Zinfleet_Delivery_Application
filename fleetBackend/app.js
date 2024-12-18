@@ -9,11 +9,6 @@ const shopRoutes = require('./routes/shop');
 const trackingRoutes = require('./routes/drivertracking');
 const otpVerificationRouted = require('./routes/otpVeirification');
 const orderRoutes = require('./routes/orderRoutes');
-// const FleetOrder = require('.//models/fleetOrder')
-// const OrderAddress = require('.//models/orderAddress')
-
-
-
 const errorMiddleware = require('./middleware/errorMiddleware');
 const crypto = require('crypto');
 
