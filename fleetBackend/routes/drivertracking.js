@@ -17,5 +17,5 @@ router.post('/', authMiddleware, trackingController.createTracking);
 router.put('/:id', authMiddleware, trackingController.updateTracking);
 router.delete('/:id', authMiddleware, trackingController.deleteTracking);
 
-router.post('/driver/jobs', authMiddleware, trackingController.getAllActiveJobs);
+router.get('/driver/jobs', authMiddleware, trackingController.getAllActiveJobs);
 module.exports = router;

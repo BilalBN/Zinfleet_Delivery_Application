@@ -4,15 +4,17 @@ const constants = {
     fleet: 'fleet'
 }
 
-const OTPSERVICE = Object.freeze({
-    PHONE: Symbol("phone"),
-    EMAIL: Symbol("email")
-});
+const OTPSERVICE = {
+    PHONE: "phone",
+    EMAIL: "email"
+};
 
 const JOBSTATUS = {
-    PENDING: 1,
-    IN_PROGRESS: 2,
-    DELIVERED: 3
+    NEW: 1,
+    ASSIGNED_DRIVER: 2,
+    DRIVER_ACCEPTED: 3,
+    IN_PROGRESS: 4,
+    DELIVERED: 5
 };
 module.exports = {
     constants,

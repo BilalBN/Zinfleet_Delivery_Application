@@ -31,3 +31,8 @@
 
 curl -i -X GET http://localhost:3000/api/orders \
 -H 'Content-Type: application/json' 
+
+//GET Active JOBS for the driver
+curl -i -X GET http://localhost:3000/api/tracking/driver/jobs?status=2 \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGhvbmVfbnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZsZWV0X2lkIjoxLCJpYXQiOjE3MzQ5MTY5ODYsImV4cCI6MTczNTc4MDk4Nn0.cy0WJxHYNvSe3WTN6l1Vqcbgpg8P9lyFN6lcTjNEEHI'

@@ -10,7 +10,8 @@ class OrderController {
         }
         try {
             const { orderData, addressData } = req.body;
-            const result = orderService.createOrderWithAddress(orderData, addressData)
+            const result = await orderService.createOrderWithAddress(orderData, addressData)
+            console.log("Order created:", result)
             return res.status(201).json(result)
         }
         catch (error) {
@@ -23,8 +24,19 @@ class OrderController {
         try {
             const orders = await orderService.getAllOrderWithAddress();
             return res.status(200).json(orders)
-        }catch(error){
-            return res.status(500).json({message: "Internal server error"});
+        } catch (error) {
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    async getFleetDrivers(req, res) {
+        try {
+            const { fleetId } = req.body;
+            const driverResult = await orderService.getFleetDriver(fleetId, 0);
+            return res.status(200).json(driverResult);
+        } catch (error) {
+            console.log(`Fetching fleet driver failed:${error}`);
+            return res.status(500).json({ message: "Internal server error" });
         }
     }
 };

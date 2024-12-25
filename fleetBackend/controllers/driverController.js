@@ -1,11 +1,12 @@
 const driverService = require("../services/driverService");
 const ResponseHandler = require('../utils/responseHandler');
 const CustomError = require('../utils/customError');
+const orderService = require("../services/orderService");
 
 class DriverController {
   async getAllDrivers(req, res, next) {
     try {
-      const drivers = await driverService.getAllDrivers(req.body.limit,req.body.page);
+      const drivers = await driverService.getAllDrivers(req.body.limit, req.body.page);
       ResponseHandler.success(res, drivers, 'Drivers fetched successfully');
     } catch (error) {
       next(new CustomError(error.message, 500));
@@ -46,6 +47,17 @@ class DriverController {
       ResponseHandler.success(res, result, 'Driver deleted successfully');
     } catch (error) {
       next(new CustomError('Driver not found', 404));
+    }
+  }
+
+  async getOrders(req, res, next) {
+    try {
+      const { orderStatus } = req.query;
+      const driverId = req.driverId;
+      const orderData = await driverService.getDriverOrders(driverId, orderStatus);
+      ResponseHandler.success(res, orderData, "Driver Order")
+    } catch {
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 }

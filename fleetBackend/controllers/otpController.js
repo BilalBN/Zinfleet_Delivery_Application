@@ -2,7 +2,7 @@
 const otpAuthService = require("../services/otpAuthService")
 const ResponseHandler = require('../utils/responseHandler');
 const CustomError = require('../utils/customError');
-const OTPSERVICE = require("../config/constants");
+const { OTPSERVICE } = require("../config/constants");
 class OtpController {
 
     async generateOtp(req, res, next) {
@@ -18,7 +18,7 @@ class OtpController {
 
     async verifyOtp(req, res, next) {
         try {
-             await otpAuthService.verifyOtp(req, res)
+            await otpAuthService.verifyOtp(req, res)
         } catch (error) {
             console.log("Verify otp:", error)
             next(new CustomError(error.message, 500));
