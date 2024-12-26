@@ -51,9 +51,10 @@ class DriverTrackingController {
 
   async getAllActiveJobs(req, res, next) {
     try {
-      const result = await trackService.getActiveJobs(req, res)
-      ResponseHandler.success(res, result, 'Data deleted successfully');
+      const result = await trackService.getDriverOrders(req, res)
+      ResponseHandler.success(res, result, 'Tracking data fetched successfully');
     } catch (error) {
+      console.log("Data fetching failed:", error)
       next(new CustomError('Data not found', 404));
     }
   }

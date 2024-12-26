@@ -1,0 +1,38 @@
+ //Create order
+ curl -i -X POST http://localhost:3000/api/order -H 'Content-Type: application/json' -d '{
+    "orderData": {
+        "orderId": 1001,
+        "storeId": 2001,
+        "orderCode": "ORD-1001",
+        "orderUrl": "http://example.com/order/1001",
+        "orderStatus": 1,
+        "currencyCode": "INR",
+        "transactionReference": "TRX-123456",
+        "transactionAmount": 150000.00,
+        "transactionAmountString": "One Lakh Fifty Thousand",
+        "orderTotal": "150000"
+    },
+    "addressData": {
+        "name": "John Doe",
+        "contactNumber": "+91-9876543210",
+        "email": "johndoe@example.com",
+        "street": "No 02/07, Friends Colony",
+        "district": "Bengaluru Urban",
+        "formattedAddress": "No 02/07, Friends Colony, Bengaluru Urban, Karnataka - 560047",
+        "latitude": "12.9715987",
+        "longitude": "77.5945627",
+        "countryCode": "IN",
+        "country": "India"
+    }
+}'
+
+
+//Get the order orderData
+
+curl -i -X GET http://localhost:3000/api/orders \
+-H 'Content-Type: application/json' 
+
+//GET Active JOBS for the driver
+curl -i -X GET http://localhost:3000/api/tracking/driver/jobs?status=2 \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGhvbmVfbnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZsZWV0X2lkIjoxLCJpYXQiOjE3MzQ5MTY5ODYsImV4cCI6MTczNTc4MDk4Nn0.cy0WJxHYNvSe3WTN6l1Vqcbgpg8P9lyFN6lcTjNEEHI'

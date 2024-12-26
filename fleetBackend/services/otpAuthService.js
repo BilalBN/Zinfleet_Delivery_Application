@@ -1,4 +1,4 @@
-const OTPSERVICE = require("../config/constants");
+const { OTPSERVICE } = require("../config/constants");
 const sequelize = require("../db/db");
 const Otp = require("../models/otpModel");
 const Driver = require("../models/driverModel");
@@ -26,7 +26,7 @@ class OtpAuthService {
                     const expiry = new Date(Date.now() + 5 * 60 * 1000) // Otp valid for 5 minutes.
                     try {
                         const otp = Otp.create({
-                            type: type.toString(),
+                            type: type,
                             receiver: otpReceiver,
                             otp: generatedOtp,
                             expire: expiry
@@ -47,8 +47,8 @@ class OtpAuthService {
                 console.log(`Sending otp via email:${otpDestination}`)
                 break;
             default:
-                console.log("Invalid otp service type:", otpDestination)
-                throw Error("Invalid otp service type:", otpDestination)
+                console.log("Invalid otp service type:", type)
+                throw Error("Invalid otp service type:", type)
         }
     }
 
@@ -62,7 +62,7 @@ class OtpAuthService {
                 where: {
                     receiver: phoneNumber,
                     otp: otp,
-                    expire:{
+                    expire: {
                         [Op.gte]: expiryLimitTimeStamp,
                     }
                 }
@@ -71,12 +71,12 @@ class OtpAuthService {
                 otpGeneratedData.isUsed = true
                 await Otp.update({
                     isUsed: true
-                },{
-                    where:{
+                }, {
+                    where: {
                         id: otpGeneratedData.id
                     }
                 })
-               authService.getDriverSession(phoneNumber, res)     
+                authService.getDriverSession(phoneNumber, res)
             } else {
                 const respData = {
                     message: `May be your phone number not registered or otp expired:${phoneNumber}`,

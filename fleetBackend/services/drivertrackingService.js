@@ -1,4 +1,4 @@
-const { UniqueConstraintError } = require('sequelize');
+const { UniqueConstraintError, where } = require('sequelize');
 const MainUsers = require('../models/mainUserModel');
 const bcrypt = require('bcrypt');
 
@@ -8,7 +8,9 @@ const Shop = require('../models/shopModel');
 const Driver = require('../models/driverModel');
 const DriverTracking = require('../models/drivertrackingModel');
 const { JOBSTATUS } = require('../config/constants');
-const { use } = require('../routes/drivertracking');
+const DriverOrder = require('../models/driverOrder')
+const FleetOrder = require('../models/fleetOrder')
+
 
 class DriverTrackingService {
   async getAllTracking(limit, page) {
@@ -139,25 +141,27 @@ class DriverTrackingService {
     return { message: 'Data deleted successfully' };
   }
 
-  async getActiveJobs(req, res) {
-    const { status } = req.query
+  async getDriverOrders(req, res) {
     const user = req.user
-    console.log("User reuquested status:", status)
     if (user) {
+      const { status } = req.query
       const whereClause = {
-        driver_id: user.id
+        driverId: user.id
       }
       if (status) {
-        whereClause.orderStatus = status
+        whereClause.jobStatus = status
       }
-      const activedJobs = await DriverTracking.findAll({
-        where: whereClause
+      console.log("User id:", user.id);
+      const orderData = await DriverOrder.findAll({
+        where: whereClause,
+        include: [{
+          model: FleetOrder,
+          required: true, //Left join
+        }]
       });
-      const activeJobData = activedJobs.map(job => job.toJSON())
-      console.log('active jobs:', activeJobData)
-      return {
-        order: activeJobData
-      }
+
+      console.log(`Order data:${orderData}`)
+      return orderData
     } else {
       throw new Error("You dont have acess")
     }
