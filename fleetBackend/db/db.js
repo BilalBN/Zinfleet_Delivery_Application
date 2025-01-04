@@ -20,11 +20,12 @@
 
 // module.exports = connection;
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
 // Initialize Sequelize instance
-const sequelize = new Sequelize('fleet_db', 'root', 'root', {
-  host: 'localhost',
-  dialect: 'mysql', // You can change this if you're using another DBMS
+const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DB_USER_NAME, process.env.DB_PASSWORD, {
+  host: process.env.DATABASE_HOST,
+  dialect:process.env.DATABASE_DIALECT, // You can change this if you're using another DBMS
 });
 
 // Test the connection
