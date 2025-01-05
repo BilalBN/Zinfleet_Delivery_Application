@@ -8,9 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { UserType } from "../../../types/user";
 import { fetchFleets } from "../../../store/fleetSlice";
 import { Fleet } from "../../../types/fleet";
-const FixedWidthSelect = styled(Select)`
-  width: 120px; // Adjust width as needed
-`;
+
 
 const Container = styled.div`
   display: flex;

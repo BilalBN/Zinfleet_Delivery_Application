@@ -94,7 +94,7 @@ const Legend = styled.div<{ color: string }>`
 `
 export const Dashboard = () => {
     return (
-        <Container>
+        <Container id="admin-dashboard">
             <WidgetContainer>
                 <CardsRow>
                     <CommonCard type={'FLEET'} value={50} title="Total Fleet Managers" />
