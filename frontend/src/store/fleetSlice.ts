@@ -83,7 +83,7 @@ const FleetSlice = createSlice({
     builder.addCase(addFleet.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(addFleet.fulfilled, (state) => {});
+    builder.addCase(addFleet.fulfilled, (_state) => {});
     builder.addCase(addFleet.rejected, (state, action) => {
       state.error = action.error.message || "Failed to add fleet";
     });
@@ -106,7 +106,7 @@ const FleetSlice = createSlice({
     builder.addCase(deleteFleet.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(deleteFleet.fulfilled, (state) => {});
+    builder.addCase(deleteFleet.fulfilled, (_state) => {});
     builder.addCase(deleteFleet.rejected, (state, action) => {
       state.error = action.error.message || "Failed to delete fleet";
     });

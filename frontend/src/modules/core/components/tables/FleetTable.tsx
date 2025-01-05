@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import ReusableTable from './ReusableOrdersTable';
-import { Button } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../../store/hook';
 import styled from "@emotion/styled";
 import { Align } from '../../../../types/table';
@@ -8,6 +7,24 @@ import { deleteFleet, fetchFleets, updateFleet } from '../../../../store/fleetSl
 import { Fleet, FleetPayload, FleetUpdatePayload } from '../../../../types/fleet';
 import { FleetDialog } from '../../../admin/components/dialog/Fleet';
 import { NoDataAvailable } from '../EmptyPage';
+import { ActionType, MoreActionType } from '../../../../types/actions';
+import MoreOptions from '../MoreMenu';
+import { AddCredit } from '../../../admin/components/dialog/AddCredit';
+
+const FleetOptions: MoreActionType[] = [
+  {
+    key: 'EDIT',
+    title: 'Edit'
+  },
+  {
+    key: 'DELETE',
+    title: 'Delete'
+  },
+  {
+    key: 'ADD',
+    title: 'Add credit'
+  }
+]
 
 const FleetActions = styled.div`
   display: flex;
@@ -19,6 +36,7 @@ const FleetTable = () => {
   const [selectedFleet, setSelectedFleet] = useState<null | Fleet>(null);
   const { data } = useAppSelector((state) => state.fleet)
   const [open, setOpen] = useState(false);
+  const [addCreditOpen, setAddCreditOpen] = useState(false);
   const handleSave = async (fleet: FleetPayload) => {
     setOpen(false)
     if (selectedFleet) {
@@ -38,10 +56,25 @@ const FleetTable = () => {
     }
   };
 
+  const handAddCreditClickopen = (value: boolean) => {
+    setAddCreditOpen(value);
+  };
+
+  const handleCreditClose = (_event: React.MouseEvent, reason: string) => {
+    if (reason !== "backdropClick") {
+      setAddCreditOpen(false);
+    }
+  };
+
 
   useEffect(() => {
     dispatch(fetchFleets())
   }, []);
+
+  const updateCredit = (_value: number) => {
+    setAddCreditOpen(false);
+    setSelectedFleet(null)
+  }
 
 
 
@@ -58,13 +91,18 @@ const FleetTable = () => {
       key: 'actions',
       render: (item: Fleet) => (
         <FleetActions>
-          <Button variant="contained" color="success" onClick={() => {
-            setSelectedFleet((item))
-            handleClickOpen(true)
-          }}>Edit</Button>
-          <Button variant="contained" color="error" onClick={() => {
-            dispatch(deleteFleet(item.id))
-          }}>Delete</Button>
+
+          <MoreOptions options={FleetOptions} onClick={(action: ActionType) => {
+            if (action === 'ADD') {
+              setSelectedFleet((item))
+              setAddCreditOpen(true)
+            } else if (action === 'EDIT') {
+              setSelectedFleet((item))
+              handleClickOpen(true)
+            } else if (action === 'DELETE') {
+              dispatch(deleteFleet(item.id))
+            }
+          }} />
         </FleetActions>
       ),
       width: '200px',
@@ -72,7 +110,7 @@ const FleetTable = () => {
     },
   ];
 
-  return (<>{data.length ? <ReusableTable columns={FleetColumns} data={data} /> : <NoDataAvailable message={"No fleets available yet. Click 'Add Fleet' to create your first one!"}/>}
+  return (<>{data.length ? <ReusableTable columns={FleetColumns} data={data} /> : <NoDataAvailable message={"No fleets available yet. Click 'Add new Fleet' to create your first one!"} />}
     {open && selectedFleet ? (<FleetDialog handleClickOpen={handleClickOpen} open={open} handleClose={handleClose} handleSave={handleSave} title={"Edit fleet"} initialData={{
       name: selectedFleet.name,
       email: selectedFleet.email,
@@ -80,7 +118,9 @@ const FleetTable = () => {
       password: selectedFleet.password,
       phoneNumber: selectedFleet.phoneNumber,
       username: selectedFleet.username,
-    }} />) : null}</>);
+    }} />) : null}
+    {addCreditOpen && selectedFleet ? (<AddCredit handleClickOpen={handAddCreditClickopen} open={addCreditOpen} handleClose={handleCreditClose} handleSave={updateCredit} title={"Add Credit"} credit={0} />) : null}
+  </>);
 };
 
 export default FleetTable;

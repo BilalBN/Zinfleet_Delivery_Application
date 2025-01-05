@@ -77,7 +77,7 @@ const DriverSlice = createSlice({
     builder.addCase(addDriver.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(addDriver.fulfilled, (state) => {});
+    builder.addCase(addDriver.fulfilled, (_state) => {});
     builder.addCase(addDriver.rejected, (state, action) => {
       state.error = action.error.message || "Failed to add driver";
     });
@@ -86,7 +86,7 @@ const DriverSlice = createSlice({
     builder.addCase(updateDriver.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(updateDriver.fulfilled, (state) => {});
+    builder.addCase(updateDriver.fulfilled, (_state) => {});
     builder.addCase(updateDriver.rejected, (state, action) => {
       state.error = action.error.message || "Failed to update fleet";
     });
@@ -95,7 +95,7 @@ const DriverSlice = createSlice({
     builder.addCase(deleteDriver.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(deleteDriver.fulfilled, (state) => {});
+    builder.addCase(deleteDriver.fulfilled, (_state) => {});
     builder.addCase(deleteDriver.rejected, (state, action) => {
       state.error = action.error.message || "Failed to delete sriver";
     });

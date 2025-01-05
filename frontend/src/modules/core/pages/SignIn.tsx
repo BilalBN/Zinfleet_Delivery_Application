@@ -10,7 +10,6 @@ import { setLoading } from "../../../store/rootslice";
 import { apiService } from "../../../api";
 import { UserType } from "../../../types/user";
 import { login } from "../../../store/authSlice";
-import { jwtDecode } from "jwt-decode";
 import { showSnackbar } from "../../../store/snackbarSlice";
 import { decodeToken } from "../utils";
 

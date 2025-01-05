@@ -15,9 +15,10 @@ export const SnackbarComponent: React.FC = () => {
       open={open}
       onClose={closeSnackbar}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      autoHideDuration={1000}
+      autoHideDuration={50000}
     >
       <Alert
+        id="toaster-body"
         onClose={closeSnackbar}
         severity={severity}
         sx={{ width: '100%' }}

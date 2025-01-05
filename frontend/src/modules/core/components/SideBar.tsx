@@ -124,7 +124,7 @@ export const SideBar = ({ items }: SidebarProps) => {
             }}
           >
             {getSideBarIcon(item)}
-            <NavigationTitle color={isActivePath(location.pathname, item)?colors.primary : colors.default}>{item.label}</NavigationTitle>
+            <NavigationTitle id={item.icon} color={isActivePath(location.pathname, item)?colors.primary : colors.default}>{item.label}</NavigationTitle>
           </ListItemContainer>
         ))}
         <Statuscontainer>
