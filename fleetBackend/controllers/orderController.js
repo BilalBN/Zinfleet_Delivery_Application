@@ -39,6 +39,17 @@ class OrderController {
             return res.status(500).json({ message: "Internal server error" });
         }
     }
+    async getFleetOrders(req, res)
+    {
+        try {
+            const { fleetId } = req.body;
+            const orderResult = await orderService.getFleetOrders(fleetId, req.body.limit,req.body.page);
+            return res.status(200).json(orderResult);
+        } catch (error) {
+            console.log(`Fetching fleet driver failed:${error}`);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    }
 };
 
 module.exports = new OrderController()

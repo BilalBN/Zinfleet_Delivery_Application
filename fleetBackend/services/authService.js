@@ -38,12 +38,12 @@ class AuthService {
               throw new Error('Invalid credentials');
             }
             let fleet_id=null;
-            if(user.role==constants.shop)
+            if(user.role=='shop')
               {
                 const shopUser =await Shop.findByPk(user.shop_id)
                 fleet_id=shopUser.fleet_id;
               }
-              if (user.role === constants.fleet) {
+              if (user.role == 'fleet') {
                 fleet_id = user.fleet_id;
               }
             // Generate JWT token
