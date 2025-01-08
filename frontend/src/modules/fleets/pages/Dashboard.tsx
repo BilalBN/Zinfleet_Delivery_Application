@@ -29,7 +29,7 @@ const CardsRow = styled.div`
 `;
 export const Dashboard = () => {
   return (
-    <Container>
+    <Container id="fleet-dashboard">
       <WidgetContainer>
         <CardsRow>
           <CustomCard

@@ -68,7 +68,7 @@ const WarehouseOrdersTable = () => {
         { title: "No. of Items", dataIndex: "no_of_items", key: "no_of_items", width: '150px' },
         { title: "Delivery location", dataIndex: "delivery_location", key: "delivery_location", width: '200px' },
         {
-            title: "Item Details", dataIndex: "order_details", key: "order_details", width: '100px', render: (row: any) => (
+            title: "Item Details", dataIndex: "order_details", key: "order_details", width: '100px', render: (_row: any) => (
                 <ViewOption onClick={() => setOpen(true)}>View</ViewOption>
             ),
         },

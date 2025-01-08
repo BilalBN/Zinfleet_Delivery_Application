@@ -1,28 +1,32 @@
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { IconButton, InputLabel } from "@mui/material";
+import React from "react";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import styled from "@emotion/styled";
-import { Shop, ShopPayload } from "../../../../types/shop";
-import { useState } from "react";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { ShopPayload } from "../../../../types/shop";
 import { useAppSelector } from "../../../../store/hook";
 
 type ShopProps = {
-  handleSave: (fleet: ShopPayload) => void
-  handleClose: (_event: React.MouseEvent, reason: string) => void
-  handleClickOpen: (value: boolean) => void
-  title: string
-  initialData?: Shop
-  open: boolean
+  handleSave: (shop: ShopPayload) => void;
+  handleClose: (_event: React.MouseEvent, reason: string) => void;
+  handleClickOpen: (value: boolean) => void;
+  title: string;
+  initialData?: ShopPayload;
+  open: boolean;
+};
 
-}
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
@@ -39,158 +43,222 @@ const FieldItem = styled.div`
   flex-direction: column;
   gap: 5px;
 `;
-const initialValue: Shop = {
-  name: "",
-  warehouseAddress: "",
-  address: "",
-  fleet_id: -1,
-  userName: "",
-  password: "",
-};
 
-export const ShopDialog = ({ open, handleClickOpen, handleClose, handleSave, initialData, }: ShopProps) => {
-  const [shop, setShop] = useState<Shop>(initialData || initialValue);
-  const { data } = useAppSelector((state) => state.fleet)
+export const ShopDialog = ({
+  open,
+  handleClickOpen,
+  handleClose,
+  handleSave,
+  initialData,
+}: ShopProps) => {
+  const { data: fleetData } = useAppSelector((state) => state.fleet);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<ShopPayload>({
+    defaultValues: initialData || {
+      name: "",
+      address: "",
+      warehouse_address: "",
+      fleet_id: -1,
+      username: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
 
-  const handleChange = (
-    event: SelectChangeEvent<number> | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.target;
-    setShop((prev) => ({ ...prev, [name]: value }));
+  const onSubmit: SubmitHandler<ShopPayload> = (data) => {
+    handleSave(data);
   };
 
-  const addNewShop = async () => {
-    const body: ShopPayload = {
-      name: shop.name,
-      address: shop.address,
-      warehouse_address: shop.warehouseAddress,
-      fleet_id: shop.fleet_id,
-      username: shop.userName,
-      password: shop.password,
-    };
-    handleSave(body)
-  };
   return (
-    <Dialog fullWidth={true} maxWidth={"sm"} open={open} disableEscapeKeyDown={true} onClose={handleClose}>
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={open}
+      disableEscapeKeyDown
+      onClose={handleClose}
+    >
       <DialogTitle>
         <Header>
-          <div>Add shop Details</div>
+          <div>{initialData ? "Edit Shop" : "Add Shop"}</div>
           <IconButton
-            onClick={() => {
-              handleClickOpen(false)
-            }}
+            onClick={() => handleClickOpen(false)}
           >
             <CloseIcon />
           </IconButton>
         </Header>
       </DialogTitle>
       <DialogContent>
-        <Container>
-          <FieldItem>
-            <InputLabel>Shop Name*</InputLabel>
-            <TextField
-              autoFocus
-              required
-              name="name"
-              label=""
-              fullWidth
-              placeholder="Enter shop name"
-              variant="outlined"
-              value={shop.name}
-              onChange={handleChange}
-            />
-          </FieldItem>
-          <FieldItem>
-            <InputLabel>Address*</InputLabel>
-            <TextField
-              variant="outlined"
-              label=""
-              name="address"
-              fullWidth
-              placeholder="Enter shop address"
-              value={shop.address}
-              onChange={handleChange}
-            />
-          </FieldItem>
-          <FieldItem>
-            <InputLabel>Warehous address*</InputLabel>
-            <TextField
-              variant="outlined"
-              label=""
-              name="warehouseAddress"
-              fullWidth
-              placeholder="Enter full Address"
-              value={shop.warehouseAddress}
-              onChange={handleChange}
-            />
-          </FieldItem>
-          <FieldItem>
-            <InputLabel>Select fleet name*</InputLabel>
-            <FormControl fullWidth>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={shop.fleet_id || -1}
-                onChange={handleChange}
-                name="fleet_id"
-                displayEmpty
-              >
-                <MenuItem value="" disabled>
-                  Select fleet name
-                </MenuItem>
-                {data.map((fleet: any) => (
-                  <MenuItem value={fleet.id}>{fleet.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </FieldItem>
-          <FieldItem>
-            <InputLabel>User Name*</InputLabel>
-            <TextField
-              variant="outlined"
-              label=""
-              name="userName"
-              fullWidth
-              placeholder="Add user name"
-              value={shop.userName}
-              onChange={handleChange}
-            />
-          </FieldItem>
-          {!initialData ? (<FieldItem>
-            <InputLabel>Password*</InputLabel>
-            <TextField
-              variant="outlined"
-              label=""
-              type="password"
-              name="password"
-              fullWidth
-              placeholder="password"
-              value={shop.password}
-              onChange={handleChange}
-            />
-          </FieldItem>) : null}
-
-        </Container>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Container>
+            <FieldItem>
+              <InputLabel>Shop Name*</InputLabel>
+              <Controller
+                name="name"
+                control={control}
+                rules={{
+                  required: "Shop name is required",
+                  validate: (value) =>
+                    value.trim() !== "" || "Shop name cannot contain only spaces",
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    placeholder="Enter shop name"
+                    variant="outlined"
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                  />
+                )}
+              />
+            </FieldItem>
+            <FieldItem>
+              <InputLabel>Address*</InputLabel>
+              <Controller
+                name="address"
+                control={control}
+                rules={{
+                  required: "Address is required",
+                  validate: (value) =>
+                    value.trim() !== "" || "Address cannot contain only spaces",
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    placeholder="Enter shop address"
+                    variant="outlined"
+                    error={!!errors.address}
+                    helperText={errors.address?.message}
+                  />
+                )}
+              />
+            </FieldItem>
+            <FieldItem>
+              <InputLabel>Warehouse Address*</InputLabel>
+              <Controller
+                name="warehouse_address"
+                control={control}
+                rules={{
+                  required: "Warehouse address is required",
+                  validate: (value) =>
+                    value.trim() !== "" ||
+                    "Warehouse address cannot contain only spaces",
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    placeholder="Enter warehouse address"
+                    variant="outlined"
+                    error={!!errors.warehouse_address}
+                    helperText={errors.warehouse_address?.message}
+                  />
+                )}
+              />
+            </FieldItem>
+            <FieldItem>
+              <InputLabel>Select Fleet Name*</InputLabel>
+              <FormControl fullWidth>
+                <Controller
+                  name="fleet_id"
+                  control={control}
+                  rules={{
+                    required: "Fleet name is required",
+                  }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      displayEmpty
+                      variant="outlined"
+                      error={!!errors.fleet_id}
+                    >
+                      <MenuItem value={-1} disabled>
+                        Select fleet name
+                      </MenuItem>
+                      {fleetData.map((fleet: any) => (
+                        <MenuItem key={fleet.id} value={fleet.id}>
+                          {fleet.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </FormControl>
+              {errors.fleet_id && (
+                <p style={{ color: "red", margin: "5px 0 0" }}>
+                  {errors.fleet_id.message}
+                </p>
+              )}
+            </FieldItem>
+            <FieldItem>
+              <InputLabel>Username*</InputLabel>
+              <Controller
+                name="username"
+                control={control}
+                rules={{
+                  required: "Username is required",
+                  validate: (value) =>
+                    value.trim() !== "" || "Username cannot contain only spaces",
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    placeholder="Enter username"
+                    variant="outlined"
+                    error={!!errors.username}
+                    helperText={errors.username?.message}
+                  />
+                )}
+              />
+            </FieldItem>
+            {!initialData && (
+              <FieldItem>
+                <InputLabel>Password*</InputLabel>
+                <Controller
+                  name="password"
+                  control={control}
+                  rules={{
+                    required: "Password is required",
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+                      message:
+                        "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 6 characters long",
+                    },
+                    validate: (value) =>
+                      value.trim() !== "" || "Password cannot contain only spaces",
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      type="password"
+                      fullWidth
+                      placeholder="Enter password"
+                      variant="outlined"
+                      error={!!errors.password}
+                      helperText={errors.password?.message}
+                    />
+                  )}
+                />
+              </FieldItem>
+            )}
+          </Container>
+          <DialogActions>
+            <Button onClick={() => handleClickOpen(false)}>Cancel</Button>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={!isValid}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </form>
       </DialogContent>
-
-      <DialogActions>
-        <Button
-          onClick={() => {
-            handleClickOpen(false)
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          onClick={addNewShop}
-          disabled={
-            !shop.address || !shop.name || !shop.address || !shop.warehouseAddress || !shop.userName || (!shop.password && !initialData)
-          }
-        >
-          Save
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

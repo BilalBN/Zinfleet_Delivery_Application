@@ -49,7 +49,7 @@ const Warehouse = createSlice({
   name: "warehouse",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: (_builder) => {},
 });
 
 export const {} = Warehouse.actions;

@@ -74,7 +74,7 @@ const ShoptSlice = createSlice({
     builder.addCase(addShop.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(addShop.fulfilled, (state) => {});
+    builder.addCase(addShop.fulfilled, (_state) => {});
     builder.addCase(addShop.rejected, (state, action) => {
       state.error = action.error.message || "Failed to add shop";
     });
@@ -83,7 +83,7 @@ const ShoptSlice = createSlice({
     builder.addCase(updateShop.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(updateShop.fulfilled, (state) => {});
+    builder.addCase(updateShop.fulfilled, (_state) => {});
     builder.addCase(updateShop.rejected, (state, action) => {
       state.error = action.error.message || "Failed to update shop";
     });
@@ -92,7 +92,7 @@ const ShoptSlice = createSlice({
     builder.addCase(deleteShop.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(deleteShop.fulfilled, (state) => {});
+    builder.addCase(deleteShop.fulfilled, (_state) => {});
     builder.addCase(deleteShop.rejected, (state, action) => {
       state.error = action.error.message || "Failed to delete shop";
     });
