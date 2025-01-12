@@ -23,7 +23,6 @@ const DriverOrder = sequelize.define('DriverOrder', {
             model: FleetOrder,
             key: 'id'
         }
-
     }
 }, {
     tableName: 'driverorder'

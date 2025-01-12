@@ -13,8 +13,9 @@ const JOBSTATUS = {
     NEW: 1,
     ASSIGNED_DRIVER: 2,
     DRIVER_ACCEPTED: 3,
-    IN_PROGRESS: 4,
-    DELIVERED: 5
+    PICKUP_COMPLETED:4,
+    DELIVERED: 5,
+    RETURNED:6
 };
 module.exports = {
     constants,

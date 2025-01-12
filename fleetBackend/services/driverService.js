@@ -1,11 +1,13 @@
-const { UniqueConstraintError } = require('sequelize');
+const { UniqueConstraintError, where } = require('sequelize');
 const Driver = require('../models/driverModel');
 const { Op } = require('sequelize');
 const Fleet = require('../models/fleetModel');
-const DriverOrder = require('../models/driverOrder')
-const FleetOrder = require('../models/fleetOrder')
-
+const DriverOrder = require('../models/driverOrder');
+const FleetOrder = require('../models/fleetOrder');
+const DriverSession = require('../models/driverSessionModel');
+const crypto = require('crypto');
 class DriverService {
+
   async getAllDrivers(limit, page) {
     try {
       // Determine if pagination is needed
@@ -165,6 +167,63 @@ class DriverService {
     return { message: 'Driver deleted successfully' };
   }
 
+  async handleDriverSession(req) {
+    const user = req.user
+    if (!user) {
+      throw new Error("User is not identified")
+    }
+    const isSessionActive = typeof req.body.isSessionActive === 'boolean'
+      ? req.body.isSessionActive
+      : false;
+
+    if (isSessionActive) {
+      const driver = Driver.findOne({
+        where: {
+          id: user.id
+        }
+      });
+      if (!driver) {
+        throw new Error("Driver not found");
+      }
+
+      const sessionResp = await DriverSession.create({
+        sessionId: crypto.randomUUID(),
+        driverId: user.id,
+        isOnline: isSessionActive
+      });
+      if (sessionResp.id) {
+        return sessionResp;
+      }
+      throw new Error("Could not establish the session");
+    } else {
+      const { sessionId } = req.body
+      const sessionServiceData = DriverSession.findOne({
+        where: {
+          sessionId: sessionId
+        }
+      });
+      if (!sessionServiceData) {
+        throw new Error("Session not found");
+      }
+      const data = await DriverSession.update({
+        isOnline: false,
+      },
+        {
+          where: {
+            sessionId: sessionId
+          }
+        }
+      );
+      if (data[0] > 0) {
+        return {
+          message: "Driver session deactivated"
+        }
+      }
+      throw new Error("Could not update the session")
+    }
+
+
+  }
 }
 
 module.exports = new DriverService();

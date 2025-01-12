@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const FleetOrder = require('../models/fleetOrder')
 const OrderAddress = require('../models/orderAddress')
 const orderService = require('../services/orderService')
+const ResponseHandler = require('../utils/responseHandler');
 class OrderController {
     async createOrder(req, res) {
         const errors = validationResult(req);
@@ -39,15 +40,28 @@ class OrderController {
             return res.status(500).json({ message: "Internal server error" });
         }
     }
-    async getFleetOrders(req, res)
-    {
+    async getFleetOrders(req, res) {
         try {
             const { fleetId } = req.body;
-            const orderResult = await orderService.getFleetOrders(fleetId, req.body.limit,req.body.page);
+            const orderResult = await orderService.getFleetOrders(fleetId, req.body.limit, req.body.page);
             return res.status(200).json(orderResult);
         } catch (error) {
             console.log(`Fetching fleet driver failed:${error}`);
             return res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    async updateDriverOrderStatus(req, res, next) {
+        try {
+            const orderUpdateData = await orderService.updateOrderStatus(req)
+            return ResponseHandler.success(res, orderUpdateData, "Driver order update")
+
+        } catch (error) {
+            var message = "Internal server Error"
+            if (error.message) {
+                message = error.message
+            }
+            return res.status(500).json({ message: message })
         }
     }
 };
