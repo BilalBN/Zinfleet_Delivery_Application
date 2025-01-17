@@ -20,7 +20,7 @@ const Container = styled.div`
 `
 
 const OrderManagment = () => {
-    const { data, selectedOrder } = useAppSelector(state => state.order)
+    const { selectedOrder } = useAppSelector(state => state.order)
 
     const renderTable = () => {
         switch (selectedOrder) {

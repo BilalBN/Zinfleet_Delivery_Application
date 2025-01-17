@@ -86,6 +86,8 @@ class OrderService {
             // Fetch associated users for the fetched shops
           const orderwithaddresses = await Promise.all(
             fleetOrders.map(async (orders) => {
+
+              console.log(orders,'teestt')
               const address = await OrderAddress.findOne({
                 where: { orderId: orders.id },
               });
@@ -124,7 +126,10 @@ class OrderService {
             throw new Error("Error fetching fleet orders");
         }
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 5d1465bb576515c69d7180adccea54f338515103
 };
 
 module.exports = new OrderService()
