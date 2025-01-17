@@ -26,7 +26,7 @@ const Shop = sequelize.define('Shop', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Fleets', // The name of the target model (the table you are referencing)
+      model: Fleet, // The name of the target model (the table you are referencing)
       key: 'id' // The key in the target model that this foreign key references
     }
   },
@@ -43,6 +43,6 @@ const Shop = sequelize.define('Shop', {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'shops'
 });
-Fleet.hasMany(Shop,{foreignKey:'fleet_id'})
-Shop.belongsTo(Fleet,{foreignKey:'fleet_id'});   // Define the association
+Fleet.hasMany(Shop, { foreignKey: 'fleet_id' })
+Shop.belongsTo(Fleet, { foreignKey: 'fleet_id' });  // Define the association
 module.exports = Shop;

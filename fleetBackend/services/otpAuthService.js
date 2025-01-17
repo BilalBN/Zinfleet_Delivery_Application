@@ -8,6 +8,7 @@ const ResponseHandler = require('../utils/responseHandler');
 const authService = require('./authService');
 const exp = require("constants");
 const { Op } = require('sequelize');
+const OrderDeliveryOtp = require("../models/deliveryOtpModel");
 const generateOtp = () => {
     return crypto.randomInt(1000, 9999)
 }
@@ -90,6 +91,76 @@ class OtpAuthService {
             throw Error("Could not verify the otp at this moment");
         }
     }
+
+
+    async requestDeliveryOtp(orderId, otpReceiver, type) {
+        switch (type) {
+            case OTPSERVICE.PHONE:
+                const generatedOtp = generateOtp();
+                const expiry = new Date(Date.now() + 24*60 * 60 * 1000) // Otp valid for 5 minutes.
+                try {
+                    const otp = OrderDeliveryOtp.create({
+                        type: type,
+                        receiver: otpReceiver,
+                        otp: generatedOtp,
+                        expire: expiry,
+                        fleetOrderId: orderId
+                    })
+                    console.log("Generated Delivery otp:", otp)
+                } catch (exc) {
+                    console.error("Error in otp generation:", exc)
+                    throw Error("Could not create the otp for:", otpReceiver)
+                }
+                console.log(`Sending otp via phone number:${otpReceiver}`)
+                return {
+                    message: `Generated otp for,:${otpReceiver}`
+                };
+                break;
+            case OTPSERVICE.EMAIL:
+                console.log(`Sending otp via email:${otpDestination}`)
+                throw Error("Invalid otp service type:", type)
+                break;
+            default:
+                console.log("Invalid otp service type:", type)
+                throw Error("Invalid otp service type:", type)
+        }
+    }
+
+    async verifyDeliveryOtp(orderId, phoneNumber, otp) {
+        try {
+            // const expiryLimitTimeStamp = new Date(Date.now() - (24*60 * 60 * 1000))
+            // console.log("Expirty time:", expiryLimitTimeStamp)
+            const otpGeneratedData = await OrderDeliveryOtp.findOne({
+                where: {
+                    receiver: phoneNumber,
+                    fleetOrderId: orderId,
+                    otp: otp,
+                    isUsed: false,
+                    expire: {
+                        [Op.gte]: Date.now(),
+                    }
+                },
+                order: [["createdAt", "DESC"]]
+            })
+            if (otpGeneratedData) {
+                otpGeneratedData.isUsed = true
+                await OrderDeliveryOtp.update({
+                    isUsed: true
+                }, {
+                    where: {
+                        id: otpGeneratedData.id
+                    }
+                })
+               return true
+            } else {
+               return false
+            }
+
+        } catch (error) {
+            throw Error("Could not verify the otp at this moment");
+        }
+    }
+
 }
 
 module.exports = new OtpAuthService();
