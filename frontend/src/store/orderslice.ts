@@ -42,7 +42,7 @@ export const fetchOrders = createAsyncThunk(
     const state: any = getState();
     const { page, limit, total, totalPages } = state.order;
     dispatch(setLoading(true));
-    const response: any = await apiService.post("/api/orders/fleetorders", { ...payload, page, limit, total, totalPages });
+    const response: any = await apiService.post("/api/orders/fleetorders", { ...payload, page, limit });
     dispatch(setLoading(false));
     return response.data;
   }
