@@ -20,7 +20,8 @@ const Container = styled.div`
 `
 
 export const Orders = () => {
-    const { data, selectedOrder } = useAppSelector(state => state.order)
+    const { selectedOrder } = useAppSelector(state => state.order)
+    console.log('selectedOrder');
 
     const renderTable = () => {
         switch (selectedOrder) {
@@ -41,10 +42,9 @@ export const Orders = () => {
     return (
         <Container>
             <SubNavBar />
-            <OrderTabs/>
-            {data.length ? (
-                renderTable()
-            ) : (<NoDataAvailable message="No orders found"/>)}
+            <OrderTabs />
+            {renderTable()}
+
         </Container>
     );
 

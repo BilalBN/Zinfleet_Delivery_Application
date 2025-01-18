@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface WarehouseOrder {
   id: number;
@@ -16,41 +16,53 @@ interface IWarehouse {
   pageno: number;
   fetched: boolean;
   error: string | null;
-  itemsPerPage: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  page: number;
 }
 const initialState: IWarehouse = {
-  data: [{
-    id: 1,
-    order_id: 1,
-    name: 'Rinshad',
-    date: '10 may 2024',
-    no_of_items: 2,
-    delivery_location: 'Box no. 1172 Dubai',
-    items: [],
-    status: 'DELIVERED',
-  },
-  {
-    id: 2,
-    order_id: 3,
-    name: 'Shaik',
-    date: '12 June 2024',
-    no_of_items: 2,
-    delivery_location: 'Box no. 1122 Dubai',
-    items: [],
-    status: 'PENDING',
-  }],
+  data: [
+    {
+      id: 1,
+      order_id: 1,
+      name: "Rinshad",
+      date: "10 may 2024",
+      no_of_items: 2,
+      delivery_location: "Box no. 1172 Dubai",
+      items: [],
+      status: "DELIVERED",
+    },
+    {
+      id: 2,
+      order_id: 3,
+      name: "Shaik",
+      date: "12 June 2024",
+      no_of_items: 2,
+      delivery_location: "Box no. 1122 Dubai",
+      items: [],
+      status: "PENDING",
+    },
+  ],
   pageno: 1,
   fetched: false,
   error: null,
-  itemsPerPage: 8,
+  limit: 8,
+  total: 2,
+  totalPages: 1,
+  page: 1,
 };
 
 const Warehouse = createSlice({
   name: "warehouse",
   initialState,
-  reducers: {},
+  reducers: {
+    setPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
+  },
   extraReducers: (_builder) => {},
 });
 
-export const {} = Warehouse.actions;
+export const {setPage} = Warehouse.actions;
 export default Warehouse.reducer;

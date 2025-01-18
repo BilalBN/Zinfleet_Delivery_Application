@@ -1,14 +1,22 @@
-import { useState } from 'react';
-import ReusableTable from './ReusableOrdersTable'; // Import the reusable table component
-import { useAppSelector } from '../../../../store/hook';
+import { useEffect, useState } from 'react';
+import ReusableTable from './ReusableTable'; // Import the reusable table component
+import { useAppDispatch, useAppSelector } from '../../../../store/hook';
 import { Select, MenuItem } from '@mui/material';
 import { Order } from '../../../../types/order';
 import { NoDataAvailable } from '../EmptyPage';
+import { fetchOrders, setPage } from '../../../../store/orderslice';
 
 const RejectedOrders = () => {
-    const { data } = useAppSelector((state) => state.order);
+    const { data, limit, page, total, totalPages } = useAppSelector((state) => state.order);
     const [reassignedUsers, setReassignedUsers] = useState<{ [key: number]: string }>({});
     const users = ['John', 'Antony', 'Ben'];
+    const { user } = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
+
+
+    useEffect(() => {
+        dispatch(fetchOrders({ order_type: 'REJECTED', fleet_id: user?.fleet_id || null }))
+    }, [page]);
 
     // Handle reassignment dropdown change
     const handleReassignChange = (id: number, user: string) => {
@@ -52,7 +60,9 @@ const RejectedOrders = () => {
         },
     ];
 
-    return (data.length ? (<ReusableTable columns={rejectedOrdersColumns} data={data} />) : (<NoDataAvailable message={"No orders available yet."} />));
+    return (data.length ? (<ReusableTable total={total} totalPages={totalPages} columns={rejectedOrdersColumns} data={data} page={page} setPage={(value: number) => {
+        dispatch(setPage(value))
+    }} rowsPerPage={limit} />) : (<NoDataAvailable message={"No orders available yet."} />));
 };
 
 export default RejectedOrders;
