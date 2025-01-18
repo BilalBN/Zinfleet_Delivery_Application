@@ -16,7 +16,7 @@ export type FleetUpdatePayload = {
   password: string;
 };
 
-export type Fleet={
+export type Fleet = {
   id: number;
   name: string;
   address: string;
@@ -26,4 +26,11 @@ export type Fleet={
   password: string;
   total_drivers: number;
   total_shops: number;
-}
+};
+
+export type FleetApiResponse = {
+  total: number;
+  totalPagess: number;
+  currentPage: number;
+  data: Fleet[];
+};

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -44,18 +44,19 @@ interface Props {
   columns: Column[];
   data: any[];
   rowsPerPage?: number;
+  page: number;
+  total: number;
+  totalPages: number;
+  setPage: (value: number) => void
 }
 
-const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 10 }) => {
-  const [page, setPage] = useState(1);
+const ReusableOrdersTable: React.FC<Props> = ({ columns, data, total, totalPages, rowsPerPage = 10, setPage, page }) => {
 
-  // Handle page change
+
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
-  // Calculate current rows
-  const currentRows = data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
   return (
     <CustomContainer>
@@ -71,7 +72,7 @@ const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 10 }) => 
             </TableRow>
           </CustomTableHead>
           <TableBody>
-            {currentRows.map((row) => (
+            {data.map((row) => (
               <TableRow key={row.id}>
                 {columns.map((col) => (
                   <TableCell key={`${col.key}-${row.id}`} width={col.width}>
@@ -86,16 +87,16 @@ const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 10 }) => 
       <CustomPaginationContainer>
         {/* Displaying the results */}
         <div>
-          Showing {(page - 1) * rowsPerPage + 1} to {Math.min(page * rowsPerPage, data.length)} of {data.length} results
+          NOW Showing {(page - 1) * rowsPerPage + 1} to {Math.min(page * rowsPerPage, total)} of {total} results
         </div>
 
         {/* Pagination controls */}
         <Pagination
-          count={Math.ceil(data.length / rowsPerPage)}
+          count={Math.ceil(total / rowsPerPage)}
           page={page}
           onChange={handleChangePage}
           siblingCount={2}
-          boundaryCount={1}
+          boundaryCount={totalPages}
           shape="rounded"
         />
       </CustomPaginationContainer>
@@ -103,4 +104,4 @@ const ReusableTable: React.FC<Props> = ({ columns, data, rowsPerPage = 10 }) => 
   );
 };
 
-export default ReusableTable;
+export default ReusableOrdersTable;

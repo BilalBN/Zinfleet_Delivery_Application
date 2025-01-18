@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
-import ReusableTable from "./ReusableOrdersTable";
+import ReusableTable from "./ReusableTable";
 import styled from "@emotion/styled";
-import { fetchDrivers } from "../../../../store/driverSlice";
+import { fetchDrivers, setPage } from "../../../../store/driverSlice";
 import { NoDataAvailable } from "../EmptyPage";
+
 const Comman = styled.div`
     display: flex;
     align-items: center;
@@ -23,11 +24,11 @@ const InActive = styled(Comman)`
 
 const CustomTable = () => {
     const dispatch = useAppDispatch();
-    const { data } = useAppSelector((state) => state.driver)
-    
+    const { data, limit, page, total, totalPages } = useAppSelector((state) => state.driver)
+
     useEffect(() => {
         dispatch(fetchDrivers())
-    }, []);
+    }, [page]);
 
     const ShopColumns = [
         { title: "Name", dataIndex: "name", key: "name", width: '100px' },
@@ -47,8 +48,10 @@ const CustomTable = () => {
 
     ];
     return (
-        data.length?( <ReusableTable columns={ShopColumns} data={data} />):(<NoDataAvailable message={"No drivers available yet. Click 'Add Driver' to get started!"}/>)
-       
+        data.length ? (<ReusableTable total={total} totalPages={totalPages} columns={ShopColumns} data={data} page={page} setPage={(value: number) => {
+            dispatch(setPage(value))
+        }} rowsPerPage={limit} />) : (<NoDataAvailable message={"No drivers available yet. Click 'Add Driver' to get started!"} />)
+
     );
 };
 

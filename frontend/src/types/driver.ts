@@ -27,3 +27,10 @@ export type Driver = {
   address: string;
   age: number;
 };
+
+export type DriverAPIResponse = {
+  total: number;
+  totalPagess: number;
+  currentPage: number;
+  data: Driver[];
+};
