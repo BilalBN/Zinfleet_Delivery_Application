@@ -126,10 +126,7 @@ class OrderService {
             throw new Error("Error fetching fleet orders");
         }
     }
-<<<<<<< HEAD
     
-=======
->>>>>>> 5d1465bb576515c69d7180adccea54f338515103
 };
 
 module.exports = new OrderService()
