@@ -14,6 +14,7 @@ class OrderService {
 
     async createOrderWithAddress(orderData, addressData) {
         console.log("Creatig order service with address");
+        orderData.fleet_id=orderData.storeId;
         const newOrder = await FleetOrder.create(orderData);
         const fleetId = newOrder.storeId
         addressData.orderId = newOrder.id;
@@ -74,22 +75,31 @@ class OrderService {
         // Ensure that limit and page are provided for pagination
         const shouldPaginate = limit && page;
         const offset = shouldPaginate ? (page - 1) * limit : undefined;
-
+    
         try {
             // Fetch fleet orders by fleetId with pagination
-            const fleetOrders = await FleetOrder.findAll({
-                where: {
-                    fleet_id: fleetId, // Filter by fleetId
-                },
-                limit: shouldPaginate ? limit : undefined,
-                offset: offset,
-            });
-
+            let fleetOrders;
+            if(fleetId && fleetId!=null)
+            {
+                fleetOrders = await FleetOrder.findAll({
+                    where: {
+                        fleet_id: fleetId, // Filter by fleetId
+                    },
+                    limit: shouldPaginate ? limit : undefined,
+                    offset: offset,
+                });
+            }
+            else{
+                fleetOrders = await FleetOrder.findAll({
+                    limit: shouldPaginate ? limit : undefined,
+                    offset: offset,
+                });
+            }
+            
             // Fetch associated users for the fetched shops
-            const orderwithaddresses = await Promise.all(
-                fleetOrders.map(async (orders) => {
+          const orderwithaddresses = await Promise.all(
+            fleetOrders.map(async (orders) => {
 
-                    console.log(orders, 'teestt')
                     const address = await OrderAddress.findOne({
                         where: { orderId: orders.id },
                     });
@@ -104,12 +114,19 @@ class OrderService {
                 })
             );
             // Get the total count of fleet orders for pagination info
-            const totalFleetOrders = await FleetOrder.count({
-                where: {
-                    storeId: fleetId, // Count orders by fleetId
-                },
-            });
-
+            let totalFleetOrders;
+            if(fleetId && fleetId!=null)
+                {
+                    totalFleetOrders = await FleetOrder.count({
+                        where: {
+                            fleet_id: fleetId, // Count orders by fleetId
+                        },
+                    });
+                }
+                else{
+                    totalFleetOrders = await FleetOrder.count({
+                    });
+                }
             // Prepare the pagination response
             const pagination = {
                 total: totalFleetOrders,
@@ -117,7 +134,7 @@ class OrderService {
                 limit,
                 totalPages: Math.ceil(totalFleetOrders / limit),
             };
-
+    
             // Return the fleet orders and pagination info
             return {
                 orderwithaddresses,

@@ -43,6 +43,6 @@ const Shop = sequelize.define('Shop', {
   timestamps: false, // Disable auto timestamps if not needed
   tableName: 'shops'
 });
-Fleet.hasMany(Shop, { foreignKey: 'fleet_id' })
-Shop.belongsTo(Fleet, { foreignKey: 'fleet_id' });  // Define the association
+Fleet.hasMany(Shop,{foreignKey:'fleet_id'})
+Shop.belongsTo(Fleet,{foreignKey:'fleet_id'});  // Define the association
 module.exports = Shop;
