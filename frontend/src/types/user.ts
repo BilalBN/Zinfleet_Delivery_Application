@@ -4,6 +4,7 @@ export interface User {
     email: string;
     companyName: string;
     type: UserType;
+    fleet_id: number
   }
 
   export enum UserType {

@@ -20,10 +20,9 @@ const DriverOrder = sequelize.define('DriverOrder', {
     fleetOrderId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'FleetOrder',
+            model: FleetOrder,
             key: 'id'
         }
-
     }
 }, {
     tableName: 'driverorder'

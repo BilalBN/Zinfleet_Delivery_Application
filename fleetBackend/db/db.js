@@ -20,7 +20,8 @@
 
 // module.exports = connection;
 const { Sequelize } = require('sequelize');
-
+require('dotenv').config();
+const fs = require('fs');
 // Initialize Sequelize instance
 const sequelize = new Sequelize('fleet_db', 'root', '', {
   host: 'localhost',

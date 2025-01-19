@@ -16,7 +16,7 @@ export type Order = {
   delivery: string;
   rejectedBy?: string; // Optional because not all entries have rejectedBy
   assignee?: string; // Optional because not all entries have assignee
-  status?: boolean
+  status?: boolean;
 };
 
 export type Column = {
@@ -24,6 +24,13 @@ export type Column = {
   dataIndex: string;
   key: string;
   width: string;
-  align?: 'left'|'right'|'center';
+  align?: "left" | "right" | "center";
   render?: (row: any) => JSX.Element | string;
+};
+
+export type OrderAPIResponse = {
+  total: number;
+  totalPagess: number;
+  currentPage: number;
+  data: Order[];
 };

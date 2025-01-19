@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
-import { useAppSelector } from "../../../store/hook";
-import ReusableTable from "../../core/components/tables/ReusableOrdersTable";
+import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import ReusableTable from "../../core/components/tables/ReusableTable";
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { useState } from "react";
 import { OrderDialog } from "./OrderDetailsDialog";
 import { NoDataAvailable } from "../../core/components/EmptyPage";
+import { setPage } from "../../../store/warehouse";
 const Deleivered = styled.div`
     display: flex;
     align-items: center;
@@ -44,8 +45,9 @@ const ViewOption = styled.div`
     cursor: pointer;
 `
 const WarehouseOrdersTable = () => {
-    const { data } = useAppSelector((state) => state.warehouse)
+    const { data, page, limit, total, totalPages } = useAppSelector((state) => state.warehouse)
     const [open, setOpen] = useState(false);
+    const dispatch = useAppDispatch();
     const handleClose = (_event: React.MouseEvent, reason: string) => {
         if (reason !== "backdropClick") {
             setOpen(false);
@@ -54,7 +56,7 @@ const WarehouseOrdersTable = () => {
 
     const handleClickOpen = (value: boolean) => {
         setOpen(value);
-      };
+    };
 
     const orderColumns = [
         { title: "Order ID", dataIndex: "order_id", key: "order_id", width: '100px' },
@@ -85,8 +87,10 @@ const WarehouseOrdersTable = () => {
 
     ];
     return (<>
-        {data.length?(<ReusableTable columns={orderColumns} data={data} />):(<NoDataAvailable message={"No orders available yet."}/>)}
-        <OrderDialog open={open} onClose={handleClose} handleClickOpen={handleClickOpen}/>
+        {data.length ? (<ReusableTable page={page} rowsPerPage={limit} total={total} totalPages={totalPages} columns={orderColumns} data={data} setPage={(value) => {
+            dispatch(setPage(value))
+        }} />) : (<NoDataAvailable message={"No orders available yet."} />)}
+        <OrderDialog open={open} onClose={handleClose} handleClickOpen={handleClickOpen} />
     </>);
 };
 

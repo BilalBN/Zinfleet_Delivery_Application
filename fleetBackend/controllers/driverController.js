@@ -60,6 +60,21 @@ class DriverController {
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  async createDriverSession(req, res, next){
+    try{
+     
+      const sessionData = await driverService.handleDriverSession(req)
+      ResponseHandler.success(res, sessionData, "Driver Session")
+      
+    }catch(error){
+      var message = "Internal server Error"
+      if(error.message){
+        message = error.message
+      }
+      return res.status(500).json({message: message})
+    }
+  }
 }
 
 module.exports = new DriverController();
