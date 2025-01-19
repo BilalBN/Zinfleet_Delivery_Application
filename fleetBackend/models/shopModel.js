@@ -45,5 +45,4 @@ const Shop = sequelize.define('Shop', {
 });
 Fleet.hasMany(Shop,{foreignKey:'fleet_id'})
 Shop.belongsTo(Fleet,{foreignKey:'fleet_id'});  // Define the association
-
 module.exports = Shop;

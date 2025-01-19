@@ -85,25 +85,24 @@ class OrderService {
                 limit: shouldPaginate ? limit : undefined,
                 offset: offset,
             });
-    
             // Fetch associated users for the fetched shops
           const orderwithaddresses = await Promise.all(
             fleetOrders.map(async (orders) => {
 
-              console.log(orders,'teestt')
-              const address = await OrderAddress.findOne({
-                where: { orderId: orders.id },
-              });
-              const fleetName = await Fleet.findOne({
-                where: { id: orders.fleet_id },
-              });
-              return {
-                ...orders.dataValues,
-                fleet:fleetName,
-                address:address
-              };
-            })
-          );
+                    console.log(orders, 'teestt')
+                    const address = await OrderAddress.findOne({
+                        where: { orderId: orders.id },
+                    });
+                    const fleetName = await Fleet.findOne({
+                        where: { id: orders.fleet_id },
+                    });
+                    return {
+                        ...orders.dataValues,
+                        fleet: fleetName,
+                        address: address
+                    };
+                })
+            );
             // Get the total count of fleet orders for pagination info
             const totalFleetOrders = await FleetOrder.count({
                 where: {
