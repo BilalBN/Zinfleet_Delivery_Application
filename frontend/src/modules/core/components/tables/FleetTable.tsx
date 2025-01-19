@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import ReusableTable from './ReusableOrdersTable';
+import ReusableTable from './ReusableTable';
 import { useAppDispatch, useAppSelector } from '../../../../store/hook';
 import styled from "@emotion/styled";
 import { Align } from '../../../../types/table';
-import { deleteFleet, fetchFleets, updateFleet } from '../../../../store/fleetSlice';
+import { deleteFleet, fetchFleets, setPage, updateFleet } from '../../../../store/fleetSlice';
 import { Fleet, FleetPayload, FleetUpdatePayload } from '../../../../types/fleet';
 import { FleetDialog } from '../../../admin/components/dialog/Fleet';
 import { NoDataAvailable } from '../EmptyPage';
@@ -34,9 +34,10 @@ const FleetActions = styled.div`
 const FleetTable = () => {
   const dispatch = useAppDispatch();
   const [selectedFleet, setSelectedFleet] = useState<null | Fleet>(null);
-  const { data } = useAppSelector((state) => state.fleet)
+  const { data, page, limit, total, totalPages } = useAppSelector((state) => state.fleet)
   const [open, setOpen] = useState(false);
   const [addCreditOpen, setAddCreditOpen] = useState(false);
+
   const handleSave = async (fleet: FleetPayload) => {
     setOpen(false)
     if (selectedFleet) {
@@ -69,7 +70,7 @@ const FleetTable = () => {
 
   useEffect(() => {
     dispatch(fetchFleets())
-  }, []);
+  }, [page]);
 
   const updateCredit = (_value: number) => {
     setAddCreditOpen(false);
@@ -110,7 +111,15 @@ const FleetTable = () => {
     },
   ];
 
-  return (<>{data.length ? <ReusableTable columns={FleetColumns} data={data} /> : <NoDataAvailable message={"No fleets available yet. Click 'Add new Fleet' to create your first one!"} />}
+  return (<>{data.length ? <ReusableTable
+    total={total}
+    totalPages={totalPages}
+    columns={FleetColumns}
+    data={data}
+    page={page}
+    setPage={(value: number) => {
+      dispatch(setPage(value))
+    }} rowsPerPage={limit} /> : <NoDataAvailable message={"No fleets available yet. Click 'Add new Fleet' to create your first one!"} />}
     {open && selectedFleet ? (<FleetDialog handleClickOpen={handleClickOpen} open={open} handleClose={handleClose} handleSave={handleSave} title={"Edit fleet"} initialData={{
       name: selectedFleet.name,
       email: selectedFleet.email,

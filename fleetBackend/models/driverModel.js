@@ -13,7 +13,7 @@ const Driver = sequelize.define('Driver', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Fleets', // The name of the target model (the table you are referencing)
+      model: Fleet, // The name of the target model (the table you are referencing)
       key: 'id' // The key in the target model that this foreign key references
     }
   },
@@ -63,4 +63,6 @@ const Driver = sequelize.define('Driver', {
     fields: ['phoneNumber', 'licenseNumber', 'uniqueId']
   }]
 });
+Fleet.hasMany(Driver,  { foreignKey: 'fleet_id' })
+Driver.belongsTo(Fleet, { foreignKey: 'fleet_id' });
 module.exports = Driver;

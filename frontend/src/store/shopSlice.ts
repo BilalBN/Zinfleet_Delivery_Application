@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { apiService } from "../api";
 import { setLoading } from "./rootslice";
-import { ShopItem, ShopPayload, ShopUpdatePayload } from "../types/shop";
+import { ShopAPIResponse, ShopItem, ShopPayload, ShopUpdatePayload } from "../types/shop";
 import { showSnackbar } from "./snackbarSlice";
 
 interface IShoptSlice {
@@ -9,22 +9,37 @@ interface IShoptSlice {
   pageno: number;
   fetched: boolean;
   error: string | null;
-  itemsPerPage: number;
+  limit: number;
+  page: number;
+  total: number;
+  totalPages: number;
 }
 const initialState: IShoptSlice = {
   data: [],
   pageno: 1,
   fetched: false,
   error: null,
-  itemsPerPage: 8,
+  limit: 8,
+  page: 1,
+  total: 0,
+  totalPages: 0,
 };
 
 // Async actions for CRUD operations
-export const fetchShops = createAsyncThunk("shop/fetchShops", async (_, { dispatch }) => {
+export const fetchShops = createAsyncThunk("shop/fetchShops", async (_, { dispatch, getState }) => {
+  const state: any = getState();
+  const { page, limit, total, totalPages } = state.shop;
+  dispatch(setLoading(true));
+  const response: any = await apiService.post("/api/shops/getshops", { page, limit, total, totalPages });
+  dispatch(setLoading(false));
+  return response.data;
+});
+
+export const fetchAllShops = createAsyncThunk("shop/fetchAllShops", async (_, { dispatch }) => {
   dispatch(setLoading(true));
   const response: any = await apiService.post("/api/shops/getshops", {});
   dispatch(setLoading(false));
-  return response.data.data;
+  return response.data;
 });
 
 export const addShop = createAsyncThunk<void, ShopPayload>(
@@ -32,7 +47,7 @@ export const addShop = createAsyncThunk<void, ShopPayload>(
   async (newShop: ShopPayload, { dispatch }) => {
     dispatch(setLoading(true));
     await apiService.post("/api/shops", newShop);
-    dispatch(showSnackbar({ message: "Successfully added a new shop", severity: "success"}));
+    dispatch(showSnackbar({ message: "Successfully added a new shop", severity: "success" }));
     await dispatch(fetchShops());
     dispatch(setLoading(false));
   }
@@ -41,7 +56,7 @@ export const addShop = createAsyncThunk<void, ShopPayload>(
 export const updateShop = createAsyncThunk("shop/updateShop", async (updatedShop: ShopUpdatePayload, { dispatch }) => {
   dispatch(setLoading(true));
   const response: any = await apiService.put(`/api/shops/${updatedShop.id}`, updatedShop);
-  dispatch(showSnackbar({ message: "Successfully updated shop", severity: "success"}));
+  dispatch(showSnackbar({ message: "Successfully updated shop", severity: "success" }));
   await dispatch(fetchShops());
   return response.data;
 });
@@ -49,24 +64,44 @@ export const updateShop = createAsyncThunk("shop/updateShop", async (updatedShop
 export const deleteShop = createAsyncThunk("shop/deleteShop", async (ShopId: number, { dispatch }) => {
   dispatch(setLoading(true));
   await apiService.delete(`/api/shops/${ShopId}`);
-  dispatch(showSnackbar({ message: "Successfully deleted a shop", severity: "success"}));
+  dispatch(showSnackbar({ message: "Successfully deleted a shop", severity: "success" }));
   await dispatch(fetchShops());
 });
 
 const ShoptSlice = createSlice({
   name: "shop",
   initialState,
-  reducers: {},
+  reducers: {
+    setPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // Handle fetchShops actions
     builder.addCase(fetchShops.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(fetchShops.fulfilled, (state, action: PayloadAction<ShopItem[]>) => {
-      state.data = action.payload;
+    builder.addCase(fetchShops.fulfilled, (state, action: PayloadAction<ShopAPIResponse>) => {
+      state.data = action.payload.data;
       state.fetched = true;
+      state.total = action.payload.total;
+      state.totalPages = action.payload.totalPagess;
     });
     builder.addCase(fetchShops.rejected, (state, action) => {
+      state.error = action.error.message || "Failed to fetch shops";
+    });
+
+    // Handle fetchAllShops actions
+    builder.addCase(fetchAllShops.pending, (state) => {
+      state.error = null;
+    });
+    builder.addCase(fetchAllShops.fulfilled, (state, action: PayloadAction<ShopAPIResponse>) => {
+      state.data = action.payload.data;
+      state.fetched = true;
+      state.total = action.payload.total;
+      state.totalPages = action.payload.totalPagess;
+    });
+    builder.addCase(fetchAllShops.rejected, (state, action) => {
       state.error = action.error.message || "Failed to fetch shops";
     });
 
@@ -99,5 +134,5 @@ const ShoptSlice = createSlice({
   },
 });
 
-export const {} = ShoptSlice.actions;
+export const { setPage } = ShoptSlice.actions;
 export default ShoptSlice.reducer;

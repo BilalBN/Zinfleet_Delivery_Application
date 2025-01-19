@@ -33,3 +33,10 @@ export type ShopItem = {
   fleet_id: number;
   createdBy: number;
 };
+
+export type ShopAPIResponse={
+  total: number;
+  totalPagess: number;
+  currentPage: number;
+  data: ShopItem[];
+}

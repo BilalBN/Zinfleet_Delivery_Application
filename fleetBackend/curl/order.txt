@@ -36,3 +36,55 @@ curl -i -X GET http://localhost:3000/api/orders \
 curl -i -X GET http://localhost:3000/api/tracking/driver/jobs?status=2 \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGhvbmVfbnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZsZWV0X2lkIjoxLCJpYXQiOjE3MzQ5MTY5ODYsImV4cCI6MTczNTc4MDk4Nn0.cy0WJxHYNvSe3WTN6l1Vqcbgpg8P9lyFN6lcTjNEEHI'
+
+
+//Update the order status
+JOBSTATUS = {
+    NEW: 1,
+    ASSIGNED_DRIVER: 2,
+    DRIVER_ACCEPTED: 3,
+    PICKUP_COMPLETED:4,
+    DELIVERED: 5,
+    RETURNED:6
+}
+
+
+curl -i -X PUT http://localhost:3000/api/order/status
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGhvbmVfbnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZsZWV0X2lkIjoxLCJpYXQiOjE3MzQ5MTY5ODYsImV4cCI6MTczNTc4MDk4Nn0.cy0WJxHYNvSe3WTN6l1Vqcbgpg8P9lyFN6lcTjNEEHI'
+ -D '
+ {
+    "orderId": 2,
+    "status":4,
+}'
+
+
+//Delivery status update
+curl -i -X PUT http://localhost:3000/api/order/status
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGhvbmVfbnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZsZWV0X2lkIjoxLCJpYXQiOjE3MzQ5MTY5ODYsImV4cCI6MTczNTc4MDk4Nn0.cy0WJxHYNvSe3WTN6l1Vqcbgpg8P9lyFN6lcTjNEEHI'
+ -D '
+ {
+    "orderId": 2,
+    "status":5,
+    "otp":1234
+}'
+//Driver Session-Active
+
+curl -i -X POST http://localhost:3000/api/drivers/session
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGhvbmVfbnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZsZWV0X2lkIjoxLCJpYXQiOjE3MzQ5MTY5ODYsImV4cCI6MTczNTc4MDk4Nn0.cy0WJxHYNvSe3WTN6l1Vqcbgpg8P9lyFN6lcTjNEEHI'
+ -D '
+{
+    "isSessionActive": true,
+   
+}'
+
+//Driver Session-Dectivate
+
+curl -i -X POST http://localhost:3000/api/drivers/session
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicGhvbmVfbnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZsZWV0X2lkIjoxLCJpYXQiOjE3MzQ5MTY5ODYsImV4cCI6MTczNTc4MDk4Nn0.cy0WJxHYNvSe3WTN6l1Vqcbgpg8P9lyFN6lcTjNEEHI'
+ -D '
+{
+    "isSessionActive": false,
+     "sessionId":"cf5107af-3216-4a8f-b50a-0e8c89d13cfd"
+}'
+
+

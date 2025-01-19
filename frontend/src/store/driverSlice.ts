@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {} from "../types/fleet";
 import { apiService } from "../api";
 import { setLoading } from "./rootslice";
-import { Driver, DriverPayload, DriverUpdatePayload } from "../types/driver";
+import { Driver, DriverAPIResponse, DriverPayload, DriverUpdatePayload } from "../types/driver";
 import { showSnackbar } from "./snackbarSlice";
 
 interface IDriver {
@@ -10,22 +10,37 @@ interface IDriver {
   pageno: number;
   fetched: boolean;
   error: string | null;
-  itemsPerPage: number;
+  limit: number;
+  page: number;
+  total: number;
+  totalPages: number;
 }
 const initialState: IDriver = {
   data: [],
   pageno: 1,
   fetched: false,
   error: null,
-  itemsPerPage: 8,
+  limit: 8,
+  page: 1,
+  total: 0,
+  totalPages: 0,
 };
 
 // Async actions for CRUD operations
-export const fetchDrivers = createAsyncThunk("driver/fetchDrivers", async (_, { dispatch }) => {
+export const fetchDrivers = createAsyncThunk("driver/fetchDrivers", async (_, { dispatch, getState }) => {
+  dispatch(setLoading(true));
+  const state: any = getState();
+  const { page, limit, total, totalPages } = state.driver;
+  const response: any = await apiService.post("/api/drivers", { page, limit, total, totalPages });
+  dispatch(setLoading(false));
+  return response.data;
+});
+
+export const fetchAllDrivers = createAsyncThunk("driver/fetchAllDrivers", async (_, { dispatch }) => {
   dispatch(setLoading(true));
   const response: any = await apiService.post("/api/drivers", {});
   dispatch(setLoading(false));
-  return response.data.data;
+  return response.data;
 });
 
 export const addDriver = createAsyncThunk<void, DriverPayload>(
@@ -59,17 +74,37 @@ export const deleteDriver = createAsyncThunk("driver/deleteDriver", async (drive
 const DriverSlice = createSlice({
   name: "driver",
   initialState,
-  reducers: {},
+  reducers: {
+    setPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // Handle fetchDrivers actions
     builder.addCase(fetchDrivers.pending, (state) => {
       state.error = null;
     });
-    builder.addCase(fetchDrivers.fulfilled, (state, action: PayloadAction<Driver[]>) => {
-      state.data = action.payload;
+    builder.addCase(fetchDrivers.fulfilled, (state, action: PayloadAction<DriverAPIResponse>) => {
+      state.data = action.payload.data;
       state.fetched = true;
+      state.total = action.payload.total;
+      state.totalPages = action.payload.totalPagess;
     });
     builder.addCase(fetchDrivers.rejected, (state, action) => {
+      state.error = action.error.message || "Failed to fetch drivers";
+    });
+
+    // Handle fetchAllDrivers actions
+    builder.addCase(fetchAllDrivers.pending, (state) => {
+      state.error = null;
+    });
+    builder.addCase(fetchAllDrivers.fulfilled, (state, action: PayloadAction<DriverAPIResponse>) => {
+      state.data = action.payload.data;
+      state.fetched = true;
+      state.total = action.payload.data.length;
+      state.totalPages = 1;
+    });
+    builder.addCase(fetchAllDrivers.rejected, (state, action) => {
       state.error = action.error.message || "Failed to fetch drivers";
     });
 
@@ -102,5 +137,5 @@ const DriverSlice = createSlice({
   },
 });
 
-export const {} = DriverSlice.actions;
+export const { setPage } = DriverSlice.actions;
 export default DriverSlice.reducer;

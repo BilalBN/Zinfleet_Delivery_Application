@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/db'); // Adjust this path according to your project
 const Shop = require('./shopModel');
+const Fleet = require('./fleetModel')
 
 const MainUsers = sequelize.define('MainUsers', {
   id: {
@@ -13,7 +14,7 @@ const MainUsers = sequelize.define('MainUsers', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: 'Fleets', // The name of the target model (the table you are referencing)
+      model: Fleet, // The name of the target model (the table you are referencing)
       key: 'id' // The key in the target model that this foreign key references
     }
   },
@@ -21,7 +22,7 @@ const MainUsers = sequelize.define('MainUsers', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: 'Shops', // The name of the target model (the table you are referencing)
+      model: Shop, // The name of the target model (the table you are referencing)
       key: 'id' // The key in the target model that this foreign key references
     }
   },

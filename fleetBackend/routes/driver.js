@@ -16,4 +16,5 @@ router.post('/add', updateDriverValidation, driverController.createDriver);
 router.put('/:id', updateDriverValidation, driverController.updateDriver);
 router.delete('/:id', deleteDriverValidation, driverController.deleteDriver);
 router.get('/orders', authMiddleware, driverController.getOrders);
+router.post('/session', authMiddleware, driverController.createDriverSession);
 module.exports = router;

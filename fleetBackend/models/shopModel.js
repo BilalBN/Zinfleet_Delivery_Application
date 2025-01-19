@@ -26,7 +26,7 @@ const Shop = sequelize.define('Shop', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Fleets', // The name of the target model (the table you are referencing)
+      model: Fleet, // The name of the target model (the table you are referencing)
       key: 'id' // The key in the target model that this foreign key references
     }
   },

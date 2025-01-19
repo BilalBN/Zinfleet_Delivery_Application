@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Align } from "../../../../types/table";
-import ReusableTable from "./ReusableOrdersTable";
+import ReusableTable from "./ReusableTable";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { ShopItem, ShopPayload, ShopUpdatePayload } from "../../../../types/shop";
 import styled from "@emotion/styled";
 import { NoDataAvailable } from "../EmptyPage";
-import { deleteShop, fetchShops, updateShop } from "../../../../store/shopSlice";
-import { fetchFleets } from "../../../../store/fleetSlice";
+import { deleteShop, fetchShops, setPage, updateShop } from "../../../../store/shopSlice";
+import { fetchAllFleets } from "../../../../store/fleetSlice";
 import { ShopDialog } from "../../../admin/components/dialog/Shop";
 
 const ShopActions = styled.div`
@@ -16,13 +16,14 @@ const ShopActions = styled.div`
   justify-content: center;
 `
 const ShopTable = () => {
-  const { data } = useAppSelector((state) => state.shop)
+  const { data, limit, page, total, totalPages } = useAppSelector((state) => state.shop)
   const [selectedShop, setSelectedShop] = useState<ShopItem | null>(null);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(fetchShops())
-    dispatch(fetchFleets())
-  }, []);
+    dispatch(fetchAllFleets())
+  }, [page]);
   const [open, setOpen] = useState(false);
   const handleSave = async (shop: ShopPayload) => {
     try {
@@ -78,7 +79,9 @@ const ShopTable = () => {
   ];
 
   return (<>
-    {data.length ? (<ReusableTable columns={ShopColumns} data={data} />) : (<NoDataAvailable message="No shops available yet. Click 'Add new Shop' to set up your first shop today!" />)}
+    {data.length ? (<ReusableTable total={total} totalPages={totalPages} columns={ShopColumns} data={data} page={page} setPage={(value: number) => {
+      dispatch(setPage(value))
+    }} rowsPerPage={limit} />) : (<NoDataAvailable message="No shops available yet. Click 'Add new Shop' to set up your first shop today!" />)}
     {open && selectedShop ? (<ShopDialog handleClickOpen={handleClickOpen} open={open} handleClose={handleClose} handleSave={handleSave} title={"Edit fleet"} initialData={{
       name: selectedShop.name,
       warehouse_address: selectedShop.warehouse_address,

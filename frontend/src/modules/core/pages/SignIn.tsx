@@ -151,7 +151,8 @@ export const SignIn = () => {
         email: data.username,
         name: data.username,
         companyName: "slate",
-        type: decodedToken.role === 'shop' ? UserType.WAREHOUSE_USER : decodedToken.role === 'admin' ? UserType.ADMIN_USER : UserType.FLEET_USER
+        type: decodedToken.role === 'shop' ? UserType.WAREHOUSE_USER : decodedToken.role === 'admin' ? UserType.ADMIN_USER : UserType.FLEET_USER,
+        fleet_id: decodedToken.fleet_id
       };
       dispatch(login(user));
       dispatch(setLoading(false));

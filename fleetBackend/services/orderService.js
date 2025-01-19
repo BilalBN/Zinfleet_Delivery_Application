@@ -2,13 +2,16 @@
 const FleetOrder = require('../models/fleetOrder')
 const OrderAddress = require('../models/orderAddress')
 const Driver = require('../models/driverModel');
-const { JOBSTATUS } = require('../config/constants')
+const { JOBSTATUS, OTPSERVICE } = require('../config/constants')
 const DriverOrder = require('../models/driverOrder');
 const { Op } = require('sequelize');
 const { fn, col } = require('sequelize');
 const Fleet = require('../models/fleetModel');
+const OtpAuthService = require('../services/otpAuthService')
+
 
 class OrderService {
+
     async createOrderWithAddress(orderData, addressData) {
         console.log("Creatig order service with address");
         orderData.fleet_id=orderData.storeId;
@@ -72,7 +75,7 @@ class OrderService {
         // Ensure that limit and page are provided for pagination
         const shouldPaginate = limit && page;
         const offset = shouldPaginate ? (page - 1) * limit : undefined;
-    
+
         try {
             // Fetch fleet orders by fleetId with pagination
             const fleetOrders = await FleetOrder.findAll({
@@ -82,32 +85,32 @@ class OrderService {
                 limit: shouldPaginate ? limit : undefined,
                 offset: offset,
             });
-    
-            // Fetch associated users for the fetched shops
-          const orderwithaddresses = await Promise.all(
-            fleetOrders.map(async (orders) => {
 
-              console.log(orders,'teestt')
-              const address = await OrderAddress.findOne({
-                where: { orderId: orders.id },
-              });
-              const fleetName = await Fleet.findOne({
-                where: { id: orders.fleet_id },
-              });
-              return {
-                ...orders.dataValues,
-                fleet:fleetName,
-                address:address
-              };
-            })
-          );
+            // Fetch associated users for the fetched shops
+            const orderwithaddresses = await Promise.all(
+                fleetOrders.map(async (orders) => {
+
+                    console.log(orders, 'teestt')
+                    const address = await OrderAddress.findOne({
+                        where: { orderId: orders.id },
+                    });
+                    const fleetName = await Fleet.findOne({
+                        where: { id: orders.fleet_id },
+                    });
+                    return {
+                        ...orders.dataValues,
+                        fleet: fleetName,
+                        address: address
+                    };
+                })
+            );
             // Get the total count of fleet orders for pagination info
             const totalFleetOrders = await FleetOrder.count({
                 where: {
                     storeId: fleetId, // Count orders by fleetId
                 },
             });
-    
+
             // Prepare the pagination response
             const pagination = {
                 total: totalFleetOrders,
@@ -115,7 +118,7 @@ class OrderService {
                 limit,
                 totalPages: Math.ceil(totalFleetOrders / limit),
             };
-    
+
             // Return the fleet orders and pagination info
             return {
                 orderwithaddresses,
@@ -126,7 +129,63 @@ class OrderService {
             throw new Error("Error fetching fleet orders");
         }
     }
-    
+
+    async updateOrderStatus(req) {
+        const user = req.user
+        const { orderId, status, otp } = req.body
+        const fleetOrder = await DriverOrder.findAll({
+            where: {
+                fleetOrderId: orderId,
+                driverId: user.id
+            }
+        })
+
+        if (!fleetOrder) {
+            throw new Error("Order not found, this order might be not belongs to you")
+        }
+
+        const orderAddress = await OrderAddress.findOne({
+            where: {
+                orderId: orderId
+            }
+        })
+        console.log("I am suppose to generate the otp, when order status is 4 and the status is:", status);
+        if (status == JOBSTATUS.PICKUP_COMPLETED) {
+
+            console.log("I am suppose to generate the otp");
+            if (orderAddress && orderAddress.contactNumber) {
+                await OtpAuthService.requestDeliveryOtp(orderId, orderAddress.contactNumber, OTPSERVICE.PHONE)
+            }
+        }
+        else if (status == JOBSTATUS.DELIVERED) {
+           const otpVeirificationStatus = await  OtpAuthService.verifyDeliveryOtp(orderId,orderAddress.contactNumber, otp)
+           if(!otpVeirificationStatus){
+                throw new Error("Delivery OTP verification failed")
+           }
+        }
+        const updateFleetOrder = await DriverOrder.update(
+            {
+                jobStatus: status
+            }, {
+            where: {
+                fleetOrderId: orderId,
+                driverId: user.id
+            }
+        }
+        );
+        if (updateFleetOrder[0] > 0) {
+            return {
+                id: fleetOrder.id,
+                driverId: fleetOrder.driverId,
+                jobStatus: status,
+                fleetOrderId: orderId
+            }
+        }
+
+        throw new Error("Order status updated failed")
+    }
+
+
 };
 
 module.exports = new OrderService()

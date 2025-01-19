@@ -1,8 +1,10 @@
-import ReusableTable from './ReusableOrdersTable'; // Import the reusable table component
-import { useAppSelector } from '../../../../store/hook';
+import ReusableTable from './ReusableTable'; // Import the reusable table component
+import { useAppDispatch, useAppSelector } from '../../../../store/hook';
 import { Order } from '../../../../types/order';
 import styled from '@emotion/styled';
 import { NoDataAvailable } from '../EmptyPage';
+import { useEffect } from 'react';
+import { fetchOrders, setPage } from '../../../../store/orderslice';
 const OutForDelivery = styled.div`
   color: #00D722;
   background-color: #C9FFC482;
@@ -21,7 +23,14 @@ const EnrouteToDelivery = styled.div`
 `
 
 const AssignedOrdersTable = () => {
-  const { data } = useAppSelector((state) => state.order);
+  const { data, page, limit, total, totalPages } = useAppSelector((state) => state.order);
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
+
+  useEffect(() => {
+    dispatch(fetchOrders({ order_type: 'ASSIGNED', fleet_id: user?.fleet_id || null }))
+  }, [page]);
 
   const AssignedOrdersTableColumns = [
     { title: "ID", dataIndex: "id", key: "id", width: "50px" },
@@ -43,7 +52,15 @@ const AssignedOrdersTable = () => {
     },
   ]
 
-  return (data.length ? (<ReusableTable columns={AssignedOrdersTableColumns} data={data} />) : (<NoDataAvailable message={"No orders available yet."} />))
+  return (data.length ? (<ReusableTable
+    total={total}
+    totalPages={totalPages}
+    columns={AssignedOrdersTableColumns}
+    data={data}
+    page={page}
+    setPage={(value: number) => {
+      dispatch(setPage(value))
+    }} rowsPerPage={limit} />) : (<NoDataAvailable message={"No orders available yet."} />))
 };
 
 export default AssignedOrdersTable;
