@@ -20,15 +20,15 @@ const initialState: IOrderSlice = {
   data: [],
   fetched: false,
   error: null,
-  page: 0,
-  limit: 0,
+  page: 1,
+  limit: 8,
   total: 0,
   totalPages: 0,
 };
 
 export const fetchAllOrders = createAsyncThunk(
   "orders/fetcAllhOrders",
-  async (payload: { order_type: string; fleet_id: number | null }, { dispatch }) => {
+  async (payload: { order_type: string; fleetId: number | null }, { dispatch }) => {
     dispatch(setLoading(true));
     const response: any = await apiService.post("/api/orders/fleetorders", payload);
     dispatch(setLoading(false));
@@ -38,9 +38,9 @@ export const fetchAllOrders = createAsyncThunk(
 
 export const fetchOrders = createAsyncThunk(
   "orders/fetchOrders",
-  async (payload: { order_type: string; fleet_id: number | null }, { dispatch, getState }) => {
+  async (payload: { order_type: string; fleetId: number | null }, { dispatch, getState }) => {
     const state: any = getState();
-    const { page, limit, total, totalPages } = state.order;
+    const { page, limit } = state.order;
     dispatch(setLoading(true));
     const response: any = await apiService.post("/api/orders/fleetorders", { ...payload, page, limit });
     dispatch(setLoading(false));
@@ -57,7 +57,7 @@ const OrderSlice = createSlice({
     },
     setSelectedOrder: (state, action: PayloadAction<OrderType>) => {
       state.selectedOrder = action.payload;
-      state.page = 0;
+      state.page = 1;
     },
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload;

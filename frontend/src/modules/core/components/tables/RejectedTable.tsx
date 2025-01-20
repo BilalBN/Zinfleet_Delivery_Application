@@ -15,7 +15,7 @@ const RejectedOrders = () => {
 
 
     useEffect(() => {
-        dispatch(fetchOrders({ order_type: 'REJECTED', fleet_id: user?.fleet_id || null }))
+        dispatch(fetchOrders({ order_type: 'REJECTED', fleetId: user?.fleet_id || null }))
     }, [page]);
 
     // Handle reassignment dropdown change

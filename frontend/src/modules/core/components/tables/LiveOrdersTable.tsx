@@ -10,7 +10,7 @@ const LiveOrders = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(fetchOrders({ order_type: 'LIVE', fleet_id: user?.fleet_id || null }))
+        dispatch(fetchOrders({ order_type: 'LIVE', fleetId: user?.fleet_id || null }))
     }, [page]);
 
     const liveOrdersColumns = [
