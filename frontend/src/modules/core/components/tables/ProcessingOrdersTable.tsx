@@ -16,7 +16,7 @@ const ProcessingOrdersTable = () => {
 
 
     useEffect(() => {
-        dispatch(fetchOrders({ order_type: 'PROCESS', fleet_id: user?.fleet_id || null }))
+        dispatch(fetchOrders({ order_type: 'PROCESS', fleetId: user?.fleet_id || null }))
     }, [page]);
 
     // Handle reassignment dropdown change

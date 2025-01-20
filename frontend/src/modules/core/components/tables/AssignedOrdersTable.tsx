@@ -29,7 +29,7 @@ const AssignedOrdersTable = () => {
 
 
   useEffect(() => {
-    dispatch(fetchOrders({ order_type: 'ASSIGNED', fleet_id: user?.fleet_id || null }))
+    dispatch(fetchOrders({ order_type: 'ASSIGNED', fleetId: user?.fleet_id || null }))
   }, [page]);
 
   const AssignedOrdersTableColumns = [

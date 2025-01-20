@@ -22,7 +22,7 @@ const initialState: IFleetSlice = {
   selectedFleet: null,
   fetched: false,
   error: null,
-  limit: 4,
+  limit: 8,
   page: 1,
   totalPages: 0,
   total: 0,

@@ -22,7 +22,7 @@ const AllOrdersTable = () => {
 
 
   useEffect(() => {
-    dispatch(fetchOrders({ order_type: "ALL", fleet_id: user?.fleet_id || null }))
+    dispatch(fetchOrders({ order_type: "ALL", fleetId: user?.fleet_id || null }))
   }, [page]);
 
 
