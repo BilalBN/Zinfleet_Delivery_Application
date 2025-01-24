@@ -1,3 +1,5 @@
+import { Fleet } from "./fleet";
+
 export enum OrderType {
   Live = "LIVE",
   Processing = "PROCESSING",
@@ -8,15 +10,19 @@ export enum OrderType {
 
 export type Order = {
   id: number;
+  orderId: number;
   amount: number;
   quantity: number;
   date: string;
   shop: string;
   pickUp: string;
   delivery: string;
-  rejectedBy?: string; // Optional because not all entries have rejectedBy
-  assignee?: string; // Optional because not all entries have assignee
-  status?: boolean;
+  rejectedBy?: string;
+  assignee?: string;
+  orderStatus?: number;
+  orderTotal: number;
+  fleet: Fleet;
+  createdAt: string
 };
 
 export type Column = {

@@ -1,33 +1,37 @@
-import { useEffect, useState } from 'react';
 import ReusableTable from './ReusableTable'; // Import the reusable table component
 import { useAppDispatch, useAppSelector } from '../../../../store/hook';
-import { Select, MenuItem } from '@mui/material';
-import { Order } from '../../../../types/order';
 import { NoDataAvailable } from '../EmptyPage';
-import { fetchOrders, setPage } from '../../../../store/orderslice';
+import { OrderTable, fetchOrders, setPage } from '../../../../store/orderslice';
+import { useEffect, useState } from 'react';
 
 const RejectedOrders = () => {
-    const { data, limit, page, total, totalPages } = useAppSelector((state) => state.order);
-    const [reassignedUsers, setReassignedUsers] = useState<{ [key: number]: string }>({});
-    const users = ['John', 'Antony', 'Ben'];
+    const { data, page, limit, total, totalPages } = useAppSelector((state) => state.order);
     const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
+    const [tableData, setTableData] = useState<OrderTable[]>([]);
 
 
     useEffect(() => {
-        dispatch(fetchOrders({ order_type: 'REJECTED', fleetId: user?.fleet_id || null }))
+        dispatch(fetchOrders({ order_type: 'LIVE', fleetId: user?.fleet_id || null }))
     }, [page]);
 
-    // Handle reassignment dropdown change
-    const handleReassignChange = (id: number, user: string) => {
-        setReassignedUsers({
-            ...reassignedUsers,
-            [id]: user,
-        });
-    };
+    useEffect(() => {
+       const targetData= data.map((item) => {
+            return {
+                id: item.id,
+                amount: item.amount,
+                quantity: item.orderTotal,
+                date: item.createdAt,
+                shop: '',
+                pickUp: item.fleet.address,
+                delivery: ''
+            }
+        })
+        setTableData(targetData)
+    }, [data]);
 
-    // Define the columns specific to Rejected Orders
-    const rejectedOrdersColumns = [
+
+    const columns = [
         { title: 'Order ID', dataIndex: 'id', key: 'id', width: '100px' },
         { title: 'Amount', dataIndex: 'amount', key: 'amount', width: '100px' },
         { title: 'Quantity', dataIndex: 'quantity', key: 'quantity', width: '100px' },
@@ -35,34 +39,41 @@ const RejectedOrders = () => {
         { title: 'Shop Name', dataIndex: 'shop', key: 'shop', width: '100px' },
         { title: 'Pick up location', dataIndex: 'pickUp', key: 'pickUp', width: '100px' },
         { title: 'Delivery location', dataIndex: 'delivery', key: 'delivery', width: '100px' },
-        { title: 'Rejected By', dataIndex: 'rejectedBy', key: 'rejectedBy', width: '100px' },
-        {
-            title: 'Reassign to',
-            dataIndex: 'reassign', // This won't map directly but will use a custom renderer
-            key: 'reassign',
-            render: (row: Order) => (
-                <Select
-                    value={reassignedUsers[row.id] || ''}
-                    onChange={(e) => handleReassignChange(row.id, e.target.value as string)}
-                    displayEmpty
-                    size="small"
-                    sx={{ width: '100px' }}
-                >
-                    <MenuItem value="" disabled>Select User</MenuItem>
-                    {users.map((user) => (
-                        <MenuItem key={user} value={user}>
-                            {user}
-                        </MenuItem>
-                    ))}
-                </Select>
-            ),
-            width: '100px'
-        },
+        // { title: 'Rejected By', dataIndex: 'rejectedBy', key: 'rejectedBy', width: '100px' },
+        // {
+        //     title: 'Reassign to',
+        //     dataIndex: 'reassign', // This won't map directly but will use a custom renderer
+        //     key: 'reassign',
+        //     render: (row: Order) => (
+        //         <Select
+        //             value={reassignedUsers[row.id] || ''}
+        //             onChange={(e) => handleReassignChange(row.id, e.target.value as string)}
+        //             displayEmpty
+        //             size="small"
+        //             sx={{ width: '100px' }}
+        //         >
+        //             <MenuItem value="" disabled>Select User</MenuItem>
+        //             {users.map((user) => (
+        //                 <MenuItem key={user} value={user}>
+        //                     {user}
+        //                 </MenuItem>
+        //             ))}
+        //         </Select>
+        //     ),
+        //     width: '100px'
+        // },
     ];
 
-    return (data.length ? (<ReusableTable total={total} totalPages={totalPages} columns={rejectedOrdersColumns} data={data} page={page} setPage={(value: number) => {
-        dispatch(setPage(value))
-    }} rowsPerPage={limit} />) : (<NoDataAvailable message={"No orders available yet."} />));
+    return (tableData.length ? (<ReusableTable
+        total={total}
+        totalPages={totalPages}
+        columns={columns}
+        data={tableData}
+        page={page}
+        setPage={(value: number) => {
+            dispatch(setPage(value))
+        }}
+        rowsPerPage={limit} />) : (<NoDataAvailable message={"No orders available yet."} />))
 };
 
 export default RejectedOrders;
