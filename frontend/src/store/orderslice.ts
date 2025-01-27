@@ -16,10 +16,10 @@ interface IOrderSlice {
 
 export type OrderTable = {
   id: number,
-  amount: number,
-  quantity: number,
-  date: string,
-  shop: string,
+  amount: string,
+  quantity: string,
+  status: number,
+  shop: number,
   pickUp: string
   delivery: string
 }

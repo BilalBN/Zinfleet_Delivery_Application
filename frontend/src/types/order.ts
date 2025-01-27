@@ -1,5 +1,3 @@
-import { Fleet } from "./fleet";
-
 export enum OrderType {
   Live = "LIVE",
   Processing = "PROCESSING",
@@ -9,20 +7,34 @@ export enum OrderType {
 }
 
 export type Order = {
-  id: number;
+  orderData: OrderData;
+  addressData: AddressData;
+};
+
+export type OrderData = {
   orderId: number;
-  amount: number;
-  quantity: number;
-  date: string;
-  shop: string;
-  pickUp: string;
-  delivery: string;
-  rejectedBy?: string;
-  assignee?: string;
-  orderStatus?: number;
-  orderTotal: number;
-  fleet: Fleet;
-  createdAt: string
+  storeId: number;
+  orderCode: string;
+  orderUrl: string;
+  orderStatus: number;
+  currencyCode: string;
+  transactionReference: string;
+  transactionAmount: number;
+  transactionAmountString: string;
+  orderTotal: string;
+};
+
+export type AddressData = {
+  name: string;
+  contactNumber: string;
+  email: string;
+  street: string;
+  district: string;
+  formattedAddress: string;
+  latitude: string;
+  longitude: string;
+  countryCode: string;
+  country: string;
 };
 
 export type Column = {
