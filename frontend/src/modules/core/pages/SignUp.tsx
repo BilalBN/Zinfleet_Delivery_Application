@@ -20,7 +20,7 @@ const SignUpImage = styled.img`
   height: 100%;
   width: 100%;
 `;
-const ZinfleetLogo = styled.img`
+const ZetraackLogo = styled.img`
   display: flex;
   max-height: 30px;
   max-width: 160px;
@@ -36,7 +36,7 @@ const RightContainer = styled.div`
   max-width: 50%;
   position: relative;
   margin: 4px;
-  oveflow-y: hidden;
+  overflow-y: hidden;
 `;
 
 const FormContainer = styled.div`
@@ -114,11 +114,11 @@ export const SignUp = () => {
         <SignUpImage src={signUpImg} />
       </LeftContainer>
       <RightContainer>
-        <ZinfleetLogo src={LogoImg} />
+        <ZetraackLogo src={LogoImg} />
         <FormContainer>
           <SignInContainer>
             <WelcomeText>
-              Welcome to <CompanyName>ZeinFleet</CompanyName>
+              Welcome to <CompanyName>Zetraack</CompanyName>
             </WelcomeText>
             <RightText>
               <div>Have an Account ?</div>

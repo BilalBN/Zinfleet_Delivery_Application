@@ -170,7 +170,7 @@ export const SignIn = () => {
         <FormContainer>
           <SignInContainer>
             <WelcomeText>
-              Welcome to <CompanyName>ZinFleet</CompanyName>
+              Welcome to <CompanyName>Zetraack</CompanyName>
             </WelcomeText>
             {/* <RightText>
               <div>No Account?</div>
