@@ -48,6 +48,15 @@ class FleetController {
       next(new CustomError('Fleet not found', 404));
     }
   }
+  async creditAllocation(req, res, next) {
+    try {
+      console.log(req.body)
+      const fleets = await fleetService.creditAllocation(req.body,req.user.id);
+      ResponseHandler.success(res, fleets, 'Credit allocated successfully', 201);
+    } catch (error) {
+      next(new CustomError(error.message, 400));
+    }
+  }
 }
 
 module.exports = new FleetController();

@@ -6,6 +6,8 @@ const { Op } = require('sequelize');
 const Fleet = require('../models/fleetModel');
 const Shop = require('../models/shopModel');
 const Driver = require('../models/driverModel');
+const CreditAllocation = require('../models/creditAllocationModel');
+
 
 class FleetService {
     async getAllFleets(limit, page) {
@@ -218,6 +220,37 @@ class FleetService {
     await main_users.destroy();
 
     return { message: 'Fleet deleted successfully' };
+  }
+  async creditAllocation(creditData,createdUser) {
+    try {
+      let existingFleet = await CreditAllocation.findOne({
+        where: { fleet_id: creditData.fleet_id }
+    });
+
+    if (existingFleet) {
+        // If fleet exists, update totalCredit
+        existingFleet.totalCredit += creditData.creditAllocated;
+        existingFleet.creditAllocated = creditData.creditAllocated;
+        await existingFleet.save();
+        return existingFleet;
+    } else {
+        // If no existing record, create a new one
+        const fleetData = {
+            fleet_id: creditData.fleet_id,
+            creditAllocated: creditData.creditAllocated,
+            totalCredit: creditData.creditAllocated,
+        };
+        const fleet = await CreditAllocation.create(fleetData);
+        return fleet;
+    }
+      } catch (error) {
+        if (error instanceof UniqueConstraintError) {
+          // Handle unique constraint error
+          const duplicateField = error.errors[0].path; // This will tell you which field is duplicated
+          throw new Error(`${duplicateField} already exists.`);
+        }
+        throw error;
+      }
   }
 }
 
