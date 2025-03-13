@@ -25,10 +25,16 @@ const getFleetByIdValidation = [
 const deleteFleetValidation = [
   param('id').isInt().withMessage('Fleet ID must be a valid integer')
 ];
-
+// Validation for creating a new driver
+const creditAllocationValidation = [
+  body('fleet_id').notEmpty().withMessage('Fleet id is required'),
+  body('creditAllocated').isString().withMessage('creditAllocated is required'),
+  // Add other validations as necessary
+];
 module.exports = {
   createFleetValidation,
   updateFleetValidation,
   getFleetByIdValidation,
-  deleteFleetValidation
+  deleteFleetValidation,
+  creditAllocationValidation
 };

@@ -4,7 +4,8 @@ const {
     createFleetValidation,
     updateFleetValidation,
     getFleetByIdValidation,
-    deleteFleetValidation
+    deleteFleetValidation,
+    creditAllocationValidation
   } = require('../validations/fleetValidation');
 const { authMiddleware } = require('../middleware/authMiddleware');
 const router = express.Router();
@@ -15,5 +16,7 @@ router.post('/', authMiddleware,createFleetValidation,fleetController.createFlee
 router.put('/:id', authMiddleware,updateFleetValidation,fleetController.updateFleet);
 router.delete('/:id', authMiddleware,deleteFleetValidation,fleetController.deleteFleet);
 router.post('/id', authMiddleware,getFleetByIdValidation,fleetController.getFleetById);
+router.post('/credit-allocation', authMiddleware,creditAllocationValidation,fleetController.creditAllocation);
+
 
 module.exports = router;
