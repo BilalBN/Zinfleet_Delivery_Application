@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Fleet, FleetApiResponse, FleetPayload, FleetUpdatePayload } from "../types/fleet";
+import { CreditPayload, Fleet, FleetApiResponse, FleetPayload, FleetUpdatePayload } from "../types/fleet";
 import { apiService } from "../api";
 import { setLoading } from "./rootslice";
 import { showSnackbar } from "./snackbarSlice";
@@ -48,11 +48,18 @@ export const fetchAllFleets = createAsyncThunk("fleet/fetchAllFleets", async (_,
   return response.data;
 });
 
+export const addCreditToFleet = createAsyncThunk("fleet/addcredit", async (payload: CreditPayload, { dispatch }) => {
+  dispatch(setLoading(true));
+  await apiService.post("/api/fleets/credit-allocation", payload);
+  dispatch(showSnackbar({ message: "Successfully added credit", severity: "success" }));
+  await dispatch(fetchAllFleets()); 
+});
+
 export const addFleet = createAsyncThunk("fleet/fleets", async (newFleet: FleetPayload, { dispatch }) => {
   dispatch(setLoading(true));
   await apiService.post("/api/fleets", newFleet);
   dispatch(showSnackbar({ message: "Successfully added fleet", severity: "success" }));
-  await dispatch(fetchAllFleets()); // Fetch fleets again after adding
+  await dispatch(fetchAllFleets());
 });
 
 export const updateFleet = createAsyncThunk(
