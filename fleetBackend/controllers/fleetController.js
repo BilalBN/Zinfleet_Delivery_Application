@@ -57,6 +57,17 @@ class FleetController {
       next(new CustomError(error.message, 400));
     }
   }
+
+  async fetchCreditAllocation(req, res, next) {
+    try {
+      
+      const credit = await fleetService.fetchCreditAllocation(req.body.limit,req.body.page);
+      ResponseHandler.success(res, credit, 'Fleets fetched successfully');
+    } catch (error) {
+      next(new CustomError(error.message, 500));
+    }
+    }
+  
 }
 
 module.exports = new FleetController();

@@ -252,6 +252,55 @@ class FleetService {
         throw error;
       }
   }
+
+  async fetchCreditAllocation(limit, page) {
+      try {
+        // Determine if pagination is needed
+        const shouldPaginate = limit && page;
+    
+        // Calculate offset only if pagination parameters are provided
+        const offset = shouldPaginate ? (page - 1) * limit : undefined;
+    
+        // Fetch fleets with or without pagination
+        const credits = await CreditAllocation.findAll({
+          limit: shouldPaginate ? limit : undefined,
+          offset: offset,
+        });
+        
+        const totalData = await CreditAllocation.count();
+    
+        // Fetch associated users for the fetched fleets
+        const creditData = await Promise.all(
+          credits.map(async (datam) => {
+            console.log(datam)
+            const fleetName = await Fleet.findOne({
+              where: { id: datam.fleet_id },
+            });
+            return {
+              fleet_id: datam ? datam.fleet_id : null,
+              fleetName: fleetName ? fleetName.name : null,
+              creditAllocated:datam.creditAllocated,
+              totalCredit:datam.totalCredit,
+              creditUsed:datam.creditUsed,
+              creditRemaining:datam.creditRemaining
+            };
+          })
+        );
+    
+        // Calculate total pages only if pagination parameters are provided
+        const totalPages = shouldPaginate ? Math.ceil(totalData / limit) : 1;
+    
+        return {
+          total: totalData,
+          totalPages: totalPages,
+          currentPage: page || 1,
+          data: creditData,
+        };
+      } catch (error) {
+        console.error('Error fetching credit data:', error);
+        throw error;
+      }
+  }
 }
 
 module.exports = new FleetService();

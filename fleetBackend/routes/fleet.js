@@ -17,6 +17,6 @@ router.put('/:id', authMiddleware,updateFleetValidation,fleetController.updateFl
 router.delete('/:id', authMiddleware,deleteFleetValidation,fleetController.deleteFleet);
 router.post('/id', authMiddleware,getFleetByIdValidation,fleetController.getFleetById);
 router.post('/credit-allocation', authMiddleware,creditAllocationValidation,fleetController.creditAllocation);
-
+router.get('/credit-allocations', authMiddleware,creditAllocationValidation,fleetController.creditAllocation);
 
 module.exports = router;
