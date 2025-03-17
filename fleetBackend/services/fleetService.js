@@ -41,7 +41,7 @@ class FleetService {
               return {
                 ...fleet.dataValues,
                 username: user ? user.user_name : null,
-                totalCredit: creditData.totalCredit,
+                totalCredit: creditData ? creditData.totalCredit : 0,
                 total_shops:totalShops.count,
                 total_drivers:totalDrivers.count
               };
