@@ -6,6 +6,10 @@ export type FleetPayload = {
   username: string;
   password: string;
 };
+
+export type CreditPayload = {
+  fleet_id: number, creditAllocated: number
+};
 export type FleetUpdatePayload = {
   id: number;
   name: string;
@@ -26,6 +30,7 @@ export type Fleet = {
   password: string;
   total_drivers: number;
   total_shops: number;
+  totalCredit:number
 };
 
 export type FleetApiResponse = {

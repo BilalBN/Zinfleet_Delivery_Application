@@ -7,16 +7,34 @@ export enum OrderType {
 }
 
 export type Order = {
-  id: number;
-  amount: number;
-  quantity: number;
-  date: string;
-  shop: string;
-  pickUp: string;
-  delivery: string;
-  rejectedBy?: string; // Optional because not all entries have rejectedBy
-  assignee?: string; // Optional because not all entries have assignee
-  status?: boolean;
+  orderData: OrderData;
+  addressData: AddressData;
+};
+
+export type OrderData = {
+  orderId: number;
+  storeId: number;
+  orderCode: string;
+  orderUrl: string;
+  orderStatus: number;
+  currencyCode: string;
+  transactionReference: string;
+  transactionAmount: number;
+  transactionAmountString: string;
+  orderTotal: string;
+};
+
+export type AddressData = {
+  name: string;
+  contactNumber: string;
+  email: string;
+  street: string;
+  district: string;
+  formattedAddress: string;
+  latitude: string;
+  longitude: string;
+  countryCode: string;
+  country: string;
 };
 
 export type Column = {

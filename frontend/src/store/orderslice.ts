@@ -14,6 +14,16 @@ interface IOrderSlice {
   totalPages: number;
 }
 
+export type OrderTable = {
+  id: number,
+  amount: string,
+  quantity: string,
+  status: number,
+  shop: number,
+  pickUp: string
+  delivery: string
+}
+
 const initialState: IOrderSlice = {
   loading: false,
   selectedOrder: OrderType.Live,

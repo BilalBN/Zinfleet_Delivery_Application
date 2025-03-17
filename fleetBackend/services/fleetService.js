@@ -35,10 +35,13 @@ class FleetService {
               }); 
               const totalShops = await Shop.findAndCountAll({where:{fleet_id:fleet.id}})
               const totalDrivers = await Driver.findAndCountAll({where:{fleet_id:fleet.id}})
-
+              let creditData = await CreditAllocation.findOne({
+                  where: { fleet_id: fleet.id }
+                })
               return {
                 ...fleet.dataValues,
                 username: user ? user.user_name : null,
+                totalCredit: creditData.totalCredit,
                 total_shops:totalShops.count,
                 total_drivers:totalDrivers.count
               };

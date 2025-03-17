@@ -137,8 +137,10 @@ class OrderService {
     
             // Return the fleet orders and pagination info
             return {
-                orderwithaddresses,
-                pagination,
+              data: {
+                data: orderwithaddresses,
+                ...pagination,
+              },
             };
         } catch (error) {
             console.error("Error fetching fleet orders:", error);

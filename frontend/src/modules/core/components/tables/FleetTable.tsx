@@ -3,7 +3,7 @@ import ReusableTable from './ReusableTable';
 import { useAppDispatch, useAppSelector } from '../../../../store/hook';
 import styled from "@emotion/styled";
 import { Align } from '../../../../types/table';
-import { deleteFleet, fetchFleets, setPage, updateFleet } from '../../../../store/fleetSlice';
+import { addCreditToFleet, deleteFleet, fetchFleets, setPage, updateFleet } from '../../../../store/fleetSlice';
 import { Fleet, FleetPayload, FleetUpdatePayload } from '../../../../types/fleet';
 import { FleetDialog } from '../../../admin/components/dialog/Fleet';
 import { NoDataAvailable } from '../EmptyPage';
@@ -74,6 +74,10 @@ const FleetTable = () => {
 
   const updateCredit = (_value: number) => {
     setAddCreditOpen(false);
+    if (selectedFleet) {
+      const payload = { fleet_id: selectedFleet.id, creditAllocated: _value}
+      dispatch(addCreditToFleet(payload))
+    }
     setSelectedFleet(null)
   }
 
@@ -86,6 +90,7 @@ const FleetTable = () => {
     { title: "Email", dataIndex: "email", key: "email", width: '100px' },
     { title: "No.Of.Shops", dataIndex: "total_shops", key: "shops", width: '100px' },
     { title: "Phone", dataIndex: "phoneNumber", key: "phoneNumber", width: '100px' },
+    { title: "Total credit", dataIndex: "totalCredit", key: "totalCredit", width: '100px' },
     {
       title: 'Actions',
       dataIndex: 'actions',
